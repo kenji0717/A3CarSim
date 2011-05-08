@@ -15,7 +15,7 @@
     <condition property="my.lib.path" value="${env.A3CS_LIB_PATH}">
         <isset property="env.A3CS_LIB_PATH"/>
     </condition>
-    <condition property="my.lib.path" value="${basedir}/lib/">
+    <condition property="my.lib.path" value="${basedir}/lib/acerola3d/">
         <not><isset property="my.lib.path"/></not>
     </condition>
 
@@ -23,13 +23,13 @@
 
     <path id="my.class.path">
         <fileset dir="${my.lib.path}">
-            <include name="**/*.jar"/>
+            <include name="*.jar"/>
         </fileset>
     </path>
 
     <path id="my.exec.class.path">
         <fileset dir="${my.lib.path}">
-            <include name="**/*.jar"/>
+            <include name="*.jar"/>
         </fileset>
     	<pathelement location="release/a3carsim.jar"/>
     </path>
@@ -63,6 +63,7 @@
     <target name="exec" depends="jar">
         <java classname="com.github.kenji0717.a3cs.Test" fork="true">
             <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
         </java>
     </target>
 
