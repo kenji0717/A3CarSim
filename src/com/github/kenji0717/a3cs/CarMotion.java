@@ -6,6 +6,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.CompoundShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.vehicle.*;
+import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 import com.bulletphysics.dynamics.DynamicsWorld;
@@ -15,18 +16,18 @@ import jp.sourceforge.acerola3d.a3.*;
 import javax.vecmath.*;
 import javax.media.j3d.*;
 
-public class VehicleMotion implements Motion {
+public class CarMotion implements Motion {
     DynamicsWorld dynamicsWorld;
 
     RigidBody carChassis;
     VehicleRaycaster vehicleRayCaster;
     RaycastVehicle vehicle;
 
-    public VehicleMotion(DynamicsWorld dw) {
+    public CarMotion(MotionState ms,DynamicsWorld dw) {
         dynamicsWorld = dw;
 
-        Transform tr = new Transform();
-        tr.setIdentity();
+        //Transform tr = new Transform();
+        //tr.setIdentity();
 
         CollisionShape chassisShape = new BoxShape(new Vector3f(0.4f, 0.25f, 0.75f));
 
@@ -37,9 +38,9 @@ public class VehicleMotion implements Motion {
 
         compound.addChildShape(localTrans, chassisShape);
 
-        tr.origin.set(0, 0, 0);
+        //tr.origin.set(0, 0, 0);
 
-        carChassis = localCreateRigidBody(100, tr, compound);
+        carChassis = localCreateRigidBody(100, ms, compound);
         carChassis.setDamping(0.5f,0.5f);//空気抵抗を設定
 
         // create vehicle
@@ -128,7 +129,8 @@ public class VehicleMotion implements Motion {
         vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
     }
 
-    public RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
+    //public RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {
+    public RigidBody localCreateRigidBody(float mass, MotionState ms, CollisionShape shape) {
         boolean isDynamic = (mass != 0f);
 
         Vector3f localInertia = new Vector3f(0f, 0f, 0f);
@@ -136,13 +138,13 @@ public class VehicleMotion implements Motion {
             shape.calculateLocalInertia(mass, localInertia);
         }
 
-        DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
+        //DefaultMotionState myMotionState = new DefaultMotionState(startTransform);
         
-        RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, myMotionState, shape, localInertia);
+        RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(mass, ms, shape, localInertia);
         
         RigidBody body = new RigidBody(cInfo);
         
-        dynamicsWorld.addRigidBody(body);
+        //dynamicsWorld.addRigidBody(body);
 
         return body;
     }

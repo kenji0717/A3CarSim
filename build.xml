@@ -59,7 +59,7 @@
     </target>
 
     <target name="exec" depends="jar">
-        <java classname="com.github.kenji0717.a3cs.SimpleCR" fork="true">
+        <java classname="com.github.kenji0717.a3cs.SimplePC" fork="true">
             <classpath refid="my.exec.class.path"/>
         	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
         </java>

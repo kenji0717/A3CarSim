@@ -32,9 +32,9 @@ public class SimpleCR implements Runnable, KeyListener {
     protected Clock clock = new Clock();
 
     A3Window w;
-    Action3D a3vehicle;
+    Action3D a3car;
     VRML backgroundVRML;
-    VehicleMotion vehicleMotion;
+    CarMotion carMotion;
 
     boolean keyUp = false;
     boolean keyDown = false;
@@ -63,12 +63,12 @@ public class SimpleCR implements Runnable, KeyListener {
         //Action3D bgm = new Action3D("x-res:///stk_Boom3.a3");
         //w.add(bgm);
 
-        a3vehicle = new Action3D("x-res:///res/stk_tux.a3");
-        vehicleMotion = new VehicleMotion(dynamicsWorld);
-        a3vehicle.setMotion("default",vehicleMotion);//この行次の行より先に実行
-        w.add(a3vehicle);//この行上の行より後に実行
-        a3vehicle.transControlUsingRootBone(true);
-        w.setAvatar(a3vehicle);
+        a3car = new Action3D("x-res:///res/stk_tux.a3");
+        //carMotion = new CarMotion(dynamicsWorld);
+        //a3car.setMotion("default",carMotion);//この行次の行より先に実行
+        w.add(a3car);//この行上の行より後に実行
+        a3car.transControlUsingRootBone(true);
+        w.setAvatar(a3car);
         Vector3d lookAt = new Vector3d(0.0,0.0,30.0);
         Vector3d camera = new Vector3d(0.0,3.0,-10.0);
         Vector3d up = new Vector3d(0.0,1.0,0.0);
@@ -112,7 +112,7 @@ public class SimpleCR implements Runnable, KeyListener {
                 gBreakingForce=maxBreakingForce;
             else
                 gBreakingForce=0.0f;
-            vehicleMotion.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
+            carMotion.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
         }
     }
     
