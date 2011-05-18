@@ -65,6 +65,13 @@
         </java>
     </target>
 
+    <target name="exec2" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.SimpleCR" fork="true">
+            <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        </java>
+    </target>
+
 <!--
 	<target name="version-input" unless="version">
     	<echo>*****************************</echo>

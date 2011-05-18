@@ -70,7 +70,7 @@ public class PhysicalWorld implements Runnable {
         while (true) {
             synchronized (newBodies) {
                 for (A3RigidBody rb : newBodies) {
-                    dynamicsWorld.addRigidBody(rb.body);
+                    dynamicsWorld.addRigidBody(rb.body,rb.group,rb.mask);
                     //if (rb instanceof MyCar)
                     //    dynamicsWorld.removeVehicle(((MyCar)rb).motion.vehicle);
                     if (window!=null)

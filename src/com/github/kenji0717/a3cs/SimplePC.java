@@ -48,6 +48,9 @@ public class SimplePC extends KeyAdapter {
         MyCar c = new MyCar(0.0,2.5,0.0,pw);
         pw.add(c);
 
+        MyCheckPoint cp = new MyCheckPoint(0.0,10.0,0.0,pw);
+        pw.add(cp);
+
         while (true) {
             Thread.sleep(33);
             gEngineForce=0.0f;
@@ -65,7 +68,6 @@ public class SimplePC extends KeyAdapter {
             if (keySpace)
                 this.shoot();
             c.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
-            System.out.println("gaha:"+gVehicleSteering);
         }
     }
 

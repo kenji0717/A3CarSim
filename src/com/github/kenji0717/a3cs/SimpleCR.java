@@ -64,10 +64,12 @@ public class SimpleCR implements Runnable, KeyListener {
         //w.add(bgm);
 
         a3car = new Action3D("x-res:///res/stk_tux.a3");
-        //carMotion = new CarMotion(dynamicsWorld);
-        //a3car.setMotion("default",carMotion);//この行次の行より先に実行
+        DefaultMotionState dms = new DefaultMotionState();
+        carMotion = new CarMotion(dms, dynamicsWorld);
+        a3car.setMotion("default",carMotion);//この行次の行より先に実行
         w.add(a3car);//この行上の行より後に実行
-        a3car.transControlUsingRootBone(true);
+        dynamicsWorld.addRigidBody(carMotion.carChassis);
+        //a3car.transControlUsingRootBone(true);
         w.setAvatar(a3car);
         Vector3d lookAt = new Vector3d(0.0,0.0,30.0);
         Vector3d camera = new Vector3d(0.0,3.0,-10.0);

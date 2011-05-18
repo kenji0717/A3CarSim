@@ -14,6 +14,8 @@ public abstract class A3RigidBody {
     RigidBody body;//JBulletにおける剛体を表すオブジェクト
     Vector3f locRequest;
     Vector3f velRequest;
+    short group = 1;
+    short mask = 1;
 
     //Acerola3DファイルのURLと初期座標で初期化
     public A3RigidBody(double x,double y,double z,PhysicalWorld pw) throws Exception {

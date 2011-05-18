@@ -18,11 +18,11 @@ public class MyCar extends A3RigidBody {
     }
     //
     public RigidBody makeRigidBody() {
-    	//DefaultMotionState dms = new DefaultMotionState();
-    	//motion = new CarMotion(dms,pw.dynamicsWorld);
-    	motion = new CarMotion(motionState,pw.dynamicsWorld);
+    	DefaultMotionState dms = new DefaultMotionState();
+    	motion = new CarMotion(dms,pw.dynamicsWorld);
+    	//motion = new CarMotion(motionState,pw.dynamicsWorld); //これでも動くが、処理が二重になる
     	((Action3D)a3).setMotion("default",motion);
-    	//((Action3D)a3).transControlUsingRootBone(true);
+    	((Action3D)a3).transControlUsingRootBone(true); //この方が自然。moationStateの方を使うなら必須
         return motion.carChassis;
     }
     public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce) {
