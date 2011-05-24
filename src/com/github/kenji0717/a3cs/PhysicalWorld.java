@@ -73,13 +73,13 @@ public class PhysicalWorld implements Runnable {
         while (true) {
             synchronized (newBodies) {
                 for (A3RigidBody rb : newBodies) {
+                    //if (rb instanceof MyCar)
+                    //    dynamicsWorld.removeVehicle(((MyCar)rb).motion.vehicle);
                     if (rb instanceof MyCheckPoint) {
                         dynamicsWorld.addCollisionObject(rb.body,rb.group,rb.mask);
                     } else {
                         dynamicsWorld.addRigidBody(rb.body,rb.group,rb.mask);
                     }
-                    //if (rb instanceof MyCar)
-                    //    dynamicsWorld.removeVehicle(((MyCar)rb).motion.vehicle);
                     if (window!=null)
                         window.add(rb.a3);
                     rigidBodies.add(rb);
@@ -88,14 +88,14 @@ public class PhysicalWorld implements Runnable {
             }
             synchronized (delBodies) {
                 for (A3RigidBody rb : delBodies) {
+                    //if (rb instanceof MyCar)
+                    //    dynamicsWorld.addVehicle(((MyCar)rb).motion.vehicle);
                     if (rb instanceof MyCheckPoint) {
                         dynamicsWorld.removeCollisionObject(rb.body);
                         
                     } else {
                         dynamicsWorld.removeRigidBody(rb.body);
                     }
-                    //if (rb instanceof MyCar)
-                    //    dynamicsWorld.addVehicle(((MyCar)rb).motion.vehicle);
                     if (window!=null)
                         window.del(rb.a3);
                     rigidBodies.remove(rb);
