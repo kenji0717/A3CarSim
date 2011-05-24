@@ -26,6 +26,7 @@ public abstract class A3RigidBody {
         transform.origin.set((float)x,(float)y,(float)z);
         motionState = new A3MotionState(a3,transform);
         body = makeRigidBody();
+        body.setUserPointer(this);
     }
 
     public abstract A3Object makeA3Object() throws Exception ;

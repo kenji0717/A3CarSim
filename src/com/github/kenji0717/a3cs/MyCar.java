@@ -11,6 +11,9 @@ public class MyCar extends A3RigidBody {
 	CarMotion motion;
     public MyCar(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,pw);
+        group = 1;
+        mask = 3;
+        a3.setUserData("車");
     }
 
     public A3Object makeA3Object() throws Exception {

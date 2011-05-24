@@ -12,6 +12,7 @@ public class MyGround2 extends A3RigidBody {
     public MyGround2(PhysicalWorld pw) throws Exception {
         //super(0.0,-50.0,0.0,pw);
         super(0.0,0.0,0.0,pw);
+        a3.setUserData("地面2");
     }
 
     public A3Object makeA3Object() throws Exception {

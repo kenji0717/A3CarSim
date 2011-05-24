@@ -14,7 +14,8 @@ public class MyCheckPoint extends A3RigidBody {
     public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,pw);
         group = 2;
-        mask = 2;
+        mask = 3;
+        a3.setUserData("CheckPoint");
     }
 
     public A3Object makeA3Object() throws Exception {
@@ -24,7 +25,7 @@ public class MyCheckPoint extends A3RigidBody {
 
     public RigidBody makeRigidBody() {
         CollisionShape groundShape = Util.makeConvexHullShape(a3.getNode());
-        RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(0.0f, motionState, groundShape, new Vector3f());
+        RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(1.0f, motionState, groundShape, new Vector3f());
         RigidBody body = new RigidBody(cInfo);
         return body;
     }

@@ -10,6 +10,7 @@ import jp.sourceforge.acerola3d.a3.*;
 public class MyBox extends A3RigidBody {
     public MyBox(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,pw);
+        a3.setUserData("サイコロ");
     }
 
     public A3Object makeA3Object() throws Exception {

@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.vecmath.*;
 
 //JBulletを使った物理計算の実験
-public class SimplePC extends KeyAdapter {
+public class SimplePC extends KeyAdapter implements CollisionListener {
     PhysicalWorld pw;//物理計算をしてくれるオブジェクト
 
     boolean keyUp = false;
@@ -24,10 +24,11 @@ public class SimplePC extends KeyAdapter {
 
     public SimplePC() throws Exception {
         pw = new PhysicalWorld();//物理計算をしてくれるオブジェクトを生成
+        pw.addCollisionListener(this);
 
         pw.window.addKeyListener(this);
-        pw.window.setCameraLocImmediately(0.0,10.0,30.0);
-        pw.window.setCameraLookAtPointImmediately(0.0,4.0,0.0);
+        pw.window.setCameraLocImmediately(0.0,2.5,7.5);
+        pw.window.setCameraLookAtPointImmediately(0.0,1.0,0.0);
         pw.window.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE);
 
         //MyGround g = new MyGround(pw);//地面
@@ -39,17 +40,28 @@ public class SimplePC extends KeyAdapter {
         for (double x=-3.0;x<=3.0;x+=2.0) {
             for (double y=1.0;y<=7.0;y+=2.0) {
                 for (double z=-3.0;z<=3.0;z+=2.0) {
-                    MyBox b = new MyBox(x,y,z,pw);//立方体
+                    MyBox b = new MyBox(x,y,z+20,pw);//立方体
                     pw.add(b);
                 }
             }
         }
         */
+        //MyBox bb = new MyBox(0.0,1.0,20.0,pw);//立方体
+        //pw.add(bb);
+
         MyCar c = new MyCar(0.0,2.5,0.0,pw);
         pw.add(c);
+        //c.setLoc2(0.0,2.5,0.0);
 
-        MyCheckPoint cp = new MyCheckPoint(0.0,10.0,0.0,pw);
+        MyCheckPoint cp = new MyCheckPoint(0.0,0.0,10.0,pw);
         pw.add(cp);
+        //cp.setLoc2(10.0,0.0,0.0);
+
+        pw.window.setAvatar(c.a3);
+        Vector3d lookAt = new Vector3d(0.0,0.0,30.0);
+        Vector3d camera = new Vector3d(0.0,3.0,-10.0);
+        Vector3d up = new Vector3d(0.0,1.0,0.0);
+        pw.window.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,1.0);
 
         while (true) {
             Thread.sleep(33);
@@ -111,6 +123,11 @@ public class SimplePC extends KeyAdapter {
         lastShootTime = System.currentTimeMillis();
     }
 
+    public void collided(A3RigidBody a,A3RigidBody b) {
+        System.out.print("a:"+a.a3.getUserData().toString());
+        System.out.print(" b:"+b.a3.getUserData().toString());
+        System.out.println("  gaha");
+    }
     public static void main(String[] args) throws Exception {
         new SimplePC();
     }
