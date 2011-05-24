@@ -7,9 +7,9 @@ import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //地面を表すクラス
-public class MyGround extends A3RigidBody {
+public class MyGround extends A3CollisionObject {
     public MyGround(PhysicalWorld pw) throws Exception {
-        super(0.0,-50.0,0.0,pw);
+        super(0.0,-50.0,0.0,COType.STATIC,pw);
     }
 
     public A3Object makeA3Object() throws Exception {
@@ -19,7 +19,7 @@ public class MyGround extends A3RigidBody {
         return a;
     }
     //地面用の剛体を作る
-    public RigidBody makeRigidBody() {
+    public RigidBody makeCollisionObject() {
         CollisionShape groundShape =
             new BoxShape(new Vector3f(50.0f,50.0f,50.0f));
         Vector3f localInertia = new Vector3f(0,0,0);

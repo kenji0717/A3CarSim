@@ -12,6 +12,7 @@ public class A3MotionState extends MotionState {
     public final Transform startWorldTrans = new Transform();
     //public final Transform tmpT = new Transform();
     A3Object a3;
+    boolean autoUpdate = true; //CarMotionを使うような場合だけfalseにする
     public A3MotionState(A3Object a) {
         a3 = a;
         graphicsWorldTrans.setIdentity();
@@ -43,7 +44,12 @@ public class A3MotionState extends MotionState {
         graphicsWorldTrans.set(centerOfMassWorldTrans);
         graphicsWorldTrans.mul(centerOfMassOffset);
         graphicsWorldTrans.getRotation(qTmp);
-        a3.setLoc(graphicsWorldTrans.origin.x,graphicsWorldTrans.origin.y,graphicsWorldTrans.origin.z);
-        a3.setQuat(qTmp.x,qTmp.y,qTmp.z,qTmp.w);
+        if (autoUpdate) {
+            a3.setLoc(graphicsWorldTrans.origin.x,graphicsWorldTrans.origin.y,graphicsWorldTrans.origin.z);
+            a3.setQuat(qTmp.x,qTmp.y,qTmp.z,qTmp.w);
+        }
+    }
+    public void setAutoUpdate(boolean b) {
+        autoUpdate = b;
     }
 }

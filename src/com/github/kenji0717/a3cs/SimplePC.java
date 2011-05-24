@@ -123,7 +123,7 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
         lastShootTime = System.currentTimeMillis();
     }
 
-    public void collided(A3RigidBody a,A3RigidBody b) {
+    public void collided(A3CollisionObject a,A3CollisionObject b) {
         System.out.print("a:"+a.a3.getUserData().toString());
         System.out.print(" b:"+b.a3.getUserData().toString());
         System.out.println("  gaha");

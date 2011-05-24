@@ -19,9 +19,9 @@ import jp.sourceforge.acerola3d.a3.*;
 public class PhysicalWorld implements Runnable {
     static int MAX_PROXIES = 1024;
     DiscreteDynamicsWorld dynamicsWorld;
-    ArrayList<A3RigidBody> rigidBodies = new ArrayList<A3RigidBody>();
-    ArrayList<A3RigidBody> newBodies = new ArrayList<A3RigidBody>();
-    ArrayList<A3RigidBody> delBodies = new ArrayList<A3RigidBody>();
+    ArrayList<A3CollisionObject> objects = new ArrayList<A3CollisionObject>();
+    ArrayList<A3CollisionObject> newObjects = new ArrayList<A3CollisionObject>();
+    ArrayList<A3CollisionObject> delObjects = new ArrayList<A3CollisionObject>();
     A3Window window;
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
 
@@ -54,16 +54,16 @@ public class PhysicalWorld implements Runnable {
     }
 
     //新規の剛体を加える
-    public void add(A3RigidBody rb) {
-        synchronized (newBodies) {
-            newBodies.add(rb);
+    public void add(A3CollisionObject rb) {
+        synchronized (newObjects) {
+            newObjects.add(rb);
         }
     }
 
     //既存の剛体を削除
-    public void del(A3RigidBody rb) {
-        synchronized (delBodies) {
-            delBodies.add(rb);
+    public void del(A3CollisionObject rb) {
+        synchronized (delObjects) {
+            delObjects.add(rb);
         }
     }
 
@@ -71,49 +71,48 @@ public class PhysicalWorld implements Runnable {
     //座標を変更するのがちょっとやっかい
     public void run() {
         while (true) {
-            synchronized (newBodies) {
-                for (A3RigidBody rb : newBodies) {
+System.out.println("gaha1");
+            synchronized (newObjects) {
+                for (A3CollisionObject co : newObjects) {
                     //if (rb instanceof MyCar)
                     //    dynamicsWorld.removeVehicle(((MyCar)rb).motion.vehicle);
-                    if (rb instanceof MyCheckPoint) {
-                        dynamicsWorld.addCollisionObject(rb.body,rb.group,rb.mask);
+                    if (co.coType==COType.GHOST) {
+                        dynamicsWorld.addCollisionObject(co.body,co.group,co.mask);
                     } else {
-                        dynamicsWorld.addRigidBody(rb.body,rb.group,rb.mask);
+                        dynamicsWorld.addRigidBody((RigidBody)co.body,co.group,co.mask);
                     }
                     if (window!=null)
-                        window.add(rb.a3);
-                    rigidBodies.add(rb);
+                        window.add(co.a3);
+                    objects.add(co);
                 }
-                newBodies.clear();
+                newObjects.clear();
             }
-            synchronized (delBodies) {
-                for (A3RigidBody rb : delBodies) {
+System.out.println("gaha2");
+            synchronized (delObjects) {
+                for (A3CollisionObject co : delObjects) {
                     //if (rb instanceof MyCar)
                     //    dynamicsWorld.addVehicle(((MyCar)rb).motion.vehicle);
-                    if (rb instanceof MyCheckPoint) {
-                        dynamicsWorld.removeCollisionObject(rb.body);
-                        
+                    if (co.coType==COType.GHOST) {
+                        dynamicsWorld.removeCollisionObject(co.body);
                     } else {
-                        dynamicsWorld.removeRigidBody(rb.body);
+                        dynamicsWorld.removeRigidBody((RigidBody)co.body);
                     }
                     if (window!=null)
-                        window.del(rb.a3);
-                    rigidBodies.remove(rb);
+                        window.del(co.a3);
+                    objects.remove(co);
                 }
-                delBodies.clear();
+                delObjects.clear();
             }
+System.out.println("gaha3");
 
-            for (A3RigidBody rb : rigidBodies) {
-                if (rb.locRequest==null)
+            for (A3CollisionObject co : objects) {
+                if (co.locRequest==null)
                     continue;
                 Transform t = new Transform();
-                t.origin.set(rb.locRequest);
-                rb.motionState.setWorldTransform(t);
-                rb.body.setCollisionFlags(rb.body.getCollisionFlags()|CollisionFlags.KINEMATIC_OBJECT);
-                rb.body.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
-                rb.body.clearForces();
-                rb.body.setLinearVelocity(new Vector3f());
-                rb.body.setAngularVelocity(new Vector3f());
+                t.origin.set(co.locRequest);
+                co.motionState.setWorldTransform(t);
+                if (co.coType==COType.DYNAMIC)
+                    co.changeCOType(COType.KINEMATIC_TEMP);
             }
 
             //ここで物理計算
@@ -121,6 +120,7 @@ public class PhysicalWorld implements Runnable {
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
 
 System.out.println("-----gaha-----");
+/*
             //衝突
             int numManifolds = dynamicsWorld.getDispatcher().getNumManifolds();
             for (int ii=0;ii<numManifolds;ii++) {
@@ -134,7 +134,6 @@ System.out.println("-----gaha-----");
                 for (int j=0;j<numContacts;j++) {
                     ManifoldPoint pt = contactManifold.getContactPoint(j);
                     if (pt.getDistance()<0.0f) {
-                        /*
                         System.out.println("-----------------");
                         System.out.println("ii:"+ii+"    j:"+j);
                         System.out.println("getLifeTime:"+pt.getLifeTime());
@@ -142,37 +141,38 @@ System.out.println("-----gaha-----");
                         System.out.println("PositionWorldOnB:"+pt.positionWorldOnB);
                         System.out.println("normalWorldOnB:"+pt.normalWorldOnB);
                         System.out.println("-----------------");
-                        */
                     }
                 }
 
                 //ロックしすぎ？
                 synchronized (collisionListeners) {
                     for (CollisionListener cl : collisionListeners) {
-                        cl.collided(((A3RigidBody)obA.getUserPointer()),((A3RigidBody)obB.getUserPointer()));
+                        cl.collided(((A3CollisionObject)obA.getUserPointer()),((A3CollisionObject)obB.getUserPointer()));
                     }
                 }
             }
+*/
+System.out.println("gaha4");
 
-            for (A3RigidBody rb : rigidBodies) {
-                if (rb.locRequest==null)
+            for (A3CollisionObject co : objects) {
+                if (co.locRequest==null)
                     continue;
-                rb.body.setCollisionFlags(rb.body.getCollisionFlags()&(~CollisionFlags.KINEMATIC_OBJECT));
-                //rb.body.setActivationState(CollisionObject.ACTIVE_TAG);
-                rb.body.forceActivationState(CollisionObject.ACTIVE_TAG);
-                rb.body.setDeactivationTime(0.0f);
-                rb.body.clearForces();
-                rb.body.setLinearVelocity(new Vector3f());
-                rb.body.setAngularVelocity(new Vector3f());
-                rb.locRequest=null;
+                if (co.coType==COType.KINEMATIC_TEMP){
+                    co.changeCOType(COType.DYNAMIC);
+                }
+                co.locRequest=null;
             }
 
-            for (A3RigidBody rb : rigidBodies) {
-                if (rb.velRequest==null)
+System.out.println("gaha5");
+            for (A3CollisionObject co : objects) {
+                if (co.velRequest==null)
                     continue;
-                rb.body.setLinearVelocity(rb.velRequest);
-                rb.velRequest=null;
+                if (co.coType!=COType.GHOST) {
+                    ((RigidBody)co.body).setLinearVelocity(co.velRequest);
+                }
+                co.velRequest=null;
             }
+System.out.println("gaha6");
             try{Thread.sleep(33);}catch(Exception e){;}
         }
     }

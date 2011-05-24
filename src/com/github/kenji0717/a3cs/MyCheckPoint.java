@@ -6,15 +6,17 @@ import jp.sourceforge.acerola3d.a3.A3Object;
 import jp.sourceforge.acerola3d.a3.Util;
 import jp.sourceforge.acerola3d.a3.VRML;
 
+import com.bulletphysics.collision.dispatch.CollisionObject;
+import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 
-public class MyCheckPoint extends A3RigidBody {
+public class MyCheckPoint extends A3CollisionObject {
     public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) throws Exception {
-        super(x,y,z,pw);
-        group = 2;
-        mask = 3;
+        super(x,y,z,COType.GHOST,pw);
+        //group = 2;
+        //mask = 3;
         a3.setUserData("CheckPoint");
     }
 
@@ -23,10 +25,19 @@ public class MyCheckPoint extends A3RigidBody {
         return vrml;
     }
 
-    public RigidBody makeRigidBody() {
-        CollisionShape groundShape = Util.makeConvexHullShape(a3.getNode());
-        RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(1.0f, motionState, groundShape, new Vector3f());
-        RigidBody body = new RigidBody(cInfo);
+    public CollisionObject makeCollisionObject() {
+        CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
+        GhostObject body = new GhostObject();
+        body.setCollisionShape(shape);
+        double x = motionState.graphicsWorldTrans.origin.x;
+        double y = motionState.graphicsWorldTrans.origin.y;
+        double z = motionState.graphicsWorldTrans.origin.z;
+        a3.setLocImmediately(x,y,z);
+        x = motionState.qTmp.x;
+        y = motionState.qTmp.y;
+        z = motionState.qTmp.z;
+        double w = motionState.qTmp.w;
+        a3.setQuat(x,y,z,w);
         return body;
     }
 }

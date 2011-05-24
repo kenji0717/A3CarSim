@@ -7,16 +7,16 @@ import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //球を表すクラス
-public class MySphere extends A3RigidBody {
+public class MySphere extends A3CollisionObject {
     public MySphere(double x,double y,double z,PhysicalWorld pw) throws Exception {
-        super(x,y,z,pw);
+        super(x,y,z,COType.DYNAMIC,pw);
     }
 
     public A3Object makeA3Object() throws Exception {
         return new Action3D("x-res:///res/earth.a3");
     }
     //球状の剛体を作る
-    public RigidBody makeRigidBody() {
+    public RigidBody makeCollisionObject() {
         CollisionShape shape = new SphereShape(1.0f);
         Vector3f localInertia = new Vector3f(0,0,0);
         shape.calculateLocalInertia(1.0f,localInertia);
