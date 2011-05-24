@@ -86,9 +86,12 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
                 this.shoot();
             c.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
 
+            /*
+            //光線テストの実験しようとしたら、このスレッドで実行するのはNGみたい
             RayResultCallback rayRC = new CollisionWorld.ClosestRayResultCallback(new Vector3f(0,0.5f,0),new Vector3f(0,0.5f,5));
             pw.dynamicsWorld.rayTest(new Vector3f(0,0.5f,0), new Vector3f(0,0.5f,5), rayRC);
             System.out.println("gaha:"+rayRC.hasHit());
+            */
         }
     }
 
