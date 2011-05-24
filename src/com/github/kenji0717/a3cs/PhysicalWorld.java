@@ -71,7 +71,6 @@ public class PhysicalWorld implements Runnable {
     //座標を変更するのがちょっとやっかい
     public void run() {
         while (true) {
-System.out.println("gaha1");
             synchronized (newObjects) {
                 for (A3CollisionObject co : newObjects) {
                     //if (rb instanceof MyCar)
@@ -87,7 +86,7 @@ System.out.println("gaha1");
                 }
                 newObjects.clear();
             }
-System.out.println("gaha2");
+
             synchronized (delObjects) {
                 for (A3CollisionObject co : delObjects) {
                     //if (rb instanceof MyCar)
@@ -103,7 +102,6 @@ System.out.println("gaha2");
                 }
                 delObjects.clear();
             }
-System.out.println("gaha3");
 
             for (A3CollisionObject co : objects) {
                 if (co.locRequest==null)
@@ -120,17 +118,15 @@ System.out.println("gaha3");
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
 
 System.out.println("-----gaha-----");
-/*
+
             //衝突
             int numManifolds = dynamicsWorld.getDispatcher().getNumManifolds();
             for (int ii=0;ii<numManifolds;ii++) {
                 PersistentManifold contactManifold = dynamicsWorld.getDispatcher().getManifoldByIndexInternal(ii);
                 CollisionObject obA = (CollisionObject)contactManifold.getBody0();
-//System.out.println("obA:"+obA.getUserPointer().getClass().getName());
                 CollisionObject obB = (CollisionObject)contactManifold.getBody1();
-//System.out.println("obB:"+obB.getUserPointer().getClass().getName());
+                /*
                 int numContacts = contactManifold.getNumContacts();
-//System.out.println("numContacts:"+numContacts);
                 for (int j=0;j<numContacts;j++) {
                     ManifoldPoint pt = contactManifold.getContactPoint(j);
                     if (pt.getDistance()<0.0f) {
@@ -143,6 +139,7 @@ System.out.println("-----gaha-----");
                         System.out.println("-----------------");
                     }
                 }
+                */
 
                 //ロックしすぎ？
                 synchronized (collisionListeners) {
@@ -151,8 +148,7 @@ System.out.println("-----gaha-----");
                     }
                 }
             }
-*/
-System.out.println("gaha4");
+
 
             for (A3CollisionObject co : objects) {
                 if (co.locRequest==null)
@@ -163,7 +159,6 @@ System.out.println("gaha4");
                 co.locRequest=null;
             }
 
-System.out.println("gaha5");
             for (A3CollisionObject co : objects) {
                 if (co.velRequest==null)
                     continue;
@@ -172,7 +167,7 @@ System.out.println("gaha5");
                 }
                 co.velRequest=null;
             }
-System.out.println("gaha6");
+
             try{Thread.sleep(33);}catch(Exception e){;}
         }
     }

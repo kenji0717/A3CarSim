@@ -184,7 +184,6 @@ public class CarMotion implements Motion {
         vehicle.getChassisWorldTransform(rootTrans);
         Transform retTrans = new Transform();
         if (bone.equals("root")) {
-System.out.println("gaha:"+rootTrans);
             retTrans.set(rootTrans);
         } else if (bone.equals("chassis")) {
             retTrans.setIdentity();

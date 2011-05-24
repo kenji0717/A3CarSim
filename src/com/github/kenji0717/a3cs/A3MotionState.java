@@ -39,7 +39,7 @@ public class A3MotionState extends MotionState {
         out.mul(graphicsWorldTrans);
         return out;
     }
-    Quat4f qTmp = new Quat4f();
+    Quat4f qTmp = new Quat4f(0.0f,0.0f,0.0f,1.0f);
     public void setWorldTransform(Transform centerOfMassWorldTrans) {
         graphicsWorldTrans.set(centerOfMassWorldTrans);
         graphicsWorldTrans.mul(centerOfMassOffset);

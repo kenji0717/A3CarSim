@@ -6,17 +6,19 @@ import jp.sourceforge.acerola3d.a3.A3Object;
 import jp.sourceforge.acerola3d.a3.Util;
 import jp.sourceforge.acerola3d.a3.VRML;
 
+import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.linearmath.Transform;
 
 public class MyCheckPoint extends A3CollisionObject {
     public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,COType.GHOST,pw);
         //group = 2;
-        //mask = 3;
+        //mask = 2;
         a3.setUserData("CheckPoint");
     }
 
@@ -25,10 +27,15 @@ public class MyCheckPoint extends A3CollisionObject {
         return vrml;
     }
 
-    public CollisionObject makeCollisionObject() {
+    public CollisionObject makeCollisionObject_BAK() {
         CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
         GhostObject body = new GhostObject();
         body.setCollisionShape(shape);
+        body.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);//ポイント
+        Transform trans = new Transform();
+        trans.origin.set(motionState.graphicsWorldTrans.origin);
+        trans.setRotation(motionState.qTmp);
+        body.setWorldTransform(trans);
         double x = motionState.graphicsWorldTrans.origin.x;
         double y = motionState.graphicsWorldTrans.origin.y;
         double z = motionState.graphicsWorldTrans.origin.z;
@@ -39,5 +46,17 @@ public class MyCheckPoint extends A3CollisionObject {
         double w = motionState.qTmp.w;
         a3.setQuat(x,y,z,w);
         return body;
+    }
+
+    //なんかこっちでもOKぽいぞ。どうする？
+    public CollisionObject makeCollisionObject() {
+        CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
+        Vector3f localInertia = new Vector3f(0,0,0);
+        shape.calculateLocalInertia(1.0f,localInertia);
+        RigidBodyConstructionInfo rbcInfo =
+            new RigidBodyConstructionInfo(1.0f,motionState,shape,localInertia);
+        RigidBody rb = new RigidBody(rbcInfo);
+        rb.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);//ここがポイント
+        return rb;
     }
 }

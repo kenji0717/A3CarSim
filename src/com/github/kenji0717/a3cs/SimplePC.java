@@ -5,6 +5,9 @@ import java.awt.event.*;
 
 import javax.vecmath.*;
 
+import com.bulletphysics.collision.dispatch.CollisionWorld;
+import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
+
 //JBulletを使った物理計算の実験
 public class SimplePC extends KeyAdapter implements CollisionListener {
     PhysicalWorld pw;//物理計算をしてくれるオブジェクト
@@ -26,10 +29,12 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
         pw = new PhysicalWorld();//物理計算をしてくれるオブジェクトを生成
         pw.addCollisionListener(this);
 
+        /* */
         pw.window.addKeyListener(this);
         pw.window.setCameraLocImmediately(0.0,2.5,7.5);
         pw.window.setCameraLookAtPointImmediately(0.0,1.0,0.0);
         pw.window.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE);
+        /* */
 
         //MyGround g = new MyGround(pw);//地面
         MyGround2 g = new MyGround2(pw);//地面
@@ -80,6 +85,10 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
             if (keySpace)
                 this.shoot();
             c.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
+
+            RayResultCallback rayRC = new CollisionWorld.ClosestRayResultCallback(new Vector3f(0,0.5f,0),new Vector3f(0,0.5f,5));
+            pw.dynamicsWorld.rayTest(new Vector3f(0,0.5f,0), new Vector3f(0,0.5f,5), rayRC);
+            System.out.println("gaha:"+rayRC.hasHit());
         }
     }
 
