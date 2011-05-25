@@ -23,13 +23,14 @@ public class Test01 extends KeyAdapter implements CollisionListener {
 
     Test01() throws Exception {
         pw = new PhysicalWorld();//物理計算をしてくれるオブジェクトを生成
+        A3Window w = new A3Window(500,500);
+        pw.setMainCanvas(w);
         pw.addCollisionListener(this);
-
         /* */
-        pw.window.addKeyListener(this);
-        pw.window.setCameraLocImmediately(0.0,2.5,7.5);
-        pw.window.setCameraLookAtPointImmediately(0.0,1.0,0.0);
-        pw.window.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE);
+        w.addKeyListener(this);
+        w.setCameraLocImmediately(0.0,2.5,7.5);
+        w.setCameraLookAtPointImmediately(0.0,1.0,0.0);
+        w.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE);
         /* */
 
         //MyGround g = new MyGround(pw);//地面
@@ -50,7 +51,7 @@ public class Test01 extends KeyAdapter implements CollisionListener {
         //MyBox bb = new MyBox(0.0,1.0,20.0,pw);//立方体
         //pw.add(bb);
 
-        MyCar c = new MyCar(0.0,2.5,0.0,pw);
+        MyCar c = new MyCar(0.0,2.5,0.0,"x-res:///res/stk_tux.a3",pw);
         pw.add(c);
         //c.setLoc2(0.0,2.5,0.0);
 
@@ -58,11 +59,11 @@ public class Test01 extends KeyAdapter implements CollisionListener {
         pw.add(cp);
         //cp.setLoc2(10.0,0.0,0.0);
 
-        pw.window.setAvatar(c.a3);
+        w.setAvatar(c.a3);
         Vector3d lookAt = new Vector3d(0.0,0.0,30.0);
         Vector3d camera = new Vector3d(0.0,3.0,-10.0);
         Vector3d up = new Vector3d(0.0,1.0,0.0);
-        pw.window.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,1.0);
+        w.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,1.0);
 
         while (true) {
             Thread.sleep(33);
@@ -119,8 +120,8 @@ public class Test01 extends KeyAdapter implements CollisionListener {
     void shoot() {
         if ((System.currentTimeMillis()-lastShootTime)<500)
             return; //あまり連続して打つと重なってしまうから
-        Vector3d v = pw.window.getCameraLoc();
-        Vector3d vv = pw.window.getCameraUnitVecZ();
+        Vector3d v = pw.mainCanvas.getCameraLoc();
+        Vector3d vv = pw.mainCanvas.getCameraUnitVecZ();
         vv.normalize();
         vv.scale(-50.0);//カメラの方向を使って弾丸の初速度を計算
         MySphere s = null;
@@ -136,9 +137,11 @@ public class Test01 extends KeyAdapter implements CollisionListener {
 
     /** 実装上止むを得ずpublicにしているだけなので使用しないで下さい。 */
     public void collided(A3CollisionObject a,A3CollisionObject b) {
+        /* */
         System.out.print("a:"+a.a3.getUserData().toString());
         System.out.print(" b:"+b.a3.getUserData().toString());
         System.out.println("  gaha");
+        /* */
     }
     public static void main(String[] args) throws Exception {
         new Test01();

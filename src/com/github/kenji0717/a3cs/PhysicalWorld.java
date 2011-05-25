@@ -19,12 +19,14 @@ class PhysicalWorld implements Runnable {
     ArrayList<A3CollisionObject> objects = new ArrayList<A3CollisionObject>();
     ArrayList<A3CollisionObject> newObjects = new ArrayList<A3CollisionObject>();
     ArrayList<A3CollisionObject> delObjects = new ArrayList<A3CollisionObject>();
-    A3Window window;
+    A3CanvasInterface mainCanvas;
+    ArrayList<A3CanvasInterface> subCanvases = new ArrayList<A3CanvasInterface>();
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
 
     //物理世界の初期化
     public PhysicalWorld() {
-    	window = new A3Window(600,600);
+        //mainCanvas = new A3Window(500,500);
+
         CollisionConfiguration collisionConfiguration =
                 new DefaultCollisionConfiguration();
         CollisionDispatcher dispatcher =
@@ -48,6 +50,22 @@ class PhysicalWorld implements Runnable {
 
         Thread t = new Thread(this);
         t.start();
+    }
+
+    public void setMainCanvas(A3CanvasInterface c) {
+        if (mainCanvas==null) {
+            mainCanvas = c;
+            for (A3CollisionObject o : objects) {
+                mainCanvas.add(o.a3);
+                System.out.println("GAHA:-------------");
+            }
+        } else {
+            System.out.println("Error: has already set mainCanvas!");
+        }
+    }
+
+    public void addSubCanvas(A3CanvasInterface c) {
+        mainCanvas.addA3SubCanvas(c);
     }
 
     //新規の剛体を加える
@@ -77,8 +95,8 @@ class PhysicalWorld implements Runnable {
                     } else {
                         dynamicsWorld.addRigidBody((RigidBody)co.body,co.group,co.mask);
                     }
-                    if (window!=null)
-                        window.add(co.a3);
+                    if (mainCanvas!=null)
+                        mainCanvas.add(co.a3);
                     objects.add(co);
                 }
                 newObjects.clear();
@@ -93,8 +111,8 @@ class PhysicalWorld implements Runnable {
                     } else {
                         dynamicsWorld.removeRigidBody((RigidBody)co.body);
                     }
-                    if (window!=null)
-                        window.del(co.a3);
+                    if (mainCanvas!=null)
+                        mainCanvas.del(co.a3);
                     objects.remove(co);
                 }
                 delObjects.clear();
@@ -114,7 +132,7 @@ class PhysicalWorld implements Runnable {
             dynamicsWorld.stepSimulation(1.0f/30.0f,10);
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
 
-System.out.println("-----gaha-----");
+//System.out.println("-----gaha-----");
 
             //衝突
             int numManifolds = dynamicsWorld.getDispatcher().getNumManifolds();
@@ -165,10 +183,12 @@ System.out.println("-----gaha-----");
                 co.velRequest=null;
             }
 
+            /*
             //光線テストの実験
             RayResultCallback rayRC = new CollisionWorld.ClosestRayResultCallback(new Vector3f(0,0.5f,0),new Vector3f(0,0.5f,5));
             dynamicsWorld.rayTest(new Vector3f(0,0.5f,0), new Vector3f(0,0.5f,5), rayRC);
             System.out.println("gaha:"+rayRC.hasHit());
+            */
 
             try{Thread.sleep(33);}catch(Exception e){;}
         }

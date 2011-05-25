@@ -15,19 +15,19 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.Transform;
 
 class MyCheckPoint extends A3CollisionObject {
-    public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) throws Exception {
+    public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) {
         super(x,y,z,COType.GHOST,pw);
         //group = 2;
         //mask = 2;
         a3.setUserData("CheckPoint");
     }
 
-    public A3Object makeA3Object() throws Exception {
+    public A3Object makeA3Object(Object...args) throws Exception {
         VRML vrml = new VRML("x-rzip:x-res:///res/ClearBlocks2.a3!/blockBlack.wrl");
         return vrml;
     }
 
-    public CollisionObject makeCollisionObject_BAK() {
+    public CollisionObject makeCollisionObject_BAK(Object...args) {
         CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
         GhostObject body = new GhostObject();
         body.setCollisionShape(shape);
@@ -49,7 +49,7 @@ class MyCheckPoint extends A3CollisionObject {
     }
 
     //なんかこっちでもOKぽいぞ。どうする？
-    public CollisionObject makeCollisionObject() {
+    public CollisionObject makeCollisionObject(Object...args) {
         CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
         Vector3f localInertia = new Vector3f(0,0,0);
         shape.calculateLocalInertia(1.0f,localInertia);

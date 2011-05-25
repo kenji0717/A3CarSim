@@ -20,20 +20,24 @@ abstract class A3CollisionObject {
     short mask = 1;
 
     //Acerola3DファイルのURLと初期座標で初期化
-    public A3CollisionObject(double x,double y,double z,COType t,PhysicalWorld pw) throws Exception {
+    public A3CollisionObject(double x,double y,double z,COType t,PhysicalWorld pw,Object...args) {
         this.pw = pw;
         this.coType = t;
-        a3 = makeA3Object();
+        try {
+            a3 = makeA3Object(args);
+        } catch(Exception e) {
+            a3 = new VRML("gaha");
+        }
         Transform transform = new Transform();
         transform.setIdentity();
         transform.origin.set((float)x,(float)y,(float)z);
         motionState = new A3MotionState(a3,transform);
-        body = makeCollisionObject();
+        body = makeCollisionObject(args);
         body.setUserPointer(this);
     }
 
-    public abstract A3Object makeA3Object() throws Exception ;
-    public abstract CollisionObject makeCollisionObject();
+    public abstract A3Object makeA3Object(Object...args) throws Exception ;
+    public abstract CollisionObject makeCollisionObject(Object...args);
 
     public void changeCOType(COType t) {
         ;

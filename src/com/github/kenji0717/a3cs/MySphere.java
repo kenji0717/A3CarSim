@@ -7,15 +7,15 @@ import jp.sourceforge.acerola3d.a3.*;
 
 //球を表すクラス
 class MySphere extends A3CollisionObject {
-    public MySphere(double x,double y,double z,PhysicalWorld pw) throws Exception {
+    public MySphere(double x,double y,double z,PhysicalWorld pw) {
         super(x,y,z,COType.DYNAMIC,pw);
     }
 
-    public A3Object makeA3Object() throws Exception {
+    public A3Object makeA3Object(Object...args) throws Exception {
         return new Action3D("x-res:///res/earth.a3");
     }
     //球状の剛体を作る
-    public RigidBody makeCollisionObject() {
+    public RigidBody makeCollisionObject(Object...args) {
         CollisionShape shape = new SphereShape(1.0f);
         Vector3f localInertia = new Vector3f(0,0,0);
         shape.calculateLocalInertia(1.0f,localInertia);

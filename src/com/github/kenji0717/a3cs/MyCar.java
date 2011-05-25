@@ -5,22 +5,25 @@ import jp.sourceforge.acerola3d.a3.*;
 
 //car
 class MyCar extends A3CollisionObject {
+    String a3url;
 	CarMotion motion;
-    public MyCar(double x,double y,double z,PhysicalWorld pw) throws Exception {
-        super(x,y,z,COType.DYNAMIC,pw);
-        group = 1;
-        mask = 3;
+    public MyCar(double x,double y,double z,String a3url,PhysicalWorld pw) {
+        super(x,y,z,COType.DYNAMIC,pw,a3url);
+        //this.a3url = a3url;
+        //group = 1;
+        //mask = 3;
         a3.setUserData("車");
     }
 
-    public A3Object makeA3Object() throws Exception {
-        return new Action3D("x-res:///res/stk_tux.a3");
+    public A3Object makeA3Object(Object...args) throws Exception {
+        a3url = (String)args[0];
+        return new Action3D(a3url);
     }
     //
-    public CollisionObject makeCollisionObject() {
-    	motionState.setAutoUpdate(false);//MotionデータでコントロールするのでAutoUpdate不要
-    	motion = new CarMotion(motionState,pw.dynamicsWorld);
-    	((Action3D)a3).setMotion("default",motion);
+    public CollisionObject makeCollisionObject(Object...args) {
+        motionState.setAutoUpdate(false);//MotionデータでコントロールするのでAutoUpdate不要
+        motion = new CarMotion(motionState,pw.dynamicsWorld);
+        ((Action3D)a3).setMotion("default",motion);
     	((Action3D)a3).transControlUsingRootBone(true);//rootの骨の情報でA3Objectの変換を制御
         return motion.carChassis;
     }
