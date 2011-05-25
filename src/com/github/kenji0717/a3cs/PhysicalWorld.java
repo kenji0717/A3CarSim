@@ -1,13 +1,9 @@
 package com.github.kenji0717.a3cs;
 
-import com.bulletphysics.collision.broadphase.AxisSweep3;
-import com.bulletphysics.collision.broadphase.BroadphaseInterface;
-import com.bulletphysics.collision.broadphase.DbvtBroadphase;
+import com.bulletphysics.collision.broadphase.*;
 import com.bulletphysics.collision.dispatch.*;
 import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
-import com.bulletphysics.collision.narrowphase.ManifoldPoint;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
-import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.*;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
@@ -17,7 +13,7 @@ import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //物理計算をしてくれるクラス
-public class PhysicalWorld implements Runnable {
+class PhysicalWorld implements Runnable {
     static int MAX_PROXIES = 1024;
     DiscreteDynamicsWorld dynamicsWorld;
     ArrayList<A3CollisionObject> objects = new ArrayList<A3CollisionObject>();

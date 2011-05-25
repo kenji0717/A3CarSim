@@ -1,8 +1,6 @@
 package com.github.kenji0717.a3cs;
 
-import com.bulletphysics.collision.dispatch.CollisionFlags;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.shapes.*;
+import com.bulletphysics.collision.dispatch.*;
 import com.bulletphysics.dynamics.*;
 import com.bulletphysics.linearmath.*;
 import javax.vecmath.*;
@@ -10,7 +8,7 @@ import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //このプログラムで剛体を表すクラス
-public abstract class A3CollisionObject {
+abstract class A3CollisionObject {
 	PhysicalWorld pw;
 	A3Object a3;
     A3MotionState motionState;//JBulletと座標をやりとりするオブジェクト

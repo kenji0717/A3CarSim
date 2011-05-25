@@ -2,13 +2,11 @@ package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.*;
-import com.bulletphysics.linearmath.*;
-
 import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //地面を表すクラス
-public class MyGround2 extends A3CollisionObject {
+class MyGround2 extends A3CollisionObject {
     public MyGround2(PhysicalWorld pw) throws Exception {
         //super(0.0,-50.0,0.0,pw);
         super(0.0,0.0,0.0,COType.STATIC,pw);

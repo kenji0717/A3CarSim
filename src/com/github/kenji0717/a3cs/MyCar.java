@@ -1,14 +1,10 @@
 package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.shapes.*;
-import com.bulletphysics.dynamics.*;
-import com.bulletphysics.linearmath.*;
-import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //car
-public class MyCar extends A3CollisionObject {
+class MyCar extends A3CollisionObject {
 	CarMotion motion;
     public MyCar(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,COType.DYNAMIC,pw);

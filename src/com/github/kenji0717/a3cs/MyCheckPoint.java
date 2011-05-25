@@ -14,7 +14,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.Transform;
 
-public class MyCheckPoint extends A3CollisionObject {
+class MyCheckPoint extends A3CollisionObject {
     public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,COType.GHOST,pw);
         //group = 2;

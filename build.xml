@@ -58,15 +58,24 @@
         </delete>
     </target>
 
-    <target name="exec" depends="jar">
-        <java classname="com.github.kenji0717.a3cs.SimplePC" fork="true">
+    <target name="CarRace" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.CarRace" fork="true">
             <classpath refid="my.exec.class.path"/>
         	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        	<arg value="test.TestCar01}"/>
         </java>
     </target>
 
-    <target name="exec2" depends="jar">
-        <java classname="com.github.kenji0717.a3cs.SimpleCR" fork="true">
+    <target name="CarBattle" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.CarBattle" fork="true">
+            <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        	<arg value="test.TestCar02 test.TestCar02}"/>
+        </java>
+    </target>
+
+    <target name="test01" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.Test01" fork="true">
             <classpath refid="my.exec.class.path"/>
         	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
         </java>

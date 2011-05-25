@@ -6,7 +6,7 @@ import javax.vecmath.*;
 
 //JBulletのシステムと座標などのやりとりをするためのクラス
 //A3Objectの座標を自動で変更する役割もしている．
-public class A3MotionState extends MotionState {
+class A3MotionState extends MotionState {
     public final Transform graphicsWorldTrans = new Transform();
     public final Transform centerOfMassOffset = new Transform();
     public final Transform startWorldTrans = new Transform();

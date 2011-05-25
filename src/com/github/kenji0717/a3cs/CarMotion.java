@@ -1,22 +1,16 @@
 package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.collision.shapes.CompoundShape;
-import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.collision.shapes.*;
+import com.bulletphysics.dynamics.*;
 import com.bulletphysics.dynamics.vehicle.*;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-
-import com.bulletphysics.dynamics.DynamicsWorld;
-import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import jp.sourceforge.acerola3d.a3.*;
 import javax.vecmath.*;
 import javax.media.j3d.*;
 
-public class CarMotion implements Motion {
+class CarMotion implements Motion {
     DynamicsWorld dynamicsWorld;
 
     RigidBody carChassis;

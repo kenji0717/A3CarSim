@@ -2,14 +2,10 @@ package com.github.kenji0717.a3cs;
 
 import jp.sourceforge.acerola3d.a3.*;
 import java.awt.event.*;
-
 import javax.vecmath.*;
 
-import com.bulletphysics.collision.dispatch.CollisionWorld;
-import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
-
 //JBulletを使った物理計算の実験
-public class SimplePC extends KeyAdapter implements CollisionListener {
+public class Test01 extends KeyAdapter implements CollisionListener {
     PhysicalWorld pw;//物理計算をしてくれるオブジェクト
 
     boolean keyUp = false;
@@ -21,11 +17,11 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
     private static float gEngineForce = 0.0f;
     private static float gBreakingForce = 0.0f;
     private static float maxEngineForce = 500.f;
-    private static float maxBreakingForce = 100.f;
+    //private static float maxBreakingForce = 100.f;
     private static float gVehicleSteering = 0.0f;
     private static float steeringClamp = 0.1f;
 
-    public SimplePC() throws Exception {
+    Test01() throws Exception {
         pw = new PhysicalWorld();//物理計算をしてくれるオブジェクトを生成
         pw.addCollisionListener(this);
 
@@ -95,6 +91,7 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
         }
     }
 
+    /** 実装上止むを得ずpublicにしているだけなので使用しないで下さい。 */
     public void keyPressed(KeyEvent ke) {
         switch(ke.getKeyCode()) {
         case KeyEvent.VK_UP:    keyUp = true;    break;
@@ -104,6 +101,8 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
         case KeyEvent.VK_SPACE: keySpace = true; break;
         }
     }
+
+    /** 実装上止むを得ずpublicにしているだけなので使用しないで下さい。 */
     public void keyReleased(KeyEvent ke) {
         switch(ke.getKeyCode()) {
         case KeyEvent.VK_UP:    keyUp = false;    break;
@@ -135,12 +134,13 @@ public class SimplePC extends KeyAdapter implements CollisionListener {
         lastShootTime = System.currentTimeMillis();
     }
 
+    /** 実装上止むを得ずpublicにしているだけなので使用しないで下さい。 */
     public void collided(A3CollisionObject a,A3CollisionObject b) {
         System.out.print("a:"+a.a3.getUserData().toString());
         System.out.print(" b:"+b.a3.getUserData().toString());
         System.out.println("  gaha");
     }
     public static void main(String[] args) throws Exception {
-        new SimplePC();
+        new Test01();
     }
 }

@@ -2,12 +2,11 @@ package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.*;
-import com.bulletphysics.linearmath.*;
 import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.*;
 
 //立方体を表すクラス
-public class MyBox extends A3CollisionObject {
+class MyBox extends A3CollisionObject {
     public MyBox(double x,double y,double z,PhysicalWorld pw) throws Exception {
         super(x,y,z,COType.DYNAMIC,pw);
         a3.setUserData("サイコロ");
