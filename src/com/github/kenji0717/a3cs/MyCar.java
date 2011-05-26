@@ -1,5 +1,7 @@
 package com.github.kenji0717.a3cs;
 
+import javax.vecmath.Vector3d;
+
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import jp.sourceforge.acerola3d.a3.*;
 
@@ -7,8 +9,9 @@ import jp.sourceforge.acerola3d.a3.*;
 class MyCar extends A3CollisionObject {
     String a3url;
 	CarMotion motion;
-    public MyCar(double x,double y,double z,String a3url,PhysicalWorld pw) {
-        super(x,y,z,COType.DYNAMIC,pw,a3url);
+	CarBase carBase;
+    public MyCar(Vector3d l,Vector3d r,String a3url,PhysicalWorld pw) {
+        super(l,r,COType.DYNAMIC,pw,a3url);
         //this.a3url = a3url;
         //group = 1;
         //mask = 3;
@@ -26,6 +29,9 @@ class MyCar extends A3CollisionObject {
         ((Action3D)a3).setMotion("default",motion);
     	((Action3D)a3).transControlUsingRootBone(true);//rootの骨の情報でA3Objectの変換を制御
         return motion.carChassis;
+    }
+    public void setCarBase(CarBase cb) {
+        carBase = cb;
     }
     public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce) {
     	motion.setForce(gEngineForce,gVehicleSteering,gBreakingForce);

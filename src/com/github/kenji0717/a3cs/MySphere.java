@@ -8,7 +8,7 @@ import jp.sourceforge.acerola3d.a3.*;
 //球を表すクラス
 class MySphere extends A3CollisionObject {
     public MySphere(double x,double y,double z,PhysicalWorld pw) {
-        super(x,y,z,COType.DYNAMIC,pw);
+        super(new Vector3d(x,y,z),new Vector3d(),COType.DYNAMIC,pw);
     }
 
     public A3Object makeA3Object(Object...args) throws Exception {

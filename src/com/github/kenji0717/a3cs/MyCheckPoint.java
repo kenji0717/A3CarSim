@@ -1,5 +1,6 @@
 package com.github.kenji0717.a3cs;
 
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import jp.sourceforge.acerola3d.a3.A3Object;
@@ -15,8 +16,8 @@ import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.Transform;
 
 class MyCheckPoint extends A3CollisionObject {
-    public MyCheckPoint(double x,double y,double z,PhysicalWorld pw) {
-        super(x,y,z,COType.GHOST,pw);
+    public MyCheckPoint(Vector3d l,Vector3d r,PhysicalWorld pw) {
+        super(l,r,COType.GHOST,pw);
         //group = 2;
         //mask = 2;
         a3.setUserData("CheckPoint");

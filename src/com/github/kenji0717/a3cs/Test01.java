@@ -51,11 +51,11 @@ public class Test01 extends KeyAdapter implements CollisionListener {
         //MyBox bb = new MyBox(0.0,1.0,20.0,pw);//立方体
         //pw.add(bb);
 
-        MyCar c = new MyCar(0.0,2.5,0.0,"x-res:///res/stk_tux.a3",pw);
+        MyCar c = new MyCar(new Vector3d(0.0,2.5,0.0),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
         pw.add(c);
         //c.setLoc2(0.0,2.5,0.0);
 
-        MyCheckPoint cp = new MyCheckPoint(0.0,0.0,10.0,pw);
+        MyCheckPoint cp = new MyCheckPoint(new Vector3d(0.0,0.0,10.0),new Vector3d(),pw);
         pw.add(cp);
         //cp.setLoc2(10.0,0.0,0.0);
 

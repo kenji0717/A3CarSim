@@ -8,7 +8,7 @@ import jp.sourceforge.acerola3d.a3.*;
 //地面を表すクラス
 class MyGround extends A3CollisionObject {
     public MyGround(PhysicalWorld pw) {
-        super(0.0,-50.0,0.0,COType.STATIC,pw);
+        super(new Vector3d(0.0,-50.0,0.0),new Vector3d(),COType.STATIC,pw);
     }
 
     public A3Object makeA3Object(Object...args) throws Exception {

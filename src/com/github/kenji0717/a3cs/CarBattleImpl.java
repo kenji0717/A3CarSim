@@ -6,7 +6,7 @@ import jp.sourceforge.acerola3d.a3.*;
 import javax.swing.*;
 import javax.vecmath.Vector3d;
 
-class CarBattleImpl implements Runnable {
+class CarBattleImpl implements Runnable, CollisionListener {
     PhysicalWorld pw;
     String carClass1;
     String carClass2;
@@ -23,6 +23,7 @@ class CarBattleImpl implements Runnable {
         carClass2 = args[1];
 
         pw = new PhysicalWorld();
+        pw.addCollisionListener(this);
 
         f = new JFrame("CarBattle");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,9 +32,9 @@ class CarBattleImpl implements Runnable {
         f.add(baseBox,BorderLayout.CENTER);
 
         mainCanvas = A3Canvas.createA3Canvas(400,400);
-        mainCanvas.setCameraLocImmediately(0.0,100.0,0.0);
-        mainCanvas.setCameraLookAtPoint(0.0,0.0,1.0);
-        mainCanvas.setNavigationMode(A3CanvasInterface.NaviMode.EXAMINE);
+        mainCanvas.setCameraLocImmediately(0.0,150.0,0.0);
+        mainCanvas.setCameraLookAtPointImmediately(-50.0,0.0,1.0);
+        mainCanvas.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE,150.0);
         pw.setMainCanvas(mainCanvas);
         baseBox.myAdd(mainCanvas,1);
         VBox subBox = new VBox();
@@ -71,16 +72,19 @@ class CarBattleImpl implements Runnable {
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");
         }
-        car1.init(new Vector3d(-1.0,2.0,0.0),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
-        car2.init(new Vector3d(-1.0,2.0,0.0),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
+        car1.init(new Vector3d(0,2,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
+        car2.init(new Vector3d(0,2,10),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw);
 
         pw.add(car1.car);
         pw.add(car2.car);
 
+        Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
+        Vector3d camera = new Vector3d(0.0,3.0,-6.0);
+        Vector3d up = new Vector3d(0.0,1.0,0.0);
         car1Canvas.setAvatar(car1.car.a3);
-        car1Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE);
+        car1Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
         car2Canvas.setAvatar(car2.car.a3);
-        car2Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE);
+        car2Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
     }
 
     public void run() {
@@ -89,5 +93,29 @@ class CarBattleImpl implements Runnable {
             car2.exec();
             try{Thread.sleep(33);}catch(Exception e){;}
         }
+    }
+
+    @Override
+    public void collided(A3CollisionObject a, A3CollisionObject b) {
+        if ((a instanceof MyBullet)||(b instanceof MyBullet)) {
+            MyBullet bullet = null;
+            A3CollisionObject other = null;
+            if (a instanceof MyBullet) {
+                bullet = (MyBullet)a;
+                other = b;
+            } else {
+                bullet = (MyBullet)b;
+                other = a;
+            }
+            if (other instanceof MyBullet) {
+                pw.del(other);
+            } else if (other instanceof MyCar) {
+                ((MyCar)other).carBase.hit();
+            } else {
+                ;//あとは背景だけ?
+            }
+            pw.del(bullet);
+        }
+        //System.out.println("a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
     }
 }

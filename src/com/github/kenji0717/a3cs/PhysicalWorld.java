@@ -2,7 +2,7 @@ package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.broadphase.*;
 import com.bulletphysics.collision.dispatch.*;
-import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
+//import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.dynamics.*;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
@@ -119,10 +119,13 @@ class PhysicalWorld implements Runnable {
             }
 
             for (A3CollisionObject co : objects) {
-                if (co.locRequest==null)
+                if ((co.locRequest==null)&&(co.quatRequest==null))
                     continue;
                 Transform t = new Transform();
-                t.origin.set(co.locRequest);
+                if (co.locRequest!=null)
+                    t.origin.set(co.locRequest);
+                if (co.quatRequest!=null)
+                    t.setRotation(new Quat4f(co.quatRequest));
                 co.motionState.setWorldTransform(t);
                 if (co.coType==COType.DYNAMIC)
                     co.changeCOType(COType.KINEMATIC_TEMP);

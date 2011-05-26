@@ -9,7 +9,7 @@ import jp.sourceforge.acerola3d.a3.*;
 class MyGround2 extends A3CollisionObject {
     public MyGround2(PhysicalWorld pw) {
         //super(0.0,-50.0,0.0,pw);
-        super(0.0,0.0,0.0,COType.STATIC,pw);
+        super(new Vector3d(),new Vector3d(),COType.STATIC,pw);
         a3.setUserData("地面2");
     }
 

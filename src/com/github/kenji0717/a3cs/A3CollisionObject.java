@@ -14,13 +14,14 @@ abstract class A3CollisionObject {
     A3MotionState motionState;//JBulletと座標をやりとりするオブジェクト
     CollisionObject body;//JBulletにおける剛体などを表すオブジェクト
     Vector3f locRequest;
+    Quat4d quatRequest;
     Vector3f velRequest;
     COType coType = COType.DYNAMIC;
     short group = 1;
     short mask = 1;
 
     //Acerola3DファイルのURLと初期座標で初期化
-    public A3CollisionObject(double x,double y,double z,COType t,PhysicalWorld pw,Object...args) {
+    public A3CollisionObject(Vector3d l,Vector3d r,COType t,PhysicalWorld pw,Object...args) {
         this.pw = pw;
         this.coType = t;
         try {
@@ -30,7 +31,8 @@ abstract class A3CollisionObject {
         }
         Transform transform = new Transform();
         transform.setIdentity();
-        transform.origin.set((float)x,(float)y,(float)z);
+        transform.origin.set((float)l.x,(float)l.y,(float)l.z);
+        transform.setRotation(new Quat4f(Util.euler2quat(r)));
         motionState = new A3MotionState(a3,transform);
         body = makeCollisionObject(args);
         body.setUserPointer(this);
@@ -85,6 +87,10 @@ abstract class A3CollisionObject {
     //座標変更．副作用で力や速度がリセットされる
     public void setLoc2(double x,double y,double z) {
         locRequest = new Vector3f((float)x,(float)y,(float)z);
+    }
+    //座標変更．副作用で力や速度がリセットされる
+    public void setRot2(double x,double y,double z) {
+        quatRequest = Util.euler2quat(x,y,z);
     }
     public void setVel(double x,double y,double z) {
         velRequest = new Vector3f((float)x,(float)y,(float)z);
