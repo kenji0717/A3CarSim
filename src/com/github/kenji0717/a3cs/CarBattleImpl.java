@@ -21,8 +21,13 @@ class CarBattleImpl implements Runnable, CollisionListener {
     A3SubCanvas car2Canvas;
 
     CarBattleImpl(String args[]) {
-        carClass1 = args[0];
-        carClass2 = args[1];
+        if (args.length==2) {
+            carClass1 = args[0];
+            carClass2 = args[1];
+        } else {
+            carClass1 = "test.TestCar02";
+            carClass2 = "test.TestCar02";
+        }
 
         pw = new PhysicalWorld();
         pw.addCollisionListener(this);
