@@ -11,8 +11,11 @@ class MyBullet extends A3CollisionObject {
         super(l,r,COType.DYNAMIC,pw);
     }
 
+static int gaha;
     public A3Object makeA3Object(Object...args) throws Exception {
-        return new Action3D("x-res:///res/bullet.a3");
+        Action3D a = new Action3D("x-res:///res/bullet.a3");
+        a.setUserData("bullet"+(gaha++)+":"+System.currentTimeMillis());
+        return a;
     }
     //球状の剛体を作る
     public RigidBody makeCollisionObject(Object...args) {

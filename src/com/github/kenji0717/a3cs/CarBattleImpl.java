@@ -6,6 +6,8 @@ import jp.sourceforge.acerola3d.a3.*;
 import javax.swing.*;
 import javax.vecmath.Vector3d;
 
+import com.bulletphysics.linearmath.Transform;
+
 class CarBattleImpl implements Runnable, CollisionListener {
     PhysicalWorld pw;
     String carClass1;
@@ -51,6 +53,8 @@ class CarBattleImpl implements Runnable, CollisionListener {
 
         MyGround2 g = new MyGround2(pw);
         pw.add(g);
+        //MyGround g = new MyGround(pw);
+        //pw.add(g);
 
         initCars();
 
@@ -72,8 +76,8 @@ class CarBattleImpl implements Runnable, CollisionListener {
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");
         }
-        car1.init(new Vector3d(0,2,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
-        car2.init(new Vector3d(0,2,10),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw);
+        car1.init(new Vector3d( 1,2,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw);
+        car2.init(new Vector3d(-1,2,10),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw);
 
         pw.add(car1.car);
         pw.add(car2.car);
@@ -109,13 +113,21 @@ class CarBattleImpl implements Runnable, CollisionListener {
             }
             if (other instanceof MyBullet) {
                 pw.del(other);
+                pw.del(bullet);
             } else if (other instanceof MyCar) {
                 ((MyCar)other).carBase.hit();
-            } else {
-                ;//あとは背景だけ?
+                pw.del(bullet);
+            } else if (other instanceof MyGround2){
+                //なぜか、当ってないと思うのに地面と衝突していると判定される。
+                //pw.del(bullet);
             }
-            pw.del(bullet);
+            /*
+            System.out.println("gaha bullet:"+bullet.a3.getUserData()+" other:"+other.a3.getUserData());
+            Transform t = new Transform();
+            bullet.body.getWorldTransform(t);
+            System.out.println("gaha loc:"+t.origin);
+            */
         }
-        //System.out.println("a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
+        //System.out.println("gaha a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
     }
 }

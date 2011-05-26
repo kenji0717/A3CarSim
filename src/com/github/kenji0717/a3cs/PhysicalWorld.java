@@ -95,8 +95,9 @@ class PhysicalWorld implements Runnable {
                     } else {
                         dynamicsWorld.addRigidBody((RigidBody)co.body,co.group,co.mask);
                     }
-                    if (mainCanvas!=null)
+                    if (mainCanvas!=null) {
                         mainCanvas.add(co.a3);
+                    }
                     objects.add(co);
                 }
                 newObjects.clear();
@@ -111,9 +112,10 @@ class PhysicalWorld implements Runnable {
                     } else {
                         dynamicsWorld.removeRigidBody((RigidBody)co.body);
                     }
-                    if (mainCanvas!=null)
+                    if (mainCanvas!=null) {
                         mainCanvas.del(co.a3);
-                    objects.remove(co);
+                    }
+                   objects.remove(co);
                 }
                 delObjects.clear();
             }
