@@ -45,7 +45,7 @@ class CarBattleImpl implements Runnable, CollisionListener {
         pw.setMainCanvas(mainCanvas);
         baseBox.myAdd(mainCanvas,1);
         VBox subBox = new VBox();
-        baseBox.myAdd(subBox,0);
+        baseBox.myAdd(subBox,1);
         car1Canvas = A3SubCanvas.createA3SubCanvas(200,200);
         pw.addSubCanvas(car1Canvas);
         subBox.myAdd(car1Canvas,1);
@@ -118,21 +118,15 @@ class CarBattleImpl implements Runnable, CollisionListener {
             }
             if (other instanceof MyBullet) {
                 pw.del(other);
-                pw.del(bullet);
             } else if (other instanceof MyCar) {
                 ((MyCar)other).carBase.hit();
-                pw.del(bullet);
             } else if (other instanceof MyGround2){
-                //なぜか、当ってないと思うのに地面と衝突していると判定される。
-                //pw.del(bullet);
+                ;
+            } else {
+                ;
             }
-            /*
-            System.out.println("gaha bullet:"+bullet.a3.getUserData()+" other:"+other.a3.getUserData());
-            Transform t = new Transform();
-            bullet.body.getWorldTransform(t);
-            System.out.println("gaha loc:"+t.origin);
-            */
+            pw.del(bullet);
         }
-        //System.out.println("gaha a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
+        System.out.println("gaha a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
     }
 }
