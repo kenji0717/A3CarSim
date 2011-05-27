@@ -191,12 +191,12 @@ class PhysicalWorld implements Runnable {
                 co.velRequest=null;
             }
 
-            /* */
+            /*
             //光線テストの実験
             RayResultCallback rayRC = new CollisionWorld.ClosestRayResultCallback(new Vector3f(0,0.5f,0),new Vector3f(0,0.5f,5));
             dynamicsWorld.rayTest(new Vector3f(0,0.5f,0), new Vector3f(0,0.5f,5), rayRC);
             System.out.println("gaha:"+rayRC.hasHit());
-            /* */
+            */
 
             try{Thread.sleep(33);}catch(Exception e){;}
         }
