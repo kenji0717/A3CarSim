@@ -1,74 +1,47 @@
 package com.github.kenji0717.a3cs;
 
-import java.awt.BorderLayout;
 import java.util.ArrayList;
-import jp.sourceforge.acerola3d.a3.*;
-import javax.swing.*;
 import javax.vecmath.Vector3d;
 
 class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     PhysicalWorld pw;
-    String carClass1;
-    String carClass2;
     CarBase car1;
     CarBase car2;
-    ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>(); 
+    ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
+    Object waitingRoom = new Object();
+    boolean simRunning = false;
+    boolean stopRequest = true;
 
-    JFrame f;
-    A3Canvas mainCanvas;
-    A3SubCanvas car1Canvas;
-    A3SubCanvas car2Canvas;
+    CarBattleGUI gui;
 
     CarBattleImpl(String args[]) {
-        if (args.length==2) {
-            carClass1 = args[0];
-            carClass2 = args[1];
-        } else {
-            carClass1 = "test.TestCar02";
-            carClass2 = "test.TestCar02";
-        }
-
         pw = new PhysicalWorld();
         pw.addCollisionListener(this);
 
-        f = new JFrame("CarBattle");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setLayout(new BorderLayout());
-        HBox baseBox = new HBox();
-        f.add(baseBox,BorderLayout.CENTER);
+        gui = new CarBattleGUI(this,args);
+        gui.pack();
+        gui.setVisible(true);
 
-        mainCanvas = A3Canvas.createA3Canvas(400,400);
-        mainCanvas.setCameraLocImmediately(0.0,150.0,0.0);
-        mainCanvas.setCameraLookAtPointImmediately(-50.0,0.0,1.0);
-        A3CSController c = new A3CSController(150.0);
-        mainCanvas.setA3Controller(c);
-        //mainCanvas.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE,150.0);
-        pw.setMainCanvas(mainCanvas);
-        baseBox.myAdd(mainCanvas,1);
-        VBox subBox = new VBox();
-        baseBox.myAdd(subBox,1);
-        car1Canvas = A3SubCanvas.createA3SubCanvas(200,200);
-        pw.addSubCanvas(car1Canvas);
-        subBox.myAdd(car1Canvas,1);
-        car2Canvas = A3SubCanvas.createA3SubCanvas(200,200);
-        pw.addSubCanvas(car2Canvas);
-        subBox.myAdd(car2Canvas,1);
-
-        f.pack();
-        f.setVisible(true);
-
-        MyGround2 g = new MyGround2(pw);
-        pw.add(g);
-        //MyGround g = new MyGround(pw);
-        //pw.add(g);
-
-        initCars();
+        pw.setMainCanvas(gui.mainCanvas);
+        pw.addSubCanvas(gui.car1Canvas);
+        pw.addSubCanvas(gui.car2Canvas);
 
         Thread t = new Thread(this);
         t.start();
     }
 
-    void initCars() {
+    void clearInitStartBattle(String carClass1,String carClass2) {
+        if (simRunning)
+            return;
+
+        //clearの処理、まだ未実装
+
+        //initの処理
+        MyGround2 g = new MyGround2(pw);
+        pw.add(g);
+        //MyGround g = new MyGround(pw);
+        //pw.add(g);
+
         try {
             ClassLoader cl = this.getClass().getClassLoader();
             Class<?> theClass = cl.loadClass(carClass1);
@@ -89,19 +62,32 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
 
         pw.add(car1.car);
         pw.add(car2.car);
+        gui.setCar1(car1);
+        gui.setCar2(car2);
 
-        Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
-        Vector3d camera = new Vector3d(0.0,3.0,-6.0);
-        Vector3d up = new Vector3d(0.0,1.0,0.0);
-        car1Canvas.setAvatar(car1.car.a3);
-        car1Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
-        car2Canvas.setAvatar(car2.car.a3);
-        car2Canvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
+
+        //startの処理
+        stopRequest = false;
+        synchronized (waitingRoom) {
+            waitingRoom.notifyAll();
+        }
+        simRunning = true;
     }
 
+    void stopBattle() {
+        //simRunning = false;
+    }
     public void run() {
         ArrayList<ActiveObject> tmp = new ArrayList<ActiveObject>();
         while (true) {
+            synchronized (waitingRoom) {
+                try {
+                    if (stopRequest)
+                        waitingRoom.wait();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
             synchronized (activeObjects) {
                 tmp.clear();
                 tmp.addAll(activeObjects);
