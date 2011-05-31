@@ -1,0 +1,83 @@
+/* A3CarSimのメインのCSS */
+/* http://desperadoes.biz/style/dan/ */
+
+body {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  background-color: #ffc;
+}
+
+/******************* まずはレイアウト用divブロックの設定 **********************/
+
+/* header */
+#header {
+  background: url("images/HeaderBack.png") no-repeat;
+  background-color: #fff;
+  width: 100%;
+  border-top:1px solid #fff;    /* なぜか必要 */
+  border-bottom:1px solid #fff; /* なぜか必要 */
+}
+
+/* menu */
+#menu {
+  background-color: #cfc;
+  float: left;
+  width: 12em;
+}
+
+/* main */
+#main {
+  margin-left: 12em;
+}
+
+/* footer */
+#footer {
+  border-top-style: ridge;
+  border-top-color: #cc7;
+  border-top-width: 5px;
+  clear: both;
+  width: 100%;
+  padding: 0.5em;
+}
+
+/******************** 全てのブロックで共通の設定 *******************/
+
+/* 今回はh1はdiv生成用ということにして表示させないようにする */
+h1 {
+  display: none;
+}
+
+h2 {
+  margin: 0.5em 0.2em 0.5em 0.2em;
+  padding: 0em 0.5em 0em 0.5em;
+}
+
+p {
+  padding: 0em 0.5em 0em 0.5em;
+  text-indent: 1em;
+}
+
+/******************** 個々のブロックにおける設定 *******************/
+
+#header h2 {
+  color: red;
+}
+#menu h2 {
+  color: green;
+  background: url("images/h2back.png");
+  background-repeat: repeat-y;
+}
+#menu ul {
+  padding: 0em 1em 0em 1em;
+  margin: 0.5em 0em 0.5em 1em;
+  list-style-image: url("images/MenuListMarker.png");
+}
+#main h2 {
+  color: blue;
+  background: url("images/h2back.png");
+  background-repeat: repeat-y;
+}
+#footer p {
+  display: inline;
+}

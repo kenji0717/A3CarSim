@@ -1,0 +1,15 @@
+/* A3CarSimのトップページ固有のCSS */
+
+#header h2 {
+  /* color: red; */
+  text-indent: -1000px;
+  background: url("images/A3CarSimTitle.png") no-repeat;
+  width: 200px;
+  height: 40px;
+}
+
+#main img {
+  display: block;
+  margin: auto;
+}
+
