@@ -22,7 +22,7 @@ Java Web Startによる配信
 
 現在準備中です．
 
-* [A3CarBattle](./A3CarBattle/)
+* [CarBattle](./CarBattle/)
 
 Footer @(id:1,footer)
 ========================================

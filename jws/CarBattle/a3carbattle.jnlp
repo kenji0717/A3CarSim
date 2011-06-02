@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- JNLP File for A3CarBattle -->
-<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/A3CarBattle"
+<!-- JNLP File for CarBattle -->
+<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/CarBattle"
       href="a3carbattle.jnlp">
   <information>
-    <title>A3CarBattle</title>
+    <title>CarBattle</title>
     <vendor>Kenji Saito</vendor>
     <homepage href="http://kenji0717.github.com/A3CarSim/"/>
-    <description>A3CarBattle</description>
+    <description>CarBattle</description>
     <icon href="./a3carbattle.png"/>
     <offline-allowed/>
     <shortcut>
