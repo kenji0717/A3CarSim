@@ -17,7 +17,7 @@ class CarBattleGUI extends JFrame implements ActionListener {
     JTextField car2classTF;
     JLabel generalInfoL;
     JButton startB;
-    //JButton pauseB;
+    JButton pauseB;
     JButton stopB;
 
     CarBattleGUI(CarBattleImpl i,String args[]) {
@@ -60,9 +60,9 @@ class CarBattleGUI extends JFrame implements ActionListener {
         startB = new JButton("START");
         startB.addActionListener(this);
         mainButtonsBox.myAdd(startB,1);
-        //pauseB = new JButton("PAUSE");
-        //pauseB.addActionListener(this);
-        //mainButtonsBox.myAdd(pauseB,1);
+        pauseB = new JButton("PAUSE");
+        pauseB.addActionListener(this);
+        mainButtonsBox.myAdd(pauseB,1);
         stopB = new JButton("STOP");
         stopB.addActionListener(this);
         mainButtonsBox.myAdd(stopB,1);
@@ -116,17 +116,15 @@ class CarBattleGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
         Object s = ae.getSource();
         if (s==startB) {
-            String carClass1 = car1classTF.getText();
-            String carClass2 = car2classTF.getText();
-            impl.clearInitStartBattle(carClass1,carClass2);
-            car1classTF.setEditable(false);
-            car2classTF.setEditable(false);
-        //} else if (s==pauseB) {
-        //    pauseBattle();
+            impl.startBattle();
+        } else if (s==pauseB) {
+            impl.pauseBattle();
         } else if (s==stopB) {
             impl.stopBattle();
-            car1classTF.setEditable(true);
-            car2classTF.setEditable(true);
         }
+    }
+    void setParamEditable(boolean b) {
+        car1classTF.setEditable(b);
+        car2classTF.setEditable(b);
     }
 }

@@ -23,6 +23,8 @@ class PhysicalWorld implements Runnable {
     A3CanvasInterface mainCanvas;
     ArrayList<A3CanvasInterface> subCanvases = new ArrayList<A3CanvasInterface>();
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
+    Object waitingRoom = new Object();
+    boolean stopRequest = false;
 
     //物理世界の初期化
     public PhysicalWorld() {
@@ -83,10 +85,47 @@ class PhysicalWorld implements Runnable {
         }
     }
 
+    public void stop() {
+        stopRequest = true;
+    }
+    public void start() {
+        stopRequest = false;
+        synchronized (waitingRoom) {
+            waitingRoom.notifyAll();
+        }
+    }
+    public void clear() {
+        stopRequest = true;
+        try{Thread.sleep(300);}catch(Exception e){;}
+        if (mainCanvas!=null) {
+            for (A3CollisionObject co : objects) {
+                mainCanvas.del(co.a3);
+            }
+        }
+        for (A3CollisionObject co : objects) {
+            if (co.coType==COType.GHOST) {
+                dynamicsWorld.removeCollisionObject(co.body);
+            } else {
+                dynamicsWorld.removeRigidBody((RigidBody)co.body);
+            }
+        }
+        objects.clear();
+        newObjects.clear();
+        delObjects.clear();
+    }
     //物理計算を進める処理
     //座標を変更するのがちょっとやっかい
     public void run() {
         while (true) {
+            synchronized (waitingRoom) {
+                if (stopRequest==true) {
+                    try {
+                        waitingRoom.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             synchronized (newObjects) {
                 for (A3CollisionObject co : newObjects) {
                     //if (rb instanceof MyCar)

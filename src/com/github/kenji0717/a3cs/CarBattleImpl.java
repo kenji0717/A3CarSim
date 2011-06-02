@@ -9,7 +9,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     CarBase car2;
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
     Object waitingRoom = new Object();
-    boolean simRunning = false;
+    boolean battleRunning = false;//一時停止中でもtrue
+    boolean simRunning = false;//一時停止中はfalse
     boolean stopRequest = true;
 
     CarBattleGUI gui;
@@ -27,33 +28,42 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         pw.addSubCanvas(gui.car2Canvas);
 
         Thread t = new Thread(this);
+        stopRequest = true;
         t.start();
     }
 
-    void clearInitStartBattle(String carClass1,String carClass2) {
+    //clearの処理
+    void clearBattle() {
         if (simRunning)
-            return;
-
-        //clearの処理、まだ未実装
-
-        //initの処理
+            throw new IllegalStateException();
+        if (battleRunning)
+            throw new IllegalStateException();
+        pw.clear();
+        activeObjects.clear();
+        car1 = null;
+        car2 = null;
+    }
+    void initBattle() {
+        if (simRunning)
+            throw new IllegalStateException();
+        if (battleRunning)
+            throw new IllegalStateException();
         MyGround2 g = new MyGround2(pw);
         pw.add(g);
         //MyGround g = new MyGround(pw);
         //pw.add(g);
 
+        String carClass1 = gui.car1classTF.getText();
+        String carClass2 = gui.car2classTF.getText();
         try {
             ClassLoader cl = this.getClass().getClassLoader();
             Class<?> theClass = cl.loadClass(carClass1);
             Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
             car1 = tClass.newInstance();
-            activeObjects.add(car1);
 
             theClass = cl.loadClass(carClass2);
             tClass = theClass.asSubclass(CarBase.class);
             car2 = tClass.newInstance();
-            activeObjects.add(car2);
-
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");
         }
@@ -64,26 +74,49 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         pw.add(car2.car);
         gui.setCar1(car1);
         gui.setCar2(car2);
+        activeObjects.add(car1);
+        activeObjects.add(car2);
 
-
-        //startの処理
+    }
+    void startBattle() {
+        if (simRunning)
+            throw new IllegalStateException();
+        if (battleRunning)
+            throw new IllegalStateException();
+        clearBattle();
+        initBattle();
         stopRequest = false;
         synchronized (waitingRoom) {
             waitingRoom.notifyAll();
         }
-        simRunning = true;
+        gui.setParamEditable(false);
     }
-
+    void pauseBattle() {
+        if (simRunning)
+            stopRequest = true;
+        else {
+            stopRequest = false;
+            synchronized (waitingRoom) {
+                waitingRoom.notifyAll();
+            }
+        }
+    }
     void stopBattle() {
-        //simRunning = false;
+        stopRequest = true;
+        battleRunning = false;
+        gui.setParamEditable(true);
     }
     public void run() {
         ArrayList<ActiveObject> tmp = new ArrayList<ActiveObject>();
+        simRunning = true;
         while (true) {
             synchronized (waitingRoom) {
                 try {
-                    if (stopRequest)
+                    if (stopRequest) {
+                        simRunning = false;
                         waitingRoom.wait();
+                        simRunning = true;
+                    }
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
