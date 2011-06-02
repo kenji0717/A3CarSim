@@ -24,7 +24,7 @@ class PhysicalWorld implements Runnable {
     ArrayList<A3CanvasInterface> subCanvases = new ArrayList<A3CanvasInterface>();
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
     Object waitingRoom = new Object();
-    boolean stopRequest = false;
+    boolean pauseRequest = false;
 
     //物理世界の初期化
     public PhysicalWorld() {
@@ -85,17 +85,17 @@ class PhysicalWorld implements Runnable {
         }
     }
 
-    public void stop() {
-        stopRequest = true;
+    public void pause() {
+        pauseRequest = true;
     }
-    public void start() {
-        stopRequest = false;
+    public void resume() {
+        pauseRequest = false;
         synchronized (waitingRoom) {
             waitingRoom.notifyAll();
         }
     }
     public void clear() {
-        stopRequest = true;
+        pauseRequest = true;
         try{Thread.sleep(300);}catch(Exception e){;}
         if (mainCanvas!=null) {
             for (A3CollisionObject co : objects) {
@@ -118,7 +118,7 @@ class PhysicalWorld implements Runnable {
     public void run() {
         while (true) {
             synchronized (waitingRoom) {
-                if (stopRequest==true) {
+                if (pauseRequest==true) {
                     try {
                         waitingRoom.wait();
                     } catch (InterruptedException e) {

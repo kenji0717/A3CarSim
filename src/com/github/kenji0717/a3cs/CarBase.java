@@ -15,6 +15,7 @@ public abstract class CarBase implements ActiveObject {
     PhysicalWorld pw;
     CarSim carSim;
     int carID;
+    int energy = 100;
     protected CarBase() {
         carID=carIDCount++;
     }
@@ -78,6 +79,7 @@ public abstract class CarBase implements ActiveObject {
         return ret;
     }
     void hit() {
+        energy--;
         System.out.println("車:"+carID+":いて!!!");
     }
     public abstract void exec();

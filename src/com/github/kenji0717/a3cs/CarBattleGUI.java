@@ -19,6 +19,8 @@ class CarBattleGUI extends JFrame implements ActionListener {
     JButton startB;
     JButton pauseB;
     JButton stopB;
+    JLabel car1EnergyL;
+    JLabel car2EnergyL;
 
     CarBattleGUI(CarBattleImpl i,String args[]) {
         super("CarBattle");
@@ -85,6 +87,8 @@ class CarBattleGUI extends JFrame implements ActionListener {
         VBox car1InfoBox = new VBox();
         car1Box.myAdd(car1InfoBox,0);
         car1InfoBox.myAdd(new JLabel("CAR1:"),0);
+        car1EnergyL = new JLabel("Energy: 000");
+        car1InfoBox.myAdd(car1EnergyL,0);
         
         HBox car2Box = new HBox();
         subBox.myAdd(car2Box,1);
@@ -93,6 +97,8 @@ class CarBattleGUI extends JFrame implements ActionListener {
         VBox car2InfoBox = new VBox();
         car2Box.myAdd(car2InfoBox,0);
         car2InfoBox.myAdd(new JLabel("CAR2:"),0);
+        car2EnergyL = new JLabel("Energy: 000");
+        car2InfoBox.myAdd(car2EnergyL,0);
 
         //this.pack();
         //this.setVisible(true);
@@ -126,5 +132,11 @@ class CarBattleGUI extends JFrame implements ActionListener {
     void setParamEditable(boolean b) {
         car1classTF.setEditable(b);
         car2classTF.setEditable(b);
+    }
+    void updateCar1Info(CarBase c) {
+        car1EnergyL.setText("Energy: "+c.energy);
+    }
+    void updateCar2Info(CarBase c) {
+        car2EnergyL.setText("Energy: "+c.energy);
     }
 }

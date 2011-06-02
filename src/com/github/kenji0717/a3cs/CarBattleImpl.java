@@ -11,7 +11,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     Object waitingRoom = new Object();
     boolean battleRunning = false;//一時停止中でもtrue
     boolean simRunning = false;//一時停止中はfalse
-    boolean stopRequest = true;
+    boolean pauseRequest = true;
 
     CarBattleGUI gui;
 
@@ -28,7 +28,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         pw.addSubCanvas(gui.car2Canvas);
 
         Thread t = new Thread(this);
-        stopRequest = true;
+        pauseRequest = true;
         t.start();
     }
 
@@ -76,34 +76,51 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         gui.setCar2(car2);
         activeObjects.add(car1);
         activeObjects.add(car2);
+        gui.updateCar1Info(car1);
+        gui.updateCar2Info(car2);
 
     }
     void startBattle() {
-        if (simRunning)
-            throw new IllegalStateException();
-        if (battleRunning)
-            throw new IllegalStateException();
-        clearBattle();
-        initBattle();
-        stopRequest = false;
-        synchronized (waitingRoom) {
-            waitingRoom.notifyAll();
+        if (simRunning) {
+            return;
+            //throw new IllegalStateException();
         }
-        gui.setParamEditable(false);
-    }
-    void pauseBattle() {
-        if (simRunning)
-            stopRequest = true;
-        else {
-            stopRequest = false;
+        if (battleRunning) {
+            pauseRequest = false;
             synchronized (waitingRoom) {
                 waitingRoom.notifyAll();
             }
+            pw.resume();
+        } else {
+            clearBattle();
+            initBattle();
+            pauseRequest = false;
+            synchronized (waitingRoom) {
+                waitingRoom.notifyAll();
+            }
+            pw.resume();
+            gui.setParamEditable(false);
+            battleRunning = true;
+        }
+    }
+    void pauseBattle() {
+        if (simRunning) {
+            pauseRequest = true;
+            pw.pause();
+        } else {
+            pauseRequest = false;
+            synchronized (waitingRoom) {
+                waitingRoom.notifyAll();
+            }
+            pw.resume();
         }
     }
     void stopBattle() {
-        stopRequest = true;
+        pauseRequest = true;
+        try{Thread.sleep(300);}catch(Exception e){;}
         battleRunning = false;
+        clearBattle();
+        pw.pause();
         gui.setParamEditable(true);
     }
     public void run() {
@@ -112,7 +129,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         while (true) {
             synchronized (waitingRoom) {
                 try {
-                    if (stopRequest) {
+                    if (pauseRequest) {
                         simRunning = false;
                         waitingRoom.wait();
                         simRunning = true;
@@ -128,6 +145,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             for (ActiveObject o: tmp) {
                 o.exec();
             }
+            gui.updateCar1Info(car1);
+            gui.updateCar2Info(car2);
             try{Thread.sleep(33);}catch(Exception e){;}
         }
     }
