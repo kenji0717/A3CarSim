@@ -1,5 +1,8 @@
 package com.github.kenji0717.a3cs;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 
@@ -14,6 +17,9 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     boolean pauseRequest = true;
 
     CarBattleGUI gui;
+
+    ArrayList<URL> classPath = new ArrayList<URL>();
+    URLClassLoader classLoader;
 
     CarBattleImpl(String args[]) {
         pw = new PhysicalWorld();
@@ -42,6 +48,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         activeObjects.clear();
         car1 = null;
         car2 = null;
+        classLoader = null;
+        System.gc();
     }
     void initBattle() {
         if (simRunning)
@@ -53,15 +61,22 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         //MyGround g = new MyGround(pw);
         //pw.add(g);
 
+        try {
+            classPath.add(new URL("file:///Users/ksaito/tmp9/"));            
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        URL urls[] = classPath.toArray(new URL[0]);
+
+        classLoader = new URLClassLoader(urls);
         String carClass1 = gui.car1classTF.getText();
         String carClass2 = gui.car2classTF.getText();
         try {
-            ClassLoader cl = this.getClass().getClassLoader();
-            Class<?> theClass = cl.loadClass(carClass1);
+            Class<?> theClass = classLoader.loadClass(carClass1);
             Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
             car1 = tClass.newInstance();
 
-            theClass = cl.loadClass(carClass2);
+            theClass = classLoader.loadClass(carClass2);
             tClass = theClass.asSubclass(CarBase.class);
             car2 = tClass.newInstance();
         } catch(Exception e) {

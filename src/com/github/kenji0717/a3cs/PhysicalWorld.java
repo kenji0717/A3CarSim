@@ -98,9 +98,9 @@ class PhysicalWorld implements Runnable {
         pauseRequest = true;
         try{Thread.sleep(300);}catch(Exception e){;}
         if (mainCanvas!=null) {
-            for (A3CollisionObject co : objects) {
-                mainCanvas.del(co.a3);
-            }
+            mainCanvas.delAll();
+            //for (A3CollisionObject co : objects)
+            //    mainCanvas.del(co.a3);
         }
         for (A3CollisionObject co : objects) {
             if (co.coType==COType.GHOST) {

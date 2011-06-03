@@ -7,6 +7,7 @@ import jp.sourceforge.acerola3d.a3.*;
 
 //地面を表すクラス
 class MyGround2 extends A3CollisionObject {
+    static CollisionShape groundShape;
     public MyGround2(PhysicalWorld pw) {
         //super(0.0,-50.0,0.0,pw);
         super(new Vector3d(),new Vector3d(),COType.STATIC,pw);
@@ -19,7 +20,8 @@ class MyGround2 extends A3CollisionObject {
     }
     //地面用の剛体を作る
     public RigidBody makeCollisionObject(Object...args) {
-        CollisionShape groundShape = Util.makeBvhTriangleMeshShape(a3.getNode());
+        if (groundShape==null)
+            groundShape = Util.makeBvhTriangleMeshShape(a3.getNode());
         RigidBodyConstructionInfo cInfo = new RigidBodyConstructionInfo(0.0f, motionState, groundShape, new Vector3f());
         RigidBody body = new RigidBody(cInfo);
         return body;
