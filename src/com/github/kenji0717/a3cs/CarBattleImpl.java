@@ -83,7 +83,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             System.out.println("Class Load Error!!!");
         }
         car1.init(new Vector3d( 1,0.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
-        car2.init(new Vector3d(-1,0.5,10),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw,this);
+        car2.init(new Vector3d(-1,0.5,10),new Vector3d(0,3.14,0),"x-res:///res/stk_wilber2.a3",pw,this);
 
         pw.add(car1.car);
         pw.add(car2.car);
