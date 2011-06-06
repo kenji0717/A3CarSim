@@ -4,6 +4,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
 import javax.vecmath.Vector3d;
 
 class CarBattleImpl implements Runnable, CollisionListener, CarSim {
@@ -15,6 +19,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     boolean battleRunning = false;//一時停止中でもtrue
     boolean simRunning = false;//一時停止中はfalse
     boolean pauseRequest = true;
+    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
     CarBattleGUI gui;
 
@@ -82,8 +87,9 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");
         }
-        car1.init(new Vector3d( 1,0.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
-        car2.init(new Vector3d(-1,0.5,10),new Vector3d(0,3.14,0),"x-res:///res/stk_wilber2.a3",pw,this);
+        //たぶん車のスタート位置を少し上にして地面に埋まらないようにしておいた方が良いと思う
+        car1.init(new Vector3d( 1,1.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
+        car2.init(new Vector3d(-1,1.5,10),new Vector3d(0,3.14,0),"x-res:///res/stk_wilber2.a3",pw,this);
 
         pw.add(car1.car);
         pw.add(car2.car);
@@ -109,16 +115,19 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         } else {
             clearBattle();
             initBattle();
+            pw.resume();
+            try{Thread.sleep(100);}catch(Exception e){;}//gaha:落ち着くまで待つ
             pauseRequest = false;
             synchronized (waitingRoom) {
                 waitingRoom.notifyAll();
             }
-            pw.resume();
             gui.setParamEditable(false);
             battleRunning = true;
         }
     }
     void pauseBattle() {
+        if (!battleRunning)
+            return;
         if (simRunning) {
             pauseRequest = true;
             pw.pause();
@@ -163,7 +172,31 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             gui.updateCar1Info(car1);
             gui.updateCar2Info(car2);
             try{Thread.sleep(33);}catch(Exception e){;}
+
+            if ((car1.energy<=0)||(car2.energy<=0)) {
+                pauseRequest = true;
+                pw.pause();
+                Runnable r = new Runnable() {
+                    public void run() {
+                        finishBattle();
+                    }
+                };
+                executor.schedule(r,100,TimeUnit.MILLISECONDS);
+            }
         }
+    }
+
+    void finishBattle() {
+        String message = null;
+        if (car1.energy==car2.energy)
+            message = "draw";
+        else if (car1.energy>car2.energy)
+            message = "car1 win!";
+        else
+            message = "car2 win!";
+        JOptionPane.showMessageDialog(gui,message);
+
+        stopBattle();
     }
 
     @Override

@@ -50,6 +50,7 @@ public abstract class CarBase implements ActiveObject {
         return car.a3.getUnitVecZ();
     }
     protected void shoot(Vector3d d) {
+        energy = energy - 1;
         if (d.length()<0.0001)
             return;
         d.normalize();
@@ -79,7 +80,7 @@ public abstract class CarBase implements ActiveObject {
         return ret;
     }
     void hit() {
-        energy--;
+        energy = energy - 5;
         System.out.println("車:"+carID+":いて!!!");
     }
     public abstract void exec();
