@@ -122,9 +122,10 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
                 urls = new URL[]{new URL(s)};
             }
             final URL urlsF[] = urls;
+            final ClassLoader pCL = CarBase.class.getClassLoader();
             cl = AccessController.doPrivilegedWithCombiner(new PrivilegedAction<URLClassLoader>() {
                 public URLClassLoader run() {
-                    return new URLClassLoader(urlsF);
+                    return new URLClassLoader(urlsF,pCL);
                 }
             });
 
