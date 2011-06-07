@@ -87,6 +87,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             car2 = tClass.newInstance();
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");
+            e.printStackTrace();
         }
         //たぶん車のスタート位置を少し上にして地面に埋まらないようにしておいた方が良いと思う
         car1.init(new Vector3d( 1,1.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
