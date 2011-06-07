@@ -3,8 +3,11 @@ package com.github.kenji0717.a3cs;
 import java.util.ArrayList;
 
 class CarRaceImpl implements CarSim {
+    CarRaceGUI gui;
     CarRaceImpl(String args[]) {
-        ;
+        gui = new CarRaceGUI(this,args);
+        gui.pack();
+        gui.setVisible(true);
     }
 
     @Override
