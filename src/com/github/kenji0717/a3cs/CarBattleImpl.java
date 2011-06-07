@@ -14,6 +14,9 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     PhysicalWorld pw;
     CarBase car1;
     CarBase car2;
+    String car1classpath = "System";
+    String car2classpath = "System";
+    String ideClasspath;
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
     Object waitingRoom = new Object();
     boolean battleRunning = false;//一時停止中でもtrue
@@ -23,8 +26,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
 
     CarBattleGUI gui;
 
-    ArrayList<URL> classPath = new ArrayList<URL>();
-    URLClassLoader classLoader;
+    URLClassLoader classLoader1;
+    URLClassLoader classLoader2;
 
     CarBattleImpl(String args[]) {
         pw = new PhysicalWorld();
@@ -53,7 +56,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         activeObjects.clear();
         car1 = null;
         car2 = null;
-        classLoader = null;
+        classLoader1 = null;
+        classLoader2 = null;
         System.gc();
     }
     void initBattle() {
@@ -66,22 +70,17 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         //MyGround g = new MyGround(pw);
         //pw.add(g);
 
-        try {
-            classPath.add(new URL("file:///Users/ksaito/tmp9/"));            
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        URL urls[] = classPath.toArray(new URL[0]);
+        classLoader1 = makeClassLoader(car1classpath);
+        classLoader2 = makeClassLoader(car2classpath);
 
-        classLoader = new URLClassLoader(urls);
         String carClass1 = gui.car1classTF.getText();
         String carClass2 = gui.car2classTF.getText();
         try {
-            Class<?> theClass = classLoader.loadClass(carClass1);
+            Class<?> theClass = classLoader1.loadClass(carClass1);
             Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
             car1 = tClass.newInstance();
 
-            theClass = classLoader.loadClass(carClass2);
+            theClass = classLoader2.loadClass(carClass2);
             tClass = theClass.asSubclass(CarBase.class);
             car2 = tClass.newInstance();
         } catch(Exception e) {
@@ -100,6 +99,30 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         gui.updateCar1Info(car1);
         gui.updateCar2Info(car2);
 
+    }
+    
+    URLClassLoader makeClassLoader(String s) {
+        try {
+            URLClassLoader cl = null;
+            URL urls[] = null;
+            if (s==null) {
+                urls = new URL[0];
+            } else if (s.equals("System")) {
+                urls = new URL[0];
+            } else if (s.equals("IDE")) {
+                if (ideClasspath==null) {
+                    urls = new URL[0];
+                } else {
+                    urls = new URL[]{new URL(ideClasspath)};
+                }
+            } else {
+                urls = new URL[]{new URL(s)};
+            }
+            cl = new URLClassLoader(urls);
+            return cl;
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
     void startBattle() {
         if (simRunning) {
@@ -171,7 +194,6 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             }
             gui.updateCar1Info(car1);
             gui.updateCar2Info(car2);
-            try{Thread.sleep(33);}catch(Exception e){;}
 
             if ((car1.energy<=0)||(car2.energy<=0)) {
                 pauseRequest = true;
@@ -183,6 +205,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
                 };
                 executor.schedule(r,100,TimeUnit.MILLISECONDS);
             }
+            try{Thread.sleep(33);}catch(Exception e){;}
         }
     }
 
@@ -247,5 +270,14 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         synchronized (activeObjects) {
             activeObjects.remove(o);
         }
+    }
+    void changeCP1(String cp) {
+        car1classpath = cp;
+    }
+    void changeCP2(String cp) {
+        car2classpath = cp;
+    }
+    void setIDEPath(String cp) {
+        ideClasspath = cp;
     }
 }
