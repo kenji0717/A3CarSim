@@ -1,9 +1,11 @@
 package com.github.kenji0717.a3cs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.PrintStream;
 
 import jp.sourceforge.acerola3d.a3.*;
 import javax.swing.*;
@@ -29,6 +31,8 @@ class CarBattleGUI extends JFrame implements ActionListener {
     JButton stopB;
     JLabel car1EnergyL;
     JLabel car2EnergyL;
+    JTextArea stdOutTA;
+    JTextAreaOutputStream out;
 
     CarBattleGUI(CarBattleImpl i,String args[]) {
         super("CarBattle");
@@ -121,6 +125,15 @@ class CarBattleGUI extends JFrame implements ActionListener {
         car2EnergyL = new JLabel("Energy: 000");
         car2InfoBox.myAdd(car2EnergyL,0);
 
+        stdOutTA = new JTextArea(10,80);
+        stdOutTA.setEditable(false);
+        JScrollPane sp = new JScrollPane(stdOutTA);
+        sp.setMinimumSize(new Dimension(100,100));
+        baseBox.myAdd(sp,0);
+        out = new JTextAreaOutputStream(stdOutTA,System.out);
+        PrintStream ps = new PrintStream(out,true);
+        System.setOut(ps);
+        System.setErr(ps);
         //this.pack();
         //this.setVisible(true);
     }
@@ -215,13 +228,13 @@ class CarBattleGUI extends JFrame implements ActionListener {
         int returnVal = chooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
-            String url = f.toURI().toString();
-            impl.setIDEPath(url);
+            impl.setWorkDir(f.getAbsolutePath());
+            impl.setWorkDirURL(f.toURI().toString());
         } else {
-            impl.setIDEPath(null);
+            impl.setWorkDirURL(null);
         }
     }
     void ide() {
-        ide.popup(impl.ideClasspath);
+        ide.popup(impl.workDir);
     }
 }

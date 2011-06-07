@@ -18,7 +18,8 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     CarBase car2;
     String car1classpath = "System";
     String car2classpath = "System";
-    String ideClasspath;
+    String workDir;
+    String workDirURL;
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
     Object waitingRoom = new Object();
     boolean battleRunning = false;//一時停止中でもtrue
@@ -113,10 +114,10 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             } else if (s.equals("System")) {
                 urls = new URL[0];
             } else if (s.equals("IDE")) {
-                if (ideClasspath==null) {
+                if (workDirURL==null) {
                     urls = new URL[0];
                 } else {
-                    urls = new URL[]{new URL(ideClasspath)};
+                    urls = new URL[]{new URL(workDirURL)};
                 }
             } else {
                 urls = new URL[]{new URL(s)};
@@ -290,7 +291,10 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     void changeCP2(String cp) {
         car2classpath = cp;
     }
-    void setIDEPath(String cp) {
-        ideClasspath = cp;
+    void setWorkDirURL(String wdu) {
+        workDirURL = wdu;
+    }
+    void setWorkDir(String wd) {
+        workDir = wd;
     }
 }

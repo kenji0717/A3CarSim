@@ -2,22 +2,24 @@ package com.github.kenji0717.a3cs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
 import javax.tools.*;
 
 class SimpleIDE extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
-    String ideDir;
+    String workDir;
+    String filePath;
     JavaCompiler compiler;
 
-    JLabel messageL;
     JButton openB;
     JButton saveB;
     JButton compileB;
+    JButton makeJarB;
     JTextArea editor;
     JTextArea outputTA;
     JTextAreaOutputStream jtaos;
@@ -28,8 +30,6 @@ class SimpleIDE extends JDialog implements ActionListener {
 
         VBox mainBox = new VBox();
         this.add(mainBox);
-        messageL = new JLabel("message:");
-        mainBox.myAdd(messageL,0);
         HBox buttonsBox = new HBox();
         mainBox.myAdd(buttonsBox,0);
         openB = new JButton("Open");
@@ -41,6 +41,9 @@ class SimpleIDE extends JDialog implements ActionListener {
         compileB = new JButton("Compile");
         compileB.addActionListener(this);
         buttonsBox.myAdd(compileB,0);
+        makeJarB = new JButton("MakeJAR");
+        makeJarB.addActionListener(this);
+        buttonsBox.myAdd(makeJarB,0);
         buttonsBox.myAdd(Box.createHorizontalGlue(),1);
         editor = new JTextArea(30,80);
         JScrollPane scroll = new JScrollPane(editor);
@@ -54,66 +57,88 @@ class SimpleIDE extends JDialog implements ActionListener {
         jtaos = new JTextAreaOutputStream(outputTA,System.out);
     }
     void setEnable(boolean b) {
-        
+        openB.setEnabled(b);
+        saveB.setEnabled(b);
+        compileB.setEnabled(b);
+        makeJarB.setEnabled(b);
+        editor.setEditable(b);
     }
-    void popup(String ideDir) {
-        if (compiler==null)
-        this.ideDir = ideDir;
+    void popup(String workDir) {
+        this.workDir = workDir;
 
-        if (compiler==null)
-            messageL.setText("JDKをインストールしましょう。");
-        else if (ideDir==null)
-            messageL.setText("作業フォルダを指定してからIDEを起動して下さい。");
-        else
-            messageL.setText("準備OK。");
+        if (compiler==null) {
+            editor.setText("JDKをインストールしましょう。");
+            this.setEnable(false);
+        } else if (workDir==null) {
+            editor.setText("作業フォルダを指定してからIDEを起動して下さい。");
+            this.setEnable(false);
+        } else {
+            editor.setText("");
+            this.setEnable(true);
+        }
 
         this.setModal(true);
         this.pack();
         this.setVisible(true);
     }
-    void compile() {
-        int result = compiler.run(null,null,null,"src/HelloWorld.java");
-    }
     @Override
     public void actionPerformed(ActionEvent ae) {
         Object s = ae.getSource();
         if (s==openB) {
-            System.out.println("Open");
+            openFile();
         } else if (s==saveB) {
-            System.out.println("Save");
+            saveFile();
         } else if (s==compileB) {
-            System.out.println("Compile");
+            compile();
+        } else if (s==makeJarB) {
+            makeJarFile();
+        } else {
+            System.out.println("gaha:????");
         }
     }
-}
-class JTextAreaOutputStream extends OutputStream {
-    JTextArea textArea;
-    PrintStream systemOut;
-    byte queue[];
-    int position = 0;
-
-    public JTextAreaOutputStream(JTextArea ta, PrintStream systemOut) {
-        this.systemOut = systemOut;
-        textArea = ta;
-        queue = new byte[256];
+    void openFile() {
+        JFileChooser chooser = new JFileChooser(workDir);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "Java Source File", "java");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            try {
+                FileReader fr = new FileReader(f);
+                BufferedReader br = new BufferedReader(fr);
+                editor.setText("");
+                String line = br.readLine();
+                while (line!=null) {
+                    editor.append(line+"\n");
+                    line = br.readLine();
+                }
+                filePath = f.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
-
-    public void write(int b) {
-        systemOut.write(b);
-        queue[position++] = (byte) b;
-        if (position >= 256)
-            flush();
+    void saveFile() {
+        try {
+            FileWriter fw = new FileWriter(filePath);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.print(editor.getText());
+            pw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-    public void flush() {
-        systemOut.flush();
-        String s = new String(queue, 0, position);
-        position = 0;
-        textArea.append(s);
-        Document d = textArea.getDocument();
-        Position p = d.getEndPosition();
-        Caret c = textArea.getCaret();
-        c.setDot(p.getOffset());
+    void compile() {
+        String classPath = System.getProperty("java.class.path");
+        int result = compiler.run(null,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
+        if (result==0) {
+            System.out.println("コンパイル成功");
+            System.out.flush();
+        }
+    }
+    void makeJarFile() {
+        System.out.println("まだ作成できていません。");
     }
 }
 
