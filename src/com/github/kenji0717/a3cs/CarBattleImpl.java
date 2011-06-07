@@ -3,6 +3,8 @@ package com.github.kenji0717.a3cs;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -118,9 +120,18 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             } else {
                 urls = new URL[]{new URL(s)};
             }
-            cl = new URLClassLoader(urls);
+            final URL urlsF[] = urls;
+            cl = AccessController.doPrivilegedWithCombiner(new PrivilegedAction<URLClassLoader>() {
+                public URLClassLoader run() {
+                    return new URLClassLoader(urlsF);
+                }
+            });
+
             return cl;
         } catch (MalformedURLException e) {
+            return null;
+        } catch (Error e) {
+            e.printStackTrace();
             return null;
         }
     }
