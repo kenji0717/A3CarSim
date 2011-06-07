@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.vecmath.*;
 
 //JBulletを使った物理計算の実験
-public class Test01 extends KeyAdapter implements CollisionListener {
+class Test01 extends KeyAdapter implements CollisionListener {
     PhysicalWorld pw;//物理計算をしてくれるオブジェクト
 
     boolean keyUp = false;

@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.tools.*;
 
-public class SimpleIDE extends JDialog implements ActionListener {
+class SimpleIDE extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     String ideDir;
     JavaCompiler compiler;
