@@ -3,6 +3,9 @@ package com.github.kenji0717.a3cs;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -133,12 +136,48 @@ class SimpleIDE extends JDialog implements ActionListener {
         String classPath = System.getProperty("java.class.path");
         int result = compiler.run(null,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
         if (result==0) {
-            System.out.println("コンパイル成功");
-            System.out.flush();
+            outputTA.append("コンパイル成功\n");
         }
     }
     void makeJarFile() {
-        System.out.println("まだ作成できていません。");
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "JAR File", "jar");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                File f = chooser.getSelectedFile();
+                JarOutputStream jos = new JarOutputStream(new FileOutputStream(f));
+                File ff = new File(workDir);
+                for (File fff:ff.listFiles()) {
+                    makeJarFileRec(jos,fff,"");
+                }
+                jos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        }
+    }
+    void makeJarFileRec(JarOutputStream jos,File f,String path) throws Exception {
+        if (f.isDirectory()) {
+            File files[] = f.listFiles();
+            for (File ff:files) {
+                makeJarFileRec(jos,ff,path+f.getName()+"/");
+            }
+        } else if (f.isFile()) {
+            FileInputStream fis = new FileInputStream(f);
+            byte[] buf = new byte[1024];
+            JarEntry je = new JarEntry(path+f.getName());
+            jos.putNextEntry(je);
+            int len = 0;
+            while ((len=fis.read(buf))!=-1) {
+                jos.write(buf,0,len);
+            }
+            fis.close();
+            jos.closeEntry();
+        }
     }
 }
 
