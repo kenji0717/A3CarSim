@@ -22,6 +22,7 @@ Java Web Startによる配信
 
 現在準備中です．
 
+* [CarRace](./CarRace/)
 * [CarBattle](./CarBattle/)
 
 Footer @(id:1,footer)
