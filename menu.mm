@@ -4,5 +4,5 @@ Menu
 
 * [Home](/A3CarSim/)
 * [JavaWebStart](/A3CarSim/jws/)
-* [javadoc](/doc/api/)
+* [javadoc](/A3CarSim/doc/api/)
 
