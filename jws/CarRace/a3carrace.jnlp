@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- JNLP File for CarBattle -->
-<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/CarBattle"
-      href="a3carbattle.jnlp">
+<!-- JNLP File for CarRace -->
+<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/CarRace"
+      href="a3carrace.jnlp">
   <information>
-    <title>CarBattle</title>
+    <title>CarRace</title>
     <vendor>Kenji Saito</vendor>
     <homepage href="http://kenji0717.github.com/A3CarSim/"/>
-    <description>CarBattle</description>
-    <icon href="./a3carbattle.png"/>
+    <description>CarRace</description>
+    <icon href="./a3carrace.png"/>
     <offline-allowed/>
     <shortcut>
       <desktop/>
@@ -23,5 +23,5 @@
     <extension href="http://acerola3d.sourceforge.jp/jws/acerola3d/acerola3d.jnlp"/>
     <extension href="http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim.jnlp"/>
   </resources>
-  <application-desc main-class="com.github.kenji0717.a3cs.CarBattle"/>
+  <application-desc main-class="com.github.kenji0717.a3cs.CarRace"/>
 </jnlp>

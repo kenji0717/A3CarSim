@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for A3CarSim -->
+<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/A3CarSim"
+      href="a3carsim.jnlp">
+  <information>
+    <title>A3CarSim</title>
+    <vendor>Kenji Saito</vendor>
+    <homepage href="http://kenji0717.github.com/A3CarSim/"/>
+    <description>A3CarSim</description>
+    <icon href="./a3carsim.png"/>
+    <offline-allowed/>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <update check="timeout" policy="prompt-update"/>
+  <resources>
+    <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="./a3carsim.jar"/>
+    <extension href="http://acerola3d.sourceforge.jp/jws/acerola3d/acerola3d.jnlp"/>
+  </resources>
+  <component-desc/>
+</jnlp>
