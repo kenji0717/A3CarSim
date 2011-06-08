@@ -1,0 +1,342 @@
+<project name="a3carsim" default="jar" basedir=".">
+
+    <!-- ここから環境設定 -->
+    <!--
+    環境変数から値を取得して設定するようにしている。 
+    処理される環境変数は以下の5つだが、指定しなければデフォルトの値が使われる。
+    * A3CS_LIB_PATH
+        - Acerola3D関係のJARファイルとDLL(Windows)やjnilib(MacOSX)やso(Linux)
+          を読み込む場所
+        - デフォルトは${basedir}/lib/acerola3d/
+    -->
+
+    <property environment="env"/>
+    <!-- Acerola3D関係のJARファイルを読み込む場所の設定 -->
+    <condition property="my.lib.path" value="${env.A3CS_LIB_PATH}">
+        <isset property="env.A3CS_LIB_PATH"/>
+    </condition>
+    <condition property="my.lib.path" value="${basedir}/lib/acerola3d/">
+        <not><isset property="my.lib.path"/></not>
+    </condition>
+
+    <!-- 環境設定、ここまで -->
+
+    <path id="my.class.path">
+        <fileset dir="${my.lib.path}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="my.exec.class.path">
+        <fileset dir="${my.lib.path}">
+            <include name="*.jar"/>
+        </fileset>
+    	<pathelement location="release/a3carsim.jar"/>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="build"/>
+        <copy todir="build/res">
+            <fileset dir="res"/>
+        </copy>
+        <javac srcdir="src" destdir="build" encoding="utf-8" debug="on">
+            <classpath refid="my.class.path"/>
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar jarfile="release/a3carsim.jar" basedir="build"
+             manifest="release/Manifest"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete file="release/a3carsim.jar"/>
+        <delete>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+        </delete>
+    </target>
+
+    <target name="CarRace" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.CarRace" fork="true">
+            <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        	<arg value="test.TestCar01}"/>
+        </java>
+    </target>
+
+    <target name="CarBattle" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.CarBattle" fork="true">
+            <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        	<arg value="test.TestCar02"/>
+        	<arg value="test.TestCar02"/>
+        </java>
+    </target>
+
+    <target name="test01" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.Test01" fork="true">
+            <classpath refid="my.exec.class.path"/>
+        	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        </java>
+    </target>
+
+<!--
+	<target name="version-input" unless="version">
+    	<echo>*****************************</echo>
+    	<echo>Please specify the version...</echo>
+    	<echo>*****************************</echo>
+		<input message="input package version:" addproperty="version"/>
+    </target>
+
+	<target name="linux-bin-package" depends="version-input,jar">
+    	<tstamp><format property="my.today" pattern="yyyy,MM/dd"/></tstamp>
+    	<copy file="release/a3viewer.jar" todir="release/A3Viewer_Linux"/> 
+    	<copy file="release/A3Viewer_Linux_README.txt"
+              tofile="release/A3Viewer_Linux/README.txt"
+              encoding="UTF8"
+    		  overwrite="true">
+            <filterset>
+                <filter token="date" value="${my.today}"/>
+                <filter token="version" value="Version:${version}"/>
+            </filterset>
+    	</copy>
+        <copy todir="release/A3Viewer_Linux/acerola3d">
+        	<fileset dir="lib/Acerola3D_Libraries_Linux/acerola3d"/>
+    	</copy>
+        <copy todir="release/A3Viewer_Linux/licensing">
+        	<fileset dir="lib/Acerola3D_Libraries_Linux/licensing"/>
+    	</copy>
+    	<concat destfile="release/A3Viewer_Linux/licensing/acerola3d-license.txt">
+    		<filelist dir="lib/Acerola3D_Libraries_Linux" files="COPYRIGHT,COPYING.LESSER,COPYING"/>
+        </concat>
+    	<copy file="COPYING" todir="release/A3Viewer_Linux/"/>
+    	<copy file="COPYING.LESSER" todir="release/A3Viewer_Linux/"/>
+      	<copy file="COPYRIGHT" todir="release/A3Viewer_Linux/"/>
+        <tar destfile="../A3Viewer_Linux-${version}.tar.gz" compression="gzip">
+            <tarfileset dir="release" mode="755">
+                <include name="A3Viewer_Linux/A3Viewer"/>
+            </tarfileset>
+            <tarfileset dir="release">
+                <include name="A3Viewer_Linux/**"/>
+                <exclude name="A3Viewer_Linux/A3Viewer"/>
+            </tarfileset>
+        </tar>
+    	<delete file="release/A3Viewer_Linux/a3viewer.jar"/>
+    	<delete file="release/A3Viewer_Linux/README.txt"/>
+    	<delete file="release/A3Viewer_Linux/COPYING"/>
+    	<delete file="release/A3Viewer_Linux/COPYING.LESSER"/>
+       	<delete file="release/A3Viewer_Linux/COPYRIGHT"/>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Linux/acerola3d" />
+        </delete>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Linux/licensing" />
+        </delete>
+    </target>
+
+	<target name="linux64-bin-package" depends="version-input,jar">
+    	<tstamp><format property="my.today" pattern="yyyy,MM/dd"/></tstamp>
+    	<copy file="release/a3viewer.jar" todir="release/A3Viewer_Linux64"/> 
+    	<copy file="release/A3Viewer_Linux64_README.txt"
+              tofile="release/A3Viewer_Linux64/README.txt"
+              encoding="UTF8"
+    		  overwrite="true">
+            <filterset>
+                <filter token="date" value="${my.today}"/>
+                <filter token="version" value="Version:${version}"/>
+            </filterset>
+    	</copy>
+        <copy todir="release/A3Viewer_Linux64/acerola3d">
+        	<fileset dir="lib/Acerola3D_Libraries_Linux64/acerola3d"/>
+    	</copy>
+        <copy todir="release/A3Viewer_Linux64/licensing">
+        	<fileset dir="lib/Acerola3D_Libraries_Linux64/licensing"/>
+    	</copy>
+    	<concat destfile="release/A3Viewer_Linux64/licensing/acerola3d-license.txt">
+    		<filelist dir="lib/Acerola3D_Libraries_Linux64" files="COPYRIGHT,COPYING.LESSER,COPYING"/>
+        </concat>
+    	<copy file="COPYING" todir="release/A3Viewer_Linux64/"/>
+    	<copy file="COPYING.LESSER" todir="release/A3Viewer_Linux64/"/>
+      	<copy file="COPYRIGHT" todir="release/A3Viewer_Linux64/"/>
+        <tar destfile="../A3Viewer_Linux64-${version}.tar.gz" compression="gzip">
+            <tarfileset dir="release" mode="755">
+                <include name="A3Viewer_Linux64/A3Viewer"/>
+            </tarfileset>
+            <tarfileset dir="release">
+                <include name="A3Viewer_Linux64/**"/>
+                <exclude name="A3Viewer_Linux64/A3Viewer"/>
+            </tarfileset>
+        </tar>
+    	<delete file="release/A3Viewer_Linux64/a3viewer.jar"/>
+    	<delete file="release/A3Viewer_Linux64/README.txt"/>
+    	<delete file="release/A3Viewer_Linux64/COPYING"/>
+    	<delete file="release/A3Viewer_Linux64/COPYING.LESSER"/>
+       	<delete file="release/A3Viewer_Linux64/COPYRIGHT"/>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Linux64/acerola3d" />
+        </delete>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Linux64/licensing" />
+        </delete>
+    </target>
+
+    <target name="mac-bin-package" depends="version-input,jar">
+    	<tstamp><format property="my.today" pattern="yyyy,MM/dd"/></tstamp>
+    	<copy file="release/a3viewer.jar" todir="release/A3Viewer_MacOSX/A3Viewer.app/Contents/Resources/Java/"/>
+    	<copy file="release/A3Viewer_MacOSX_README.txt"
+              tofile="release/A3Viewer_MacOSX/README.txt"
+              encoding="SJIS"
+    		  overwrite="true">
+            <filterset>
+                <filter token="date" value="${my.today}"/>
+                <filter token="version" value="Version:${version}"/>
+            </filterset>
+    	</copy>
+        <copy todir="release/A3Viewer_MacOSX/A3Viewer.app/Contents/Resources/Java/">
+        	<fileset dir="lib/Acerola3D_Libraries_MacOSX/acerola3d"/>
+    	</copy>
+        <copy todir="release/A3Viewer_MacOSX/licensing">
+        	<fileset dir="lib/Acerola3D_Libraries_MacOSX/licensing"/>
+    	</copy>
+    	<concat destfile="release/A3Viewer_MacOSX/licensing/acerola3d-license.txt">
+    		<filelist dir="lib/Acerola3D_Libraries_MacOSX" files="COPYRIGHT,COPYING.LESSER,COPYING"/>
+        </concat>
+    	<copy file="COPYING" todir="release/A3Viewer_MacOSX/"/>
+    	<copy file="COPYING.LESSER" todir="release/A3Viewer_MacOSX/"/>
+      	<copy file="COPYRIGHT" todir="release/A3Viewer_MacOSX/"/>
+    	<exec dir="release" executable="chmod" os="Mac OS X">
+    		<arg value="755"/>
+    		<arg value="A3Viewer_MacOSX/A3Viewer.app/Contents/MacOS/JavaApplicationStub"/>
+       	</exec>
+    	<exec dir="release/A3Viewer_MacOSX" executable="ln" os="Mac OS X">
+    		<arg value="-s"/>
+    		<arg path="/Applications"/>
+    		<arg value="."/>
+       	</exec>
+    	<exec dir="release" executable="hdiutil" os="Mac OS X">
+    		<arg value="create"/>
+    		<arg value="-srcfolder"/>
+       		<arg value="A3Viewer_MacOSX"/>
+	    	<arg value="-fs"/>
+	    	<arg value="HFS+"/>
+    		<arg value="-volname"/>
+    		<arg value="A3Viewer_MacOSX"/>
+    		<arg value="../../A3Viewer_MacOSX-${version}.dmg"/>
+       	</exec>
+    	<exec dir="release/A3Viewer_MacOSX" executable="rm" os="Mac OS X">
+    		<arg value="Applications"/>
+       	</exec>
+        <delete>
+            <fileset dir="release/A3Viewer_MacOSX/A3Viewer.app/Contents/Resources/Java/">
+                <include name="*"/>
+            </fileset>
+        </delete>
+    	<delete file="release/A3Viewer_MacOSX/README.txt"/>
+    	<delete file="release/A3Viewer_MacOSX/COPYING"/>
+    	<delete file="release/A3Viewer_MacOSX/COPYING.LESSER"/>
+       	<delete file="release/A3Viewer_MacOSX/COPYRIGHT"/>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_MacOSX/licensing" />
+        </delete>
+    </target>
+
+    <target name="win-bin-package" depends="version-input,jar">
+    	<tstamp><format property="my.today" pattern="yyyy,MM/dd"/></tstamp>
+    	<copy file="release/a3viewer.jar" todir="release/A3Viewer_Windows"/> 
+    	<copy file="release/A3Viewer_Windows_README.txt"
+              tofile="release/A3Viewer_Windows/README.txt"
+              encoding="SJIS"
+    		  overwrite="true">
+            <filterset>
+                <filter token="date" value="${my.today}"/>
+                <filter token="version" value="Version:${version}"/>
+            </filterset>
+    	</copy>
+        <copy todir="release/A3Viewer_Windows/acerola3d">
+        	<fileset dir="lib/Acerola3D_Libraries_Windows/acerola3d"/>
+    	</copy>
+        <copy todir="release/A3Viewer_Windows/licensing">
+        	<fileset dir="lib/Acerola3D_Libraries_Windows/licensing"/>
+    	</copy>
+    	<concat destfile="release/A3Viewer_Windows/licensing/acerola3d-license.txt">
+    		<filelist dir="lib/Acerola3D_Libraries_Windows" files="COPYRIGHT,COPYING.LESSER,COPYING"/>
+        </concat>
+    	<copy file="COPYING" todir="release/A3Viewer_Windows/"/>
+    	<copy file="COPYING.LESSER" todir="release/A3Viewer_Windows/"/>
+      	<copy file="COPYRIGHT" todir="release/A3Viewer_Windows/"/>
+        <zip destfile="../A3Viewer_Windows-${version}.zip">
+            <zipfileset dir="release">
+                <include name="A3Viewer_Windows/**"/>
+            </zipfileset>
+        </zip>
+    	<delete file="release/A3Viewer_Windows/a3viewer.jar"/>
+    	<delete file="release/A3Viewer_Windows/README.txt"/>
+    	<delete file="release/A3Viewer_Windows/COPYING"/>
+    	<delete file="release/A3Viewer_Windows/COPYING.LESSER"/>
+       	<delete file="release/A3Viewer_Windows/COPYRIGHT"/>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Windows/acerola3d" />
+        </delete>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Windows/licensing" />
+        </delete>
+    </target>
+
+    <target name="win64-bin-package" depends="version-input,jar">
+    	<tstamp><format property="my.today" pattern="yyyy,MM/dd"/></tstamp>
+    	<copy file="release/a3viewer.jar" todir="release/A3Viewer_Windows64"/> 
+    	<copy file="release/A3Viewer_Windows64_README.txt"
+              tofile="release/A3Viewer_Windows64/README.txt"
+              encoding="SJIS"
+    		  overwrite="true">
+            <filterset>
+                <filter token="date" value="${my.today}"/>
+                <filter token="version" value="Version:${version}"/>
+            </filterset>
+    	</copy>
+        <copy todir="release/A3Viewer_Windows64/acerola3d">
+        	<fileset dir="lib/Acerola3D_Libraries_Windows64/acerola3d"/>
+    	</copy>
+        <copy todir="release/A3Viewer_Windows64/licensing">
+        	<fileset dir="lib/Acerola3D_Libraries_Windows64/licensing"/>
+    	</copy>
+    	<concat destfile="release/A3Viewer_Windows64/licensing/acerola3d-license.txt">
+    		<filelist dir="lib/Acerola3D_Libraries_Windows64" files="COPYRIGHT,COPYING.LESSER,COPYING"/>
+        </concat>
+    	<copy file="COPYING" todir="release/A3Viewer_Windows64/"/>
+    	<copy file="COPYING.LESSER" todir="release/A3Viewer_Windows64/"/>
+      	<copy file="COPYRIGHT" todir="release/A3Viewer_Windows64/"/>
+        <zip destfile="../A3Viewer_Windows64-${version}.zip">
+            <zipfileset dir="release">
+                <include name="A3Viewer_Windows64/**"/>
+            </zipfileset>
+        </zip>
+    	<delete file="release/A3Viewer_Windows64/a3viewer.jar"/>
+    	<delete file="release/A3Viewer_Windows64/README.txt"/>
+    	<delete file="release/A3Viewer_Windows64/COPYING"/>
+    	<delete file="release/A3Viewer_Windows64/COPYING.LESSER"/>
+       	<delete file="release/A3Viewer_Windows64/COPYRIGHT"/>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Windows64/acerola3d" />
+        </delete>
+    	<delete includeEmptyDirs="true" >
+    	    <fileset dir="release/A3Viewer_Windows64/licensing" />
+        </delete>
+    </target>
+
+	<target name="src-package" depends="version-input,clean">
+        <tar destfile="../a3viewer-src-${version}.tar.gz" compression="gzip">
+        	<tarfileset dir="..">
+        		<include name="A3Viewer/**/*"/>
+        		<exclude name="A3Viewer/lib/**/*"/>
+        		<exclude name="A3Viewer/build/**/*"/>
+        	</tarfileset>
+        	<tarfileset dir="..">
+        		<include name="A3Viewer/lib/memo.txt"/>
+        	</tarfileset>
+        </tar>
+    </target>
+-->
+</project>
