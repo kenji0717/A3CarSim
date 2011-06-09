@@ -237,4 +237,7 @@ class CarBattleGUI extends JFrame implements ActionListener {
     void ide() {
         ide.popup(impl.workDir);
     }
+    void clearTA() {
+        stdOutTA.setText("");
+    }
 }

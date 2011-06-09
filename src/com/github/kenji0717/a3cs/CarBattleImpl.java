@@ -62,6 +62,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         classLoader1 = null;
         classLoader2 = null;
         System.gc();
+        gui.clearTA();
     }
     void initBattle() {
         if (simRunning)

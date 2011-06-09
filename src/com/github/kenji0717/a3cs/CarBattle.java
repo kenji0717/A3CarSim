@@ -1,5 +1,7 @@
 package com.github.kenji0717.a3cs;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import jp.sourceforge.acerola3d.A23;
 
 /**
@@ -15,7 +17,17 @@ public class CarBattle {
      */
     public static void main(String args[]) {
         System.setSecurityManager(null);//gahaここは後で要確認
-        A23.setClassLoader(CarBattle.class.getClassLoader());
+        ClassLoader cl = CarBattle.class.getClassLoader();
+        A23.setClassLoader(cl);
+        if (cl instanceof URLClassLoader) {
+            URL urls[] = ((URLClassLoader)cl).getURLs();
+            for (URL url:urls) {
+                System.out.println(url.toString());
+            }
+        }
+        System.out.println("gaha:classLoader:"+(cl.toString()));
+        URL url = cl.getResource("res/stk_tux.a3");
+        System.out.println("gaha:"+url.toString());
         new CarBattleImpl(args);
     }
 }

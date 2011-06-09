@@ -133,7 +133,9 @@ class SimpleIDE extends JDialog implements ActionListener {
         }
     }
     void compile() {
+        outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
+        System.out.println("CLASSPATH:"+classPath);
         int result = compiler.run(null,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
         if (result==0) {
             outputTA.append("コンパイル成功\n");
