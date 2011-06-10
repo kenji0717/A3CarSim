@@ -16,7 +16,8 @@ public class CarBattle {
      * を指定することができます。
      */
     public static void main(String args[]) {
-        System.setSecurityManager(null);//gahaここは後で要確認
+        //System.setSecurityManager(null);//gahaここは後で要確認
+        //System.setSecurityManager(new SecurityManager());//gahaここは後で要確認
         ClassLoader cl = CarBattle.class.getClassLoader();
         A23.setClassLoader(cl);
         if (cl instanceof URLClassLoader) {

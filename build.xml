@@ -25,12 +25,14 @@
         <fileset dir="${my.lib.path}">
             <include name="*.jar"/>
         </fileset>
+    	<pathelement location="lib/ecj-3.6.2.jar"/>
     </path>
 
     <path id="my.exec.class.path">
         <fileset dir="${my.lib.path}">
             <include name="*.jar"/>
         </fileset>
+    	<pathelement location="lib/ecj-3.6.2.jar"/>
     	<pathelement location="release/a3carsim.jar"/>
     </path>
 

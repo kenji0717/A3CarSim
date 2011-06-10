@@ -14,7 +14,8 @@ public class CarRace {
      * を指定することができます。
      */
     public static void main(String args[]) {
-        System.setSecurityManager(null);//gahaここは後で要確認
+        //System.setSecurityManager(null);//gahaここは後で要確認
+        //System.setSecurityManager(new SecurityManager());//gahaここは後で要確認
         A23.setClassLoader(CarRace.class.getClassLoader());
         new CarRaceImpl(args);
     }
