@@ -34,16 +34,10 @@ class CarBattleGUI extends JFrame implements ActionListener {
     JTextArea stdOutTA;
     JTextAreaOutputStream out;
 
-    CarBattleGUI(CarBattleImpl i,String args[]) {
+    CarBattleGUI(CarBattleImpl i,String carClass1,String carClass2) {
         super("CarBattle");
         impl = i;
         ide = new SimpleIDE(this);
-        String carClass1 = "test.TestCar02";
-        String carClass2 = "test.TestCar02";
-        if (args.length>=1)
-            carClass1 = args[0];
-        if (args.length>=2)
-            carClass2 = args[1];
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -177,12 +171,12 @@ class CarBattleGUI extends JFrame implements ActionListener {
             ide();
         }
     }
-    String getPath() {
+    String getPath(int i) {
         Object[] possibleValues = { "System", "IDE", "JAR" };
         String selectedValue = (String)JOptionPane.showInputDialog(this,
                 "Choose one", "Input",
                 JOptionPane.INFORMATION_MESSAGE, null,
-                possibleValues, possibleValues[0]);
+                possibleValues, possibleValues[i]);
         if (selectedValue==null)
             return null;
         if (selectedValue.equals("System"))
@@ -205,12 +199,26 @@ class CarBattleGUI extends JFrame implements ActionListener {
         }
     }
     void changeCP1() {
-        String cp = getPath();
+        int i = 0;
+        if (impl.car1classpath.equals("System"))
+            i = 0;
+        else if (impl.car1classpath.equals("IDE"))
+            i = 1;
+        else
+            i = 2;
+        String cp = getPath(i);
         if (cp!=null)
             impl.changeCP1(cp);
     }
     void changeCP2() {
-        String cp = getPath();
+        int i = 0;
+        if (impl.car2classpath.equals("System"))
+            i = 0;
+        else if (impl.car2classpath.equals("IDE"))
+            i = 1;
+        else
+            i = 2;
+        String cp = getPath(i);
         if (cp!=null)
             impl.changeCP2(cp);
     }

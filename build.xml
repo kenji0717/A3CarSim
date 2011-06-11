@@ -72,8 +72,8 @@
         <java classname="com.github.kenji0717.a3cs.CarBattle" fork="true">
             <classpath refid="my.exec.class.path"/>
         	<jvmarg value="-Djava.library.path=${my.lib.path}"/>
-        	<arg value="test.TestCar02"/>
-        	<arg value="test.TestCar02"/>
+        	<!-- <arg value="test.TestCar02"/> -->
+        	<!-- <arg value="test.TestCar02"/> -->
         </java>
     </target>
 

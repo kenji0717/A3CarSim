@@ -8,16 +8,17 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import javax.swing.JOptionPane;
 import javax.vecmath.Vector3d;
+import java.util.prefs.*;
 
 class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     PhysicalWorld pw;
+    Preferences prefs;
     CarBase car1;
     CarBase car2;
-    String car1classpath = "System";
-    String car2classpath = "System";
+    String car1classpath;
+    String car2classpath;
     String workDir;
     String workDirURL;
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
@@ -33,10 +34,30 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     URLClassLoader classLoader2;
 
     CarBattleImpl(String args[]) {
+        //http://www.javainthebox.net/laboratory/JDK1.4/MiscAPI/Preferences/Preferences.html
+        prefs = Preferences.userNodeForPackage(this.getClass());
+
+        String carClass1 = prefs.get("carClass1","test.TestCar02");
+        String carClass2 = prefs.get("carClass2","test.TestCar02");
+        if (args.length>=1) {
+            carClass1 = args[0];
+            prefs.put("carClass1",carClass1);
+        }
+        if (args.length>=2) {
+            carClass2 = args[1];
+            prefs.put("carClass2",carClass2);
+        }
+
+        car1classpath = prefs.get("car1classpath","System");
+        car2classpath = prefs.get("car2classpath","System");
+
+        workDir = prefs.get("workDir",null);
+        workDirURL = prefs.get("workDirURL",null);
+
         pw = new PhysicalWorld();
         pw.addCollisionListener(this);
 
-        gui = new CarBattleGUI(this,args);
+        gui = new CarBattleGUI(this,carClass1,carClass2);
         gui.pack();
         gui.setVisible(true);
 
@@ -79,6 +100,9 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
 
         String carClass1 = gui.car1classTF.getText();
         String carClass2 = gui.car2classTF.getText();
+        prefs.put("carClass1",carClass1);
+        prefs.put("carClass2",carClass2);
+        //try{prefs.flush();}catch(Exception e){;}
         try {
             Class<?> theClass = classLoader1.loadClass(carClass1);
             Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
@@ -288,14 +312,18 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     }
     void changeCP1(String cp) {
         car1classpath = cp;
+        prefs.put("car1classpath",car1classpath);
     }
     void changeCP2(String cp) {
         car2classpath = cp;
+        prefs.put("car2classpath",car2classpath);
     }
     void setWorkDirURL(String wdu) {
         workDirURL = wdu;
+        prefs.put("workDirURL",workDirURL);
     }
     void setWorkDir(String wd) {
         workDir = wd;
+        prefs.put("workDir",workDir);
     }
 }

@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
-//import javax.tools.*;
+import javax.tools.*;
 //import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler;
 import org.eclipse.jdt.internal.compiler.batch.Main;
 
@@ -17,7 +17,7 @@ class SimpleIDE extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     String workDir;
     String filePath;
-    //JavaCompiler compiler;
+    JavaCompiler compiler;
     Main compilerMain;
 
     JButton openB;
@@ -30,7 +30,7 @@ class SimpleIDE extends JDialog implements ActionListener {
 
     SimpleIDE(Frame owner) {
         super(owner);
-        //compiler = ToolProvider.getSystemJavaCompiler();
+        compiler = ToolProvider.getSystemJavaCompiler();
         //compiler = new EclipseCompiler();
 
         VBox mainBox = new VBox();
@@ -65,6 +65,7 @@ class SimpleIDE extends JDialog implements ActionListener {
         PrintWriter out = new PrintWriter(osw);
         osw = new OutputStreamWriter(jtaos);
         PrintWriter err = new PrintWriter(osw);
+
         compilerMain = new Main(out,err,false,null,null);
     }
     void setEnable(boolean b) {
@@ -142,14 +143,28 @@ class SimpleIDE extends JDialog implements ActionListener {
         }
     }
     void compile() {
+        prepareJars();
+        if (compiler!=null)
+            compile1();
+        else
+            compile2();
+    }
+    void prepareJars() {
+        
+    }
+    void compile1() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
         System.out.println("CLASSPATH:"+classPath);
-        //int result = compiler.run(System.in,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
-        //if (result==0) {
-        //    outputTA.append("コンパイル成功\n");
-        //}
-        //boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,"-d",workDir,filePath});
+        int result = compiler.run(System.in,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
+        if (result==0) {
+            outputTA.append("コンパイル成功\n");
+        }
+    }
+    void compile2() {
+        outputTA.setText("");
+        String classPath = System.getProperty("java.class.path");
+        System.out.println("CLASSPATH:"+classPath);
         boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,filePath});
         if (result==true) {
             outputTA.append("コンパイル成功\n");
