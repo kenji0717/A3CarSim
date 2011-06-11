@@ -3,6 +3,8 @@ package com.github.kenji0717.a3cs;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import javax.swing.*;
@@ -17,7 +19,7 @@ class SimpleIDE extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     String workDir;
     String filePath;
-    JavaCompiler compiler;
+    //JavaCompiler compiler;
     Main compilerMain;
 
     JButton openB;
@@ -30,7 +32,7 @@ class SimpleIDE extends JDialog implements ActionListener {
 
     SimpleIDE(Frame owner) {
         super(owner);
-        compiler = ToolProvider.getSystemJavaCompiler();
+        //compiler = ToolProvider.getSystemJavaCompiler();
         //compiler = new EclipseCompiler();
 
         VBox mainBox = new VBox();
@@ -144,26 +146,62 @@ class SimpleIDE extends JDialog implements ActionListener {
     }
     void compile() {
         prepareJars();
-        if (compiler!=null)
-            compile1();
-        else
+        //if (compiler!=null)
+        //    compile1();
+        //else
             compile2();
     }
     void prepareJars() {
-        
+        String vecmathPath = workDir+"/vecmath.jar";
+        String a3carsimPath = workDir+"/a3carsim-api.jar";
+        File vpF = new File(vecmathPath);
+        File apF = new File(a3carsimPath);
+        if (!vpF.exists()) {
+            dl("http://acerola3d.sourceforge.jp/jws/acerola3d/all/vecmath.jar",vecmathPath);
+        }
+        if (!apF.exists()) {
+            dl("http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim-api.jar",a3carsimPath);
+        }
     }
+    void dl(String s,String d) {
+        try {
+            URL url = new URL(s);
+            URLConnection conn = url.openConnection();
+            InputStream in = conn.getInputStream();
+
+            File file = new File(d);
+            FileOutputStream out = new FileOutputStream(file, false);
+            byte[] bytes = new byte[512];
+            while(true){
+                int ret = in.read(bytes);
+                if(ret == 0) break;
+                out.write(bytes, 0, ret);
+            }
+
+            out.close();
+            in.close();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*
     void compile1() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
+        classPath=classPath+":"+workDir+"/vecmath.jar:";
+        classPath=classPath+":"+workDir+"/a3carsim-api.jar:";
         System.out.println("CLASSPATH:"+classPath);
         int result = compiler.run(System.in,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
         if (result==0) {
             outputTA.append("コンパイル成功\n");
         }
     }
+    */
     void compile2() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
+        classPath=classPath+":"+workDir+"/vecmath.jar:";
+        classPath=classPath+":"+workDir+"/a3carsim-api.jar:";
         System.out.println("CLASSPATH:"+classPath);
         boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,filePath});
         if (result==true) {

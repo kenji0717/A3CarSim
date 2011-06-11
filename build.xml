@@ -38,23 +38,32 @@
 
     <target name="compile">
         <mkdir dir="build"/>
-        <copy todir="build/res">
-            <fileset dir="res"/>
-        </copy>
         <javac srcdir="src" destdir="build" encoding="utf-8" debug="on">
             <classpath refid="my.class.path"/>
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
 
-    <target name="jar" depends="compile">
-        <jar jarfile="release/a3carsim.jar" basedir="build"
+    <target name="jar" depends="jar-api,jar-res">
+    </target>
+
+    <target name="jar-api" depends="compile">
+        <jar jarfile="release/a3carsim-api.jar" basedir="build"
              manifest="release/Manifest"/>
+    </target>
+
+    <target name="jar-res">
+        <jar destfile="release/a3carsim-res.jar">
+            <fileset dir=".">
+                <include name="res/**"/>
+            </fileset>
+        </jar>
     </target>
 
     <target name="clean">
         <delete dir="build"/>
-        <delete file="release/a3carsim.jar"/>
+        <delete file="release/a3carsim-api.jar"/>
+        <delete file="release/a3carsim-res.jar"/>
         <delete>
             <fileset dir="." includes="**/*~" defaultexcludes="no"/>
         </delete>
