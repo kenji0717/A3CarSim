@@ -236,6 +236,10 @@ class SimpleIDE extends JDialog implements ActionListener {
                 makeJarFileRec(jos,ff,path+f.getName()+"/");
             }
         } else if (f.isFile()) {
+            if (f.getName().equals("vecmath.jar"))
+                return;
+            if (f.getName().equals("a3carsim-api.jar"))
+                return;
             FileInputStream fis = new FileInputStream(f);
             byte[] buf = new byte[1024];
             JarEntry je = new JarEntry(path+f.getName());
