@@ -120,7 +120,9 @@ class CarRaceGUI extends JFrame implements ActionListener {
     void updateCarInfo(CarBase c) {
         carEnergyL.setText("Energy: "+c.energy);
     }
-
+    void updateTime(double t) {
+        generalInfoL.setText("Time:"+String.format("%4.2f",t));
+    }
     @Override
     public void actionPerformed(ActionEvent ae) {
         Object s = ae.getSource();

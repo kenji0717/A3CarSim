@@ -25,6 +25,7 @@ class PhysicalWorld implements Runnable {
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
     Object waitingRoom = new Object();
     boolean pauseRequest = false;
+    double time;
 
     //物理世界の初期化
     public PhysicalWorld() {
@@ -51,6 +52,7 @@ class PhysicalWorld implements Runnable {
                                           solver,collisionConfiguration);
         dynamicsWorld.setGravity(new Vector3f(0,-10,0));
 
+        time = 0.0;
         Thread t = new Thread(this);
         t.start();
     }
@@ -112,6 +114,7 @@ class PhysicalWorld implements Runnable {
         objects.clear();
         newObjects.clear();
         delObjects.clear();
+        time = 0.0;
     }
     //物理計算を進める処理
     //座標を変更するのがちょっとやっかい
@@ -174,7 +177,7 @@ class PhysicalWorld implements Runnable {
             }
 
             //ここで物理計算
-            dynamicsWorld.stepSimulation(1.0f/30.0f,10);
+            dynamicsWorld.stepSimulation(1.0f/30.0f,10);time += 1.0f/30.0f;
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
 
 //System.out.println("-----gaha-----");
@@ -249,5 +252,8 @@ class PhysicalWorld implements Runnable {
         synchronized (collisionListeners) {
             collisionListeners.remove(cl);
         }
+    }
+    public double getTime() {
+        return time;
     }
 }

@@ -280,6 +280,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
                 o.exec();
             }
             gui.updateCarInfo(car);
+            gui.updateTime(pw.getTime());
 
             if (finished==true) {
                 pauseRequest = true;
@@ -309,6 +310,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             }
         }
         String message = goal ? "goal":"fail";
+        message = message+"\ntime:"+String.format("%4.2f",pw.getTime());
         JOptionPane.showMessageDialog(gui,message);
 
         stopBattle();
