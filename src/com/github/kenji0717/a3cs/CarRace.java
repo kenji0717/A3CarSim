@@ -14,8 +14,14 @@ public class CarRace {
      * を指定することができます。
      */
     public static void main(String args[]) {
-        //System.setSecurityManager(null);//gahaここは後で要確認
-        //System.setSecurityManager(new SecurityManager());//gahaここは後で要確認
+        //本当は以下の行を有効にしてJavaアプリケーションでも
+        //SecurityManagerを有効にしたいところだけど、
+        //どうしても面倒なことになるのでコメントアウト。
+        //信頼できないコードのシミュレーションをする場合は
+        //JavaアプリケーションでなくJava Web Startで実行するべし。
+        //if (System.getSecurityManager()==null)
+        //    System.setSecurityManager(new SecurityManager());
+
         A23.setClassLoader(CarRace.class.getClassLoader());
         new CarRaceImpl(args);
     }

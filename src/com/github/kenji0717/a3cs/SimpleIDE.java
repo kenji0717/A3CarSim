@@ -11,7 +11,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
-import javax.tools.*;
+//import javax.tools.*;
 //import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler;
 import org.eclipse.jdt.internal.compiler.batch.Main;
 
@@ -120,6 +120,8 @@ class SimpleIDE extends JDialog implements ActionListener {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             try {
+                if (!f.exists())
+                    f.createNewFile();
                 FileReader fr = new FileReader(f);
                 BufferedReader br = new BufferedReader(fr);
                 editor.setText("");

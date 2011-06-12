@@ -1,7 +1,5 @@
 package com.github.kenji0717.a3cs;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import jp.sourceforge.acerola3d.A23;
 
 /**
@@ -16,19 +14,15 @@ public class CarBattle {
      * を指定することができます。
      */
     public static void main(String args[]) {
-        //System.setSecurityManager(null);//gahaここは後で要確認
-        //System.setSecurityManager(new SecurityManager());//gahaここは後で要確認
-        ClassLoader cl = CarBattle.class.getClassLoader();
-        A23.setClassLoader(cl);
-        if (cl instanceof URLClassLoader) {
-            URL urls[] = ((URLClassLoader)cl).getURLs();
-            for (URL url:urls) {
-                System.out.println(url.toString());
-            }
-        }
-        System.out.println("gaha:classLoader:"+(cl.toString()));
-        URL url = cl.getResource("res/stk_tux.a3");
-        System.out.println("gaha:"+url.toString());
+        //本当は以下の行を有効にしてJavaアプリケーションでも
+        //SecurityManagerを有効にしたいところだけど、
+        //どうしても面倒なことになるのでコメントアウト。
+        //信頼できないコードのシミュレーションをする場合は
+        //JavaアプリケーションでなくJava Web Startで実行するべし。
+        //if (System.getSecurityManager()==null)
+        //    System.setSecurityManager(new SecurityManager());
+
+        A23.setClassLoader(CarBattle.class.getClassLoader());
         new CarBattleImpl(args);
     }
 }
