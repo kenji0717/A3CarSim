@@ -159,9 +159,11 @@ class SimpleIDE extends JDialog implements ActionListener {
         File vpF = new File(vecmathPath);
         File apF = new File(a3carsimPath);
         if (!vpF.exists()) {
+            outputTA.append("コンパイルに必要なvecmath.jarを作業フォルダにダウンロード中\n");
             dl("http://acerola3d.sourceforge.jp/jws/acerola3d/all/vecmath.jar",vecmathPath);
         }
         if (!apF.exists()) {
+            outputTA.append("コンパイルに必要なa3carsim-api.jarを作業フォルダにダウンロード中\n");
             dl("http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim-api.jar",a3carsimPath);
         }
     }
