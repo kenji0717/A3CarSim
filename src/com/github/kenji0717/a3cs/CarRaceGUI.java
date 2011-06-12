@@ -201,4 +201,10 @@ class CarRaceGUI extends JFrame implements ActionListener {
     void clearTA() {
         stdOutTA.setText("");
     }
+    void clearCamera() {
+        mainCanvas.setCameraLocImmediately(0.0,150.0,0.0);
+        mainCanvas.setCameraLookAtPointImmediately(-50.0,0.0,1.0);
+        carCanvas.setCameraLocImmediately(-10,10,0);
+        carCanvas.setCameraLookAtPointImmediately(0,0,0);
+    }
 }

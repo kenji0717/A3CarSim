@@ -5,7 +5,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
@@ -25,9 +25,13 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     boolean battleRunning = false;//一時停止中でもtrue
     boolean simRunning = false;//一時停止中はfalse
     boolean pauseRequest = true;
+    boolean finished = false;
     ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     URLClassLoader classLoader;
     CarRaceGUI gui;
+    int NUM=5;
+    MyCheckPoint cps[];
+    Deque<MyCheckPoint> checkPointStack;
 
     CarRaceImpl(String args[]) {
         prefs = Preferences.userNodeForPackage(this.getClass());
@@ -39,6 +43,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         carClasspath = prefs.get("arClasspath","System");
         workDir = prefs.get("workDir",null);
         workDirURL = prefs.get("workDirURL",null);
+        checkPointStack = new ArrayDeque<MyCheckPoint>();
 
         pw = new PhysicalWorld();
         pw.addCollisionListener(this);
@@ -65,7 +70,10 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         car = null;
         classLoader = null;
         System.gc();
+        gui.clearCamera();
         gui.clearTA();
+        finished = false;
+        checkPointStack.clear();
     }
     void initBattle() {
         if (simRunning)
@@ -76,6 +84,23 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         pw.add(g);
         //MyGround g = new MyGround(pw);
         //pw.add(g);
+
+        //CheckPoint配置
+        cps = new MyCheckPoint[NUM];
+        Vector3d loc = new Vector3d();
+        Vector3d rot = new Vector3d();
+        loc.set(  0,  4,-10);rot.set(0,0,0);
+        cps[0] = new MyCheckPoint(loc,rot,pw);cps[0].a3.setUserData("cp0");
+        loc.set(  0,  4,-20);rot.set(0,0,0);
+        cps[1] = new MyCheckPoint(loc,rot,pw);cps[1].a3.setUserData("cp1");
+        loc.set(  0,  4,-30);rot.set(0,0,0);
+        cps[2] = new MyCheckPoint(loc,rot,pw);cps[2].a3.setUserData("cp2");
+        loc.set(  0,  4,-40);rot.set(0,0,0);
+        cps[3] = new MyCheckPoint(loc,rot,pw);cps[3].a3.setUserData("cp3");
+        loc.set(  0,  4,-50);rot.set(0,0,0);
+        cps[4] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp4");
+        for (int i=0;i<NUM;i++)
+            pw.add(cps[i]);
 
         classLoader = makeClassLoader(carClasspath);
 
@@ -90,8 +115,8 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             System.out.println("Class Load Error!!!");
             e.printStackTrace();
         }
-        //たぶん車のスタート位置を少し上にして地面に埋まらないようにしておいた方が良いと思う
-        car.init(new Vector3d( 1,1.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
+
+        car.init(new Vector3d( 0,1.5,-1),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw,this);
 
         pw.add(car.car);
         gui.setCar(car);
@@ -202,28 +227,31 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
 
     @Override
     public void collided(A3CollisionObject a, A3CollisionObject b) {
-        if ((a instanceof MyBullet)||(b instanceof MyBullet)) {
-            MyBullet bullet = null;
+        if ((a instanceof MyCheckPoint)||(b instanceof MyCheckPoint)) {
+            MyCheckPoint cp = null;
             A3CollisionObject other = null;
-            if (a instanceof MyBullet) {
-                bullet = (MyBullet)a;
+            if (a instanceof MyCheckPoint) {
+                cp = (MyCheckPoint)a;
                 other = b;
             } else {
-                bullet = (MyBullet)b;
+                cp = (MyCheckPoint)b;
                 other = a;
             }
-            if (other instanceof MyBullet) {
-                pw.del(other);
-                this.delActiveObject((MyBullet)other);
-            } else if (other instanceof MyCar) {
-                ((MyCar)other).carBase.hit();
+            if (other instanceof MyCar) {
+                if (checkPointStack.peek()!=cp) {
+                    checkPointStack.push(cp);
+                    System.out.println(cp.a3.getUserData());
+                }
+                if (cp==cps[NUM-1])
+                    finished = true;
             } else if (other instanceof MyGround2){
                 ;
-            } else {
+            } else if (other instanceof MyBullet){
                 ;
+            } else if (other instanceof MyCheckPoint){
+                ;
+            } else {
             }
-            pw.del(bullet);
-            this.delActiveObject(bullet);
         }
         //System.out.println("gaha a:"+a.a3.getUserData()+" b:"+b.a3.getUserData());
     }
@@ -253,7 +281,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             }
             gui.updateCarInfo(car);
 
-            if (car.energy==0) {
+            if (finished==true) {
                 pauseRequest = true;
                 pw.pause();
                 Runnable r = new Runnable() {
@@ -268,7 +296,19 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     }
 
     void finishBattle() {
-        String message = "????????????";
+        boolean goal=true;
+        for (int i=0;i<NUM;i++) {
+            if (checkPointStack.isEmpty()){
+                goal=false;
+                break;
+            }
+            MyCheckPoint cp = checkPointStack.removeLast();
+            if (cps[i]!=cp) {
+                goal=false;
+                break;
+            }
+        }
+        String message = goal ? "goal":"fail";
         JOptionPane.showMessageDialog(gui,message);
 
         stopBattle();
