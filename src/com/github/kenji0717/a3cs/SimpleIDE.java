@@ -204,8 +204,9 @@ class SimpleIDE extends JDialog implements ActionListener {
     void compile2() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
-        classPath=classPath+":"+workDir+"/vecmath.jar:";
-        classPath=classPath+":"+workDir+"/a3carsim-api.jar:";
+        classPath = classPath.replaceAll("¥¥¥¥","¥¥");
+        classPath=classPath+File.separator+workDir+File.pathSeparator+"vecmath.jar:";
+        classPath=classPath+File.separator+workDir+File.pathSeparator+"a3carsim-api.jar:";
         System.out.println("CLASSPATH:"+classPath);
         boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,filePath});
         if (result==true) {
