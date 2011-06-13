@@ -192,8 +192,8 @@ class SimpleIDE extends JDialog implements ActionListener {
     void compile1() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
-        classPath=classPath+":"+workDir+"/vecmath.jar:";
-        classPath=classPath+":"+workDir+"/a3carsim-api.jar:";
+        classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar:";
+        classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar:";
         System.out.println("CLASSPATH:"+classPath);
         int result = compiler.run(System.in,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
         if (result==0) {
@@ -205,8 +205,8 @@ class SimpleIDE extends JDialog implements ActionListener {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
         classPath = classPath.replaceAll("¥¥¥¥","¥¥");
-        classPath=classPath+File.separator+workDir+File.pathSeparator+"vecmath.jar:";
-        classPath=classPath+File.separator+workDir+File.pathSeparator+"a3carsim-api.jar:";
+        classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar:";
+        classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar:";
         System.out.println("CLASSPATH:"+classPath);
         boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,filePath});
         if (result==true) {
