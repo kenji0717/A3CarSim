@@ -7,6 +7,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
+import java.util.regex.Matcher;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -154,8 +156,8 @@ class SimpleIDE extends JDialog implements ActionListener {
             compile2();
     }
     void prepareJars() {
-        String vecmathPath = workDir+"/vecmath.jar";
-        String a3carsimPath = workDir+"/a3carsim-api.jar";
+        String vecmathPath = workDir+File.separator+"vecmath.jar";
+        String a3carsimPath = workDir+File.separator+"a3carsim-api.jar";
         File vpF = new File(vecmathPath);
         File apF = new File(a3carsimPath);
         if (!vpF.exists()) {
@@ -178,7 +180,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             byte[] bytes = new byte[512];
             while(true){
                 int ret = in.read(bytes);
-                if(ret == 0) break;
+                if(ret == -1) break;
                 out.write(bytes, 0, ret);
             }
 
@@ -204,7 +206,9 @@ class SimpleIDE extends JDialog implements ActionListener {
     void compile2() {
         outputTA.setText("");
         String classPath = System.getProperty("java.class.path");
-        classPath = classPath.replaceAll("\\\\","\\");
+        String ss1 = Matcher.quoteReplacement("\\\\");
+        String ss2 = Matcher.quoteReplacement("\\");
+        classPath = classPath.replaceAll(ss1,ss2);
         classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar";
         classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar"+File.pathSeparator;
         System.out.println("CLASSPATH:"+classPath);

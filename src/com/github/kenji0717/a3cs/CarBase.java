@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import javax.vecmath.*;
 
+import jp.sourceforge.acerola3d.a3.Util;
+
+import com.bulletphysics.linearmath.Transform;
+
 /**
  * このクラスを拡張してレースorバトルするための車を作成します。
  * これを拡張して作成する車クラスは必ず引数無しの
@@ -51,42 +55,73 @@ public abstract class CarBase implements ActiveObject {
      * この車の現在の座標を取得します。
      */
     protected Vector3d getLoc() {
-        return car.a3.getTargetLoc();
+        //return car.a3.getTargetLoc();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        return new Vector3d(t.origin);
     }
 
     /**
      * この車の現在の回転を四元数で取得します。
      */
     protected Quat4d getQuat() {
-        return car.a3.getTargetQuat();
+        //return car.a3.getTargetQuat();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        Quat4d q = new Quat4d();
+        q.set(t.basis);
+        return q;
     }
 
     /**
      * この車の現在の回転をオイラー角で取得します。
      */
     protected Vector3d getRot() {
-        return car.a3.getTargetRot();
+        //return car.a3.getTargetRot();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        Quat4d q = new Quat4d();
+        q.set(t.basis);
+        return Util.quat2euler(q);
     }
 
     /**
      * この車の現在の進行方向左向きの単位ベクトルを取得します。
      */
     protected Vector3d getUnitVecX() {
-        return car.a3.getUnitVecX();
+        //return car.a3.getUnitVecX();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        Quat4d q = new Quat4d();
+        q.set(t.basis);
+        q.normalize();
+        return Util.trans(q,new Vector3d(1,0,0));
     }
 
     /**
      * この車の現在の進行方向上向きの単位ベクトルを取得します。
      */
     protected Vector3d getUnitVecY() {
-        return car.a3.getUnitVecY();
+        //return car.a3.getUnitVecY();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        Quat4d q = new Quat4d();
+        q.set(t.basis);
+        q.normalize();
+        return Util.trans(q,new Vector3d(0,1,0));
     }
 
     /**
      * この車の現在の進行方向の単位ベクトルを取得します。
      */
     protected Vector3d getUnitVecZ() {
-        return car.a3.getUnitVecZ();
+        //return car.a3.getUnitVecZ();
+        Transform t = new Transform();
+        car.body.getWorldTransform(t);
+        Quat4d q = new Quat4d();
+        q.set(t.basis);
+        q.normalize();
+        return Util.trans(q,new Vector3d(0,0,1));
     }
 
     /**

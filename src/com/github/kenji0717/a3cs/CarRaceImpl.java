@@ -29,7 +29,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     URLClassLoader classLoader;
     CarRaceGUI gui;
-    int NUM=5;
+    int NUM=12;
     MyCheckPoint cps[];
     Deque<MyCheckPoint> checkPointStack;
 
@@ -89,16 +89,31 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         cps = new MyCheckPoint[NUM];
         Vector3d loc = new Vector3d();
         Vector3d rot = new Vector3d();
-        loc.set(  0,  4,-10);rot.set(0,0,0);
-        cps[0] = new MyCheckPoint(loc,rot,pw);cps[0].a3.setUserData("cp0");
-        loc.set(  0,  4,-20);rot.set(0,0,0);
-        cps[1] = new MyCheckPoint(loc,rot,pw);cps[1].a3.setUserData("cp1");
-        loc.set(  0,  4,-30);rot.set(0,0,0);
-        cps[2] = new MyCheckPoint(loc,rot,pw);cps[2].a3.setUserData("cp2");
-        loc.set(  0,  4,-40);rot.set(0,0,0);
-        cps[3] = new MyCheckPoint(loc,rot,pw);cps[3].a3.setUserData("cp3");
-        loc.set(  0,  4,-50);rot.set(0,0,0);
-        cps[4] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp4");
+        loc.set(  0,  4,-25);rot.set(0,0,0);
+        cps[ 0] = new MyCheckPoint(loc,rot,pw);cps[0].a3.setUserData("cp00");
+        loc.set(-37,  4,-56);rot.set(0,1.57,0);
+        cps[ 1] = new MyCheckPoint(loc,rot,pw);cps[1].a3.setUserData("cp01");
+        loc.set(-76,  4,  9);rot.set(0,0.78,0);
+        cps[ 2] = new MyCheckPoint(loc,rot,pw);cps[2].a3.setUserData("cp02");
+        loc.set(-21,  4, 20);rot.set(0,0,0);
+        cps[ 3] = new MyCheckPoint(loc,rot,pw);cps[3].a3.setUserData("cp03");
+        loc.set(-54,  4, 35);rot.set(0,0,0);
+        cps[ 4] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp04");
+        loc.set(-16,  4, 35);rot.set(0,-0.78,0);
+        cps[ 5] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp05");
+        loc.set(-23,  4,-39);rot.set(0,1.57,0);
+        cps[ 6] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp06");
+        loc.set(-43,  4,  0);rot.set(0,1.57,0);
+        cps[ 7] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp07");
+        loc.set(-53,  4,-38);rot.set(0,1.57,0);
+        cps[ 8] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp08");
+        loc.set(-65,  8, 11);rot.set(0,0,0);
+        cps[ 9] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp09");
+        loc.set(-40,  4, 55);rot.set(0,1.57,0);
+        cps[10] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp10");
+        loc.set(  0,  4, 10);rot.set(0,0,0);
+        cps[11] = new MyCheckPoint(loc,rot,pw);cps[4].a3.setUserData("cp11");
+
         for (int i=0;i<NUM;i++)
             pw.add(cps[i]);
 
@@ -116,7 +131,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             e.printStackTrace();
         }
 
-        car.init(new Vector3d( 0,1.5,-1),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw,this);
+        car.init(new Vector3d( 0,0.8,-1),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw,this);
 
         pw.add(car.car);
         gui.setCar(car);
@@ -240,7 +255,8 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             if (other instanceof MyCar) {
                 if (checkPointStack.peek()!=cp) {
                     checkPointStack.push(cp);
-                    System.out.println(cp.a3.getUserData());
+                    String t = String.format("%4.2f",pw.getTime());
+                    System.out.println(cp.a3.getUserData()+":"+t);
                 }
                 if (cp==cps[NUM-1])
                     finished = true;
