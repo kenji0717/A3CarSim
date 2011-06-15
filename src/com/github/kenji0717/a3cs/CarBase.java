@@ -68,8 +68,7 @@ public abstract class CarBase implements ActiveObject {
         //return car.a3.getTargetQuat();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
-        Quat4d q = new Quat4d();
-        q.set(t.basis);
+        Quat4d q = Util.matrix2quat(t.basis);
         return q;
     }
 
@@ -80,8 +79,7 @@ public abstract class CarBase implements ActiveObject {
         //return car.a3.getTargetRot();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
-        Quat4d q = new Quat4d();
-        q.set(t.basis);
+        Quat4d q = Util.matrix2quat(t.basis);
         return Util.quat2euler(q);
     }
 
@@ -92,8 +90,7 @@ public abstract class CarBase implements ActiveObject {
         //return car.a3.getUnitVecX();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
-        Quat4d q = new Quat4d();
-        q.set(t.basis);
+        Quat4d q = Util.matrix2quat(t.basis);
         q.normalize();
         return Util.trans(q,new Vector3d(1,0,0));
     }
@@ -105,8 +102,7 @@ public abstract class CarBase implements ActiveObject {
         //return car.a3.getUnitVecY();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
-        Quat4d q = new Quat4d();
-        q.set(t.basis);
+        Quat4d q = Util.matrix2quat(t.basis);
         q.normalize();
         return Util.trans(q,new Vector3d(0,1,0));
     }
@@ -118,8 +114,7 @@ public abstract class CarBase implements ActiveObject {
         //return car.a3.getUnitVecZ();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
-        Quat4d q = new Quat4d();
-        q.set(t.basis);
+        Quat4d q = Util.matrix2quat(t.basis);
         q.normalize();
         return Util.trans(q,new Vector3d(0,0,1));
     }

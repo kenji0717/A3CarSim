@@ -131,7 +131,8 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             e.printStackTrace();
         }
 
-        car.init(new Vector3d( 0,0.8,-1),new Vector3d(0,3.14,0),"x-res:///res/stk_tux.a3",pw,this);
+        //下の行の3.1という数値は本来PI=3.141592...ジンバルロック対策でわざと誤差を入れた
+        car.init(new Vector3d( 0,0.8,-1),new Vector3d(0,3.1,0),"x-res:///res/stk_tux.a3",pw,this);
 
         pw.add(car.car);
         gui.setCar(car);

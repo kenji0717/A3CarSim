@@ -45,25 +45,10 @@ class MyCheckPoint extends A3CollisionObject {
         GhostObject body = new GhostObject();
         body.setCollisionShape(shape);
         body.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);//ポイント
-        Transform trans = new Transform();
-        //trans.origin.set(motionState.graphicsWorldTrans.origin);
-        //trans.setRotation(motionState.qTmp);
-        body.setWorldTransform(trans);
-        //double x = motionState.graphicsWorldTrans.origin.x;
-        //double y = motionState.graphicsWorldTrans.origin.y;
-        //double z = motionState.graphicsWorldTrans.origin.z;
-        double x = trans.origin.x;
-        double y = trans.origin.y;
-        double z = trans.origin.z;
-        a3.setLocImmediately(x,y,z);
-        //x = motionState.qTmp.x;
-        //y = motionState.qTmp.y;
-        //z = motionState.qTmp.z;
-        //double w = motionState.qTmp.w;
-        //a3.setQuat(x,y,z,w);
-        Quat4d qTmp = new Quat4d();
-        qTmp.set(trans.basis);
-        a3.setQuat(qTmp);
+        Transform t = new Transform();
+        body.setWorldTransform(t);
+        a3.setLocImmediately(t.origin.x,t.origin.y,t.origin.z);
+        a3.setQuat(Util.matrix2quat(t.basis));
         return body;
     }
 
