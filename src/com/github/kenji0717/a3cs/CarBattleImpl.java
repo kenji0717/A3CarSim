@@ -90,10 +90,10 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             throw new IllegalStateException();
         if (battleRunning)
             throw new IllegalStateException();
-        MyGround2 g = new MyGround2(pw);
-        pw.add(g);
         //MyGround g = new MyGround(pw);
-        //pw.add(g);
+        //MyGround2 g = new MyGround2(pw);
+        MyGround3 g = new MyGround3(pw);
+        pw.add(g);
 
         classLoader1 = makeClassLoader(car1classpath);
         classLoader2 = makeClassLoader(car2classpath);
@@ -115,9 +115,17 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
             System.out.println("Class Load Error!!!");
             e.printStackTrace();
         }
-        //たぶん車のスタート位置を少し上にして地面に埋まらないようにしておいた方が良いと思う
-        car1.init(new Vector3d( 1,1.5,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
-        car2.init(new Vector3d(-1,1.5,10),new Vector3d(0,3.14,0),"x-res:///res/stk_wilber2.a3",pw,this);
+
+        car1.init(new Vector3d( 0,1.0,-10),new Vector3d(),"x-res:///res/stk_tux.a3",pw,this);
+        car2.init(new Vector3d( 0,1.0, 10),new Vector3d(0,3.1,0),"x-res:///res/stk_wilber2.a3",pw,this);
+
+        pw.add(new MyBox(-10.0,1.0,0.0,pw));
+        pw.add(new MyBox(-13.0,1.0,0.0,pw));
+        pw.add(new MyBox(-16.0,1.0,0.0,pw));
+
+        pw.add(new MySphere(10,1.0,0.0,pw));
+        pw.add(new MySphere(13,1.0,0.0,pw));
+        pw.add(new MySphere(16,1.0,0.0,pw));
 
         pw.add(car1.car);
         pw.add(car2.car);

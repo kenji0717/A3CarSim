@@ -11,7 +11,7 @@ import com.github.kenji0717.a3cs.*;
  */
 public class TestCar02 extends CarBase {
     public void exec() {
-        setForce(100,0,0);
+        setForce(100,0.1,0);
         if (Math.random()<0.03) {
             myShoot();
         }

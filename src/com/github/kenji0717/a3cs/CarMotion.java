@@ -202,8 +202,7 @@ class CarMotion implements Motion {
         }
         //return new Transform3D(retTrans.basis,retTrans.origin,1.0f);
         Quat4d q = Util.matrix2quat(retTrans.basis);
-q.normalize();
-if (bone.equals("root"))System.out.println("gaha:"+q);
+        q.normalize();//???
         return new Transform3D(q,new Vector3d(retTrans.origin),1.0f);
     }
 }

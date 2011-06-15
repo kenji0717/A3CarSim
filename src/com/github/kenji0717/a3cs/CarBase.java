@@ -174,6 +174,12 @@ public abstract class CarBase implements ActiveObject {
     }
 
     /**
+     * シミュレーション開始からの時間(秒)を返します。
+     */
+    protected double getTime() {
+        return pw.getTime();
+    }
+    /**
      * この車をコントロールするプログラムを記述するメソッドです。
      * このCarBaseを継承するクラスでは必ず、このメソッドを実装して
      * 下さい。
