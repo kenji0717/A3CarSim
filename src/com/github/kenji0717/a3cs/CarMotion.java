@@ -16,6 +16,7 @@ class CarMotion implements Motion {
     RigidBody carChassis;
     VehicleRaycaster vehicleRayCaster;
     RaycastVehicle vehicle;
+    Transform rootTransform = new Transform();
 
     public CarMotion(MotionState ms,DynamicsWorld dw) {
         dynamicsWorld = dw;
@@ -174,8 +175,9 @@ class CarMotion implements Motion {
         return abs;
     }
     public Transform3D getTransform3D(String bone,double time) {
-        Transform rootTrans = new Transform();
-        vehicle.getChassisWorldTransform(rootTrans);
+        //Transform rootTrans = new Transform();
+        //vehicle.getChassisWorldTransform(rootTrans);
+        Transform rootTrans = new Transform(rootTransform);
         Transform retTrans = new Transform();
         if (bone.equals("root")) {
             retTrans.set(rootTrans);

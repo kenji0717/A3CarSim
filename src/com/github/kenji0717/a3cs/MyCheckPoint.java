@@ -1,5 +1,7 @@
 package com.github.kenji0717.a3cs;
 
+import javax.vecmath.Quat4d;
+import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
@@ -14,6 +16,7 @@ import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 
 class MyCheckPoint extends A3CollisionObject {
@@ -29,7 +32,13 @@ class MyCheckPoint extends A3CollisionObject {
         vrml.setScale(8);
         return vrml;
     }
-
+    public MotionState makeMotionState(Vector3d l,Vector3d r) {
+        Transform transform = new Transform();
+        transform.setIdentity();
+        transform.origin.set((float)l.x,(float)l.y,(float)l.z);
+        transform.setRotation(new Quat4f(Util.euler2quat(r)));
+        return new A3MotionState(a3,transform);
+    }
     public CollisionObject makeCollisionObject_BAK(Object...args) {
         //CollisionShape shape = Util.makeConvexHullShape(a3.getNode());
         CollisionShape shape = new BoxShape(new Vector3f(40,40,20));
@@ -37,18 +46,24 @@ class MyCheckPoint extends A3CollisionObject {
         body.setCollisionShape(shape);
         body.setCollisionFlags(CollisionFlags.NO_CONTACT_RESPONSE);//ポイント
         Transform trans = new Transform();
-        trans.origin.set(motionState.graphicsWorldTrans.origin);
-        trans.setRotation(motionState.qTmp);
+        //trans.origin.set(motionState.graphicsWorldTrans.origin);
+        //trans.setRotation(motionState.qTmp);
         body.setWorldTransform(trans);
-        double x = motionState.graphicsWorldTrans.origin.x;
-        double y = motionState.graphicsWorldTrans.origin.y;
-        double z = motionState.graphicsWorldTrans.origin.z;
+        //double x = motionState.graphicsWorldTrans.origin.x;
+        //double y = motionState.graphicsWorldTrans.origin.y;
+        //double z = motionState.graphicsWorldTrans.origin.z;
+        double x = trans.origin.x;
+        double y = trans.origin.y;
+        double z = trans.origin.z;
         a3.setLocImmediately(x,y,z);
-        x = motionState.qTmp.x;
-        y = motionState.qTmp.y;
-        z = motionState.qTmp.z;
-        double w = motionState.qTmp.w;
-        a3.setQuat(x,y,z,w);
+        //x = motionState.qTmp.x;
+        //y = motionState.qTmp.y;
+        //z = motionState.qTmp.z;
+        //double w = motionState.qTmp.w;
+        //a3.setQuat(x,y,z,w);
+        Quat4d qTmp = new Quat4d();
+        qTmp.set(trans.basis);
+        a3.setQuat(qTmp);
         return body;
     }
 

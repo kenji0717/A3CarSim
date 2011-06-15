@@ -11,7 +11,7 @@ import jp.sourceforge.acerola3d.a3.*;
 abstract class A3CollisionObject {
 	PhysicalWorld pw;
 	A3Object a3;
-    A3MotionState motionState;//JBulletと座標をやりとりするオブジェクト
+    MotionState motionState;//JBulletと座標をやりとりするオブジェクト
     CollisionObject body;//JBulletにおける剛体などを表すオブジェクト
     Vector3f locRequest;
     Quat4d quatRequest;
@@ -29,16 +29,18 @@ abstract class A3CollisionObject {
         } catch(Exception e) {
             a3 = new VRML("gaha");
         }
-        Transform transform = new Transform();
-        transform.setIdentity();
-        transform.origin.set((float)l.x,(float)l.y,(float)l.z);
-        transform.setRotation(new Quat4f(Util.euler2quat(r)));
-        motionState = new A3MotionState(a3,transform);
+        //Transform transform = new Transform();
+        //transform.setIdentity();
+        //transform.origin.set((float)l.x,(float)l.y,(float)l.z);
+        //transform.setRotation(new Quat4f(Util.euler2quat(r)));
+        //motionState = new A3MotionState(a3,transform);
+        motionState = makeMotionState(l,r);
         body = makeCollisionObject(args);
         body.setUserPointer(this);
     }
 
     public abstract A3Object makeA3Object(Object...args) throws Exception ;
+    public abstract MotionState makeMotionState(Vector3d l,Vector3d r);
     public abstract CollisionObject makeCollisionObject(Object...args);
 
     public void changeCOType(COType t) {

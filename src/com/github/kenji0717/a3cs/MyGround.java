@@ -2,7 +2,11 @@ package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.*;
+import com.bulletphysics.linearmath.MotionState;
+import com.bulletphysics.linearmath.Transform;
+
 import javax.vecmath.*;
+
 import jp.sourceforge.acerola3d.a3.*;
 
 //地面を表すクラス
@@ -16,6 +20,13 @@ class MyGround extends A3CollisionObject {
         a.setScale(5.0);
         a.setLoc(0.0,0.0,0.0);
         return a;
+    }
+    public MotionState makeMotionState(Vector3d l,Vector3d r) {
+        Transform transform = new Transform();
+        transform.setIdentity();
+        transform.origin.set((float)l.x,(float)l.y,(float)l.z);
+        transform.setRotation(new Quat4f(Util.euler2quat(r)));
+        return new A3MotionState(a3,transform);
     }
     //地面用の剛体を作る
     public RigidBody makeCollisionObject(Object...args) {
