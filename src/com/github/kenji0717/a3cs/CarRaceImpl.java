@@ -21,11 +21,8 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     String workDir;
     String workDirURL;
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
-    Object waitingRoom = new Object();
     boolean battleRunning = false;//一時停止中でもtrue
     boolean simRunning = false;//一時停止中はfalse
-    boolean pauseRequest = true;
-    boolean finished = false;
     ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     URLClassLoader classLoader;
     CarRaceGUI gui;
@@ -46,6 +43,9 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         checkPointStack = new ArrayDeque<MyCheckPoint>();
 
         pw = new PhysicalWorld();
+        pw.pause();
+        simRunning = false;
+        pw.addTask(this);
         pw.addCollisionListener(this);
 
         gui = new CarRaceGUI(this,carClass);
@@ -54,10 +54,6 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
 
         pw.setMainCanvas(gui.mainCanvas);
         pw.addSubCanvas(gui.carCanvas);
-
-        Thread t = new Thread(this);
-        pauseRequest = true;
-        t.start();
     }
     //clearの処理
     void clearBattle() {
@@ -72,7 +68,6 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         System.gc();
         gui.clearCamera();
         gui.clearTA();
-        finished = false;
         checkPointStack.clear();
     }
     void initBattle() {
@@ -180,20 +175,13 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             //throw new IllegalStateException();
         }
         if (battleRunning) {
-            pauseRequest = false;
-            synchronized (waitingRoom) {
-                waitingRoom.notifyAll();
-            }
             pw.resume();
+            simRunning = true;
         } else {
             clearBattle();
             initBattle();
             pw.resume();
-            try{Thread.sleep(100);}catch(Exception e){;}//gaha:落ち着くまで待つ
-            pauseRequest = false;
-            synchronized (waitingRoom) {
-                waitingRoom.notifyAll();
-            }
+            simRunning = true;
             gui.setParamEditable(false);
             battleRunning = true;
         }
@@ -202,22 +190,18 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         if (!battleRunning)
             return;
         if (simRunning) {
-            pauseRequest = true;
             pw.pause();
+            simRunning = false;
         } else {
-            pauseRequest = false;
-            synchronized (waitingRoom) {
-                waitingRoom.notifyAll();
-            }
             pw.resume();
+            simRunning = true;
         }
     }
     void stopBattle() {
-        pauseRequest = true;
-        try{Thread.sleep(300);}catch(Exception e){;}
         battleRunning = false;
-        clearBattle();
+        //clearBattle();
         pw.pause();
+        simRunning = false;
         gui.setParamEditable(true);
     }
     @Override
@@ -259,8 +243,9 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
                     String t = String.format("%4.2f",pw.getTime());
                     System.out.println(cp.a3.getUserData()+":"+t);
                 }
-                if (cp==cps[NUM-1])
-                    finished = true;
+                if (cp==cps[NUM-1]) {
+                    finishBattle();
+                }
             } else if (other instanceof MyGround2){
                 ;
             } else if (other instanceof MyBullet){
@@ -276,44 +261,20 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     @Override
     public void run() {
         ArrayList<ActiveObject> tmp = new ArrayList<ActiveObject>();
-        simRunning = true;
-        while (true) {
-            synchronized (waitingRoom) {
-                try {
-                    if (pauseRequest) {
-                        simRunning = false;
-                        waitingRoom.wait();
-                        simRunning = true;
-                    }
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            synchronized (activeObjects) {
-                tmp.clear();
-                tmp.addAll(activeObjects);
-            }
-            for (ActiveObject o: tmp) {
-                o.exec();
-            }
-            gui.updateCarInfo(car);
-            gui.updateTime(pw.getTime());
-
-            if (finished==true) {
-                pauseRequest = true;
-                pw.pause();
-                Runnable r = new Runnable() {
-                    public void run() {
-                        finishBattle();
-                    }
-                };
-                executor.schedule(r,100,TimeUnit.MILLISECONDS);
-            }
-            try{Thread.sleep(33);}catch(Exception e){;}
+        synchronized (activeObjects) {
+            tmp.clear();
+            tmp.addAll(activeObjects);
         }
+        for (ActiveObject o: tmp) {
+            o.exec();
+        }
+        gui.updateCarInfo(car);
+        gui.updateTime(pw.getTime());
     }
 
     void finishBattle() {
+        pw.pause();
+        simRunning = false;
         boolean goal=true;
         for (int i=0;i<NUM;i++) {
             if (checkPointStack.isEmpty()){

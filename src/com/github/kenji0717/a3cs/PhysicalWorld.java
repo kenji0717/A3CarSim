@@ -23,8 +23,9 @@ class PhysicalWorld implements Runnable {
     A3CanvasInterface mainCanvas;
     ArrayList<A3CanvasInterface> subCanvases = new ArrayList<A3CanvasInterface>();
     ArrayList<CollisionListener> collisionListeners = new ArrayList<CollisionListener>();
+    ArrayList<Runnable> tasks = new ArrayList<Runnable>();
     Object waitingRoom = new Object();
-    boolean pauseRequest = false;
+    boolean pauseRequest = true;
     double time;
 
     //物理世界の初期化
@@ -240,6 +241,11 @@ class PhysicalWorld implements Runnable {
             System.out.println("gaha:"+rayRC.hasHit());
             */
 
+            synchronized (tasks) {
+                for (Runnable r:tasks) {
+                    r.run();
+                }
+            }
             try{Thread.sleep(33);}catch(Exception e){;}
         }
     }
@@ -255,5 +261,15 @@ class PhysicalWorld implements Runnable {
     }
     public double getTime() {
         return time;
+    }
+    public void addTask(Runnable r) {
+        synchronized (tasks) {
+            tasks.add(r);
+        }
+    }
+    public void removeTask(Runnable r) {
+        synchronized (tasks) {
+            tasks.remove(r);
+        }
     }
 }

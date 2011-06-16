@@ -55,6 +55,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         workDirURL = prefs.get("workDirURL",null);
 
         pw = new PhysicalWorld();
+        pw.resume();
         pw.addCollisionListener(this);
 
         gui = new CarBattleGUI(this,carClass1,carClass2);
