@@ -137,7 +137,7 @@ public abstract class CarBase implements ActiveObject {
         l.add(new Vector3d(0.0,0.2,0.0));
         l.add(d);
         l.add(d);
-        //d.scale(1.0);
+        d.scale(10.0);
         MyBullet b = new MyBullet(l,d,pw);
         pw.add(b);
         carSim.addActiveObject(b);

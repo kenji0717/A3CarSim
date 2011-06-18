@@ -44,13 +44,20 @@ static int gaha;
                 new RigidBodyConstructionInfo(1.0f,motionState,
                                               shape,localInertia);
         RigidBody rb = new RigidBody(rbcInfo);
-        rb.setCollisionFlags(rb.getCollisionFlags()|CollisionFlags.KINEMATIC_OBJECT);
-        rb.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
+        //rb.setCollisionFlags(rb.getCollisionFlags()|CollisionFlags.KINEMATIC_OBJECT);
+        //rb.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
         return rb;
     }
 
+    boolean initGrav = false;
     public void exec() {
-        l.add(v);
-        this.setLoc2(l.x,l.y,l.z);
+        //l.add(v);
+        //this.setLoc2(l.x,l.y,l.z);
+        if (initGrav==false) {
+            ((RigidBody)body).setGravity(new Vector3f());
+            this.setLoc2(l.x,l.y,l.z);
+            this.setVel(v.x,v.y,v.z);
+            initGrav=true;
+        }
     }
 }
