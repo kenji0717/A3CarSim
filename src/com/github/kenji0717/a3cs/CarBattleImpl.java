@@ -15,8 +15,8 @@ import java.util.prefs.*;
 class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     PhysicalWorld pw;
     Preferences prefs;
-    CarBase car1;
-    CarBase car2;
+    BattleCarBase car1;
+    BattleCarBase car2;
     String car1classpath;
     String car2classpath;
     String workDir;
@@ -106,11 +106,11 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         //try{prefs.flush();}catch(Exception e){;}
         try {
             Class<?> theClass = classLoader1.loadClass(carClass1);
-            Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
+            Class<? extends BattleCarBase> tClass = theClass.asSubclass(BattleCarBase.class);
             car1 = tClass.newInstance();
 
             theClass = classLoader2.loadClass(carClass2);
-            tClass = theClass.asSubclass(CarBase.class);
+            tClass = theClass.asSubclass(BattleCarBase.class);
             car2 = tClass.newInstance();
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");

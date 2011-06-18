@@ -16,7 +16,7 @@ import javax.vecmath.Vector3d;
 class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     PhysicalWorld pw;
     Preferences prefs;
-    CarBase car;
+    RaceCarBase car;
     String carClasspath;
     String workDir;
     String workDirURL;
@@ -119,7 +119,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         //try{prefs.flush();}catch(Exception e){;}
         try {
             Class<?> theClass = classLoader.loadClass(carClass);
-            Class<? extends CarBase> tClass = theClass.asSubclass(CarBase.class);
+            Class<? extends RaceCarBase> tClass = theClass.asSubclass(RaceCarBase.class);
             car = tClass.newInstance();
         } catch(Exception e) {
             System.out.println("Class Load Error!!!");

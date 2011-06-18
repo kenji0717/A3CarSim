@@ -15,7 +15,7 @@ import com.bulletphysics.linearmath.Transform;
  * この車は初期値100のエネルギーを持ち、被弾すると5づつエネルギーが
  * 減少します。また弾丸を発射した時も1づつエネルギーを消費します。
  */
-public abstract class CarBase implements ActiveObject {
+abstract class CarBase implements ActiveObject {
     static int carIDCount=0; 
     MyCar car;
     PhysicalWorld pw;
@@ -39,7 +39,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車のID(整数値)を取得します。
      */
-    protected int getCarID() {
+    int getCarID() {
         return carID;
     }
 
@@ -47,14 +47,14 @@ public abstract class CarBase implements ActiveObject {
      * 前進のための力(gEngineForce)、ハンドルの方向(gVehicleSteering:正->右,負->左)、
      * そしてブレーキの力(gBreakingForce)を指定して車をコントロールします。
      */
-    protected void setForce(double gEngineForce,double gVehicleSteering,double gBreakingForce) {
+    void setForce(double gEngineForce,double gVehicleSteering,double gBreakingForce) {
         car.setForce((float)gEngineForce,(float)gVehicleSteering,(float)gBreakingForce);
     }
 
     /**
      * この車の現在の座標を取得します。
      */
-    protected Vector3d getLoc() {
+    Vector3d getLoc() {
         //return car.a3.getTargetLoc();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -64,7 +64,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在の回転を四元数で取得します。
      */
-    protected Quat4d getQuat() {
+    Quat4d getQuat() {
         //return car.a3.getTargetQuat();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -75,7 +75,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在の回転をオイラー角で取得します。
      */
-    protected Vector3d getRot() {
+    Vector3d getRot() {
         //return car.a3.getTargetRot();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -86,7 +86,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在の進行方向左向きの単位ベクトルを取得します。
      */
-    protected Vector3d getUnitVecX() {
+    Vector3d getUnitVecX() {
         //return car.a3.getUnitVecX();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -98,7 +98,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在の進行方向上向きの単位ベクトルを取得します。
      */
-    protected Vector3d getUnitVecY() {
+    Vector3d getUnitVecY() {
         //return car.a3.getUnitVecY();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -110,7 +110,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在の進行方向の単位ベクトルを取得します。
      */
-    protected Vector3d getUnitVecZ() {
+    Vector3d getUnitVecZ() {
         //return car.a3.getUnitVecZ();
         Transform t = new Transform();
         car.body.getWorldTransform(t);
@@ -125,7 +125,7 @@ public abstract class CarBase implements ActiveObject {
      * いる場合は弾丸は発射されません。このメソッドを呼び出すと無条件で
      * エネルギーを1消費します。
      */
-    protected void shoot(Vector3d d) {
+    void shoot(Vector3d d) {
         energy = energy - 1;
         if (d.length()<0.0001)
             return;
@@ -147,7 +147,7 @@ public abstract class CarBase implements ActiveObject {
      * 現在のフィールドに存在している全ての車の情報を取得します。
      * データの詳細についてはCarDataクラスを参照して下さい。
      */
-    protected ArrayList<CarData> getAllCarData() {
+    ArrayList<CarData> getAllCarData() {
         ArrayList<CarData> ret = new ArrayList<CarData>();
         for (CarBase c:carSim.getAllCar()) {
             CarData cd = new CarData();
@@ -165,7 +165,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * この車の現在のエネルギー値を取得します。
      */
-    protected int getEnergy() {
+    int getEnergy() {
         return energy;
     }
     void hit() {
@@ -176,7 +176,7 @@ public abstract class CarBase implements ActiveObject {
     /**
      * シミュレーション開始からの時間(秒)を返します。
      */
-    protected double getTime() {
+    double getTime() {
         return pw.getTime();
     }
     /**

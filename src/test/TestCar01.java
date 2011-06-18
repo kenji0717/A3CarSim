@@ -4,7 +4,7 @@ import com.github.kenji0717.a3cs.*;
 import javax.vecmath.Vector3d;
 import java.util.ArrayDeque;
 
-public class TestCar01 extends CarBase {
+public class TestCar01 extends RaceCarBase {
     ArrayDeque<Vector3d> points = new ArrayDeque<Vector3d>();
     Vector3d target;
     public TestCar01() {

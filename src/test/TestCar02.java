@@ -7,9 +7,9 @@ import javax.vecmath.Vector3d;
 import com.github.kenji0717.a3cs.*;
 
 /**
- * CarButtle用のテストカー。
+ * CarBattle用のテストカー。
  */
-public class TestCar02 extends CarBase {
+public class TestCar02 extends BattleCarBase {
     public void exec() {
         setForce(100,0.1,0);
         if (Math.random()<0.03) {
