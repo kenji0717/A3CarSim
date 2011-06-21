@@ -22,9 +22,13 @@ A3CarSimに関するドキュメント
 
 現在準備中です．
 
+<!--
+<div>
 * [CarRace](./CarRace/)
 * [CarBattle](./CarBattle/)
 * [javadoc](./api/)
+</div>
+-->
 
 Footer @(id:1,footer)
 ========================================
