@@ -1,0 +1,19 @@
+grant codeBase "file:lib/acerola3d/*" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:release/a3carsim-api.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:release/a3carsim-res.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:lib/ecj-3.6.2.jar" {
+  permission java.security.AllPermission;
+};
+
+//-----------------------------------------
+//keystore "pubKeystore";
+//keystorePasswordURL "pubKeystore.pw";
+//grant signedBy "mykey" {
+//  permission java.security.AllPermission;
+//};
