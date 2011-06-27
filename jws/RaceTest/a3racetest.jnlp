@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for CarRace -->
+<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/RaceTest"
+      href="a3racetest.jnlp">
+  <information>
+    <title>RaceTest</title>
+    <vendor>Kenji Saito</vendor>
+    <homepage href="http://kenji0717.github.com/A3CarSim/"/>
+    <description>RaceTest</description>
+    <icon href="./a3racetest.png"/>
+    <offline-allowed/>
+    <shortcut>
+      <desktop/>
+      <menu submenu="A3CarSim"/>
+    </shortcut>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <update check="timeout" policy="prompt-update"/>
+  <resources>
+    <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <extension href="http://acerola3d.sourceforge.jp/jws/acerola3d/acerola3d.jnlp"/>
+    <extension href="http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim.jnlp"/>
+  </resources>
+  <application-desc main-class="com.github.kenji0717.a3cs.RaceTest"/>
+</jnlp>
