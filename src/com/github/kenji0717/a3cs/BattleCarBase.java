@@ -26,11 +26,11 @@ public abstract class BattleCarBase extends CarBase {
     }
 
     /**
-     * 前進のための力(gEngineForce)、ハンドルの方向(gVehicleSteering:正->右,負->左)、
-     * そしてブレーキの力(gBreakingForce)を指定して車をコントロールします。
+     * 前進のための力(engine)、ハンドルの方向(steering:正->左,負->右)、
+     * そしてブレーキの力(breaking)を指定して車をコントロールします。
      */
-    protected void setForce(double gEngineForce,double gVehicleSteering,double gBreakingForce) {
-        super.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
+    protected void setForce(double engine,double steering,double breaking) {
+        super.setForce(engine,steering,breaking,0.0);
     }
 
     /**

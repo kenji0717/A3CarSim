@@ -47,8 +47,8 @@ abstract class CarBase implements ActiveObject {
      * 前進のための力(gEngineForce)、ハンドルの方向(gVehicleSteering:正->右,負->左)、
      * そしてブレーキの力(gBreakingForce)を指定して車をコントロールします。
      */
-    void setForce(double gEngineForce,double gVehicleSteering,double gBreakingForce) {
-        car.setForce((float)gEngineForce,(float)gVehicleSteering,(float)gBreakingForce);
+    void setForce(double gEngineForce,double gVehicleSteering,double gBreakingForce,double drift) {
+        car.setForce((float)gEngineForce,(float)gVehicleSteering,(float)gBreakingForce,(float)drift);
     }
 
     /**

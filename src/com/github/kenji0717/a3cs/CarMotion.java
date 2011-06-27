@@ -110,18 +110,31 @@ class CarMotion implements Motion {
     }
 
     //車をコントロールするためのメソッド
-    public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce) {
+    public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce,float drift) {
         int wheelIndex = 2;
-        vehicle.applyEngineForce(gEngineForce,wheelIndex);
         vehicle.setBrake(gBreakingForce,wheelIndex);
         wheelIndex = 3;
-        vehicle.applyEngineForce(gEngineForce,wheelIndex);
         vehicle.setBrake(gBreakingForce,wheelIndex);
 
         wheelIndex = 0;
         vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
+        vehicle.applyEngineForce(gEngineForce,wheelIndex);
         wheelIndex = 1;
         vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
+        vehicle.applyEngineForce(gEngineForce,wheelIndex);
+
+        WheelInfo wi = null;
+        wi = vehicle.getWheelInfo(0);
+        wi.frictionSlip = (drift>0.9)?1.5f:1000.0f;
+        wi = vehicle.getWheelInfo(1);
+        wi.frictionSlip = (drift>0.9)?1.5f:1000.0f;
+        wi = vehicle.getWheelInfo(2);
+        wi.frictionSlip = (drift>0.9)?1.0f:1000.0f;
+        wi = vehicle.getWheelInfo(3);
+        wi.frictionSlip = (drift>0.9)?1.0f:1000.0f;
+
+        //float d = 100 * gVehicleSteering * drift;
+        //carChassis.applyTorqueImpulse(new Vector3f(0,d,0));
     }
 
     //public RigidBody localCreateRigidBody(float mass, Transform startTransform, CollisionShape shape) {

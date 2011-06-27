@@ -96,8 +96,8 @@
         </java>
     </target>
 
-    <target name="test01" depends="jar">
-        <java classname="com.github.kenji0717.a3cs.Test01" fork="true">
+    <target name="RaceTest" depends="jar">
+        <java classname="com.github.kenji0717.a3cs.RaceTest" fork="true">
             <classpath refid="my.exec.class.path"/>
             <jvmarg value="-Djava.library.path=${my.lib.path}"/>
         </java>

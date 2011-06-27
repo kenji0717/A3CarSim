@@ -9,8 +9,8 @@ import jp.sourceforge.acerola3d.a3.*;
 
 //このプログラムで剛体を表すクラス
 abstract class A3CollisionObject {
-	PhysicalWorld pw;
-	A3Object a3;
+    PhysicalWorld pw;
+    A3Object a3;
     MotionState motionState;//JBulletと座標をやりとりするオブジェクト
     CollisionObject body;//JBulletにおける剛体などを表すオブジェクト
     Vector3f locRequest;

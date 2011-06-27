@@ -45,6 +45,6 @@ public class TestCar01 extends RaceCarBase {
             target = points.pop();
 
         v.normalize();
-        setForce(200,0.3*v.dot(left),0);
+        setForce(200,0.3*v.dot(left),0,0);
     }
 }

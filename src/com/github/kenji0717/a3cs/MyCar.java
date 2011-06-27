@@ -13,8 +13,8 @@ import jp.sourceforge.acerola3d.a3.*;
 //car
 class MyCar extends A3CollisionObject {
     String a3url;
-	CarMotion motion;
-	CarBase carBase;
+    CarMotion motion;
+    CarBase carBase;
     public MyCar(Vector3d l,Vector3d r,String a3url,PhysicalWorld pw) {
         super(l,r,COType.DYNAMIC,pw,a3url);
         //this.a3url = a3url;
@@ -40,13 +40,13 @@ class MyCar extends A3CollisionObject {
         motion = new CarMotion(motionState,pw.dynamicsWorld);
         ((CarMotionState)motionState).setCarMotion(motion);
         ((Action3D)a3).setMotion("default",motion);
-    	((Action3D)a3).transControlUsingRootBone(true);//rootの骨の情報でA3Objectの変換を制御
+        ((Action3D)a3).transControlUsingRootBone(true);//rootの骨の情報でA3Objectの変換を制御
         return motion.carChassis;
     }
     public void setCarBase(CarBase cb) {
         carBase = cb;
     }
-    public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce) {
-    	motion.setForce(gEngineForce,gVehicleSteering,gBreakingForce);
+    public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce,float drift) {
+        motion.setForce(gEngineForce,gVehicleSteering,gBreakingForce,drift);
     }
 }

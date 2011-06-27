@@ -34,8 +34,8 @@ class MyGround extends A3CollisionObject {
             new BoxShape(new Vector3f(50.0f,50.0f,50.0f));
         Vector3f localInertia = new Vector3f(0,0,0);
         RigidBodyConstructionInfo groundRBInfo =
-	    new RigidBodyConstructionInfo(0.0f,motionState,
-					  groundShape,localInertia);
+            new RigidBodyConstructionInfo(0.0f,motionState,
+                groundShape,localInertia);
         RigidBody groundBody = new RigidBody(groundRBInfo);
         return groundBody;
     }
