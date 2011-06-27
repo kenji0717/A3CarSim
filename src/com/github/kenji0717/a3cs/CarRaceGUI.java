@@ -24,6 +24,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
     JButton confB;
     JButton ideB;
     JLabel generalInfoL;
+    JCheckBox fastForwardCB;
     JButton startB;
     JButton pauseB;
     JButton stopB;
@@ -63,6 +64,9 @@ class CarRaceGUI extends JFrame implements ActionListener {
         generalInfoBox.myAdd(ideB,0);
         generalInfoL = new JLabel("Time:");
         generalInfoBox.myAdd(generalInfoL,1);
+        fastForwardCB = new JCheckBox("fast-forward");
+        fastForwardCB.addActionListener(this);
+        generalInfoBox.myAdd(fastForwardCB,0);
         HBox mainButtonsBox = new HBox();
         controlBox2.myAdd(mainButtonsBox,0);
         startB = new JButton("START");
@@ -138,6 +142,8 @@ class CarRaceGUI extends JFrame implements ActionListener {
             conf();
         } else if (s==ideB) {
             ide();
+        } else if (s==fastForwardCB) {
+            impl.fastForward(fastForwardCB.isSelected());
         }
     }
     String getPath(int i) {

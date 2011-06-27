@@ -27,6 +27,7 @@ class PhysicalWorld implements Runnable {
     Object waitingRoom = new Object();
     boolean pauseRequest = true;
     double time;
+    long waitTime = 33;
 
     //物理世界の初期化
     public PhysicalWorld() {
@@ -246,7 +247,7 @@ class PhysicalWorld implements Runnable {
                     r.run();
                 }
             }
-            try{Thread.sleep(33);}catch(Exception e){;}
+            try{Thread.sleep(waitTime);}catch(Exception e){;}
         }
     }
     public void addCollisionListener(CollisionListener cl) {
@@ -271,5 +272,8 @@ class PhysicalWorld implements Runnable {
         synchronized (tasks) {
             tasks.remove(r);
         }
+    }
+    public void setWaitTime(long l) {
+        waitTime = l;
     }
 }
