@@ -20,7 +20,6 @@
   <update check="timeout" policy="prompt-update"/>
   <resources>
     <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <extension href="http://acerola3d.sourceforge.jp/jws/acerola3d/acerola3d.jnlp"/>
     <extension href="http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim.jnlp"/>
   </resources>
   <application-desc main-class="com.github.kenji0717.a3cs.RaceTest"/>

@@ -19,7 +19,7 @@
     <jar href="./a3carsim-api.jar"/>
     <jar href="./a3carsim-res.jar"/>
     <jar href="./ecj-3.6.2.jar"/>
-    <extension href="http://acerola3d.sourceforge.jp/jws/acerola3d/acerola3d.jnlp"/>
+    <extension href="http://kenji0717.github.com/A3CarSim/jws/acerola3d/acerola3d.jnlp"/>
   </resources>
   <component-desc/>
 </jnlp>

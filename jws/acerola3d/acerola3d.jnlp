@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for acerola3d -->
+<jnlp spec="6.0+" codebase="http://kenji0717.github.com/A3CarSim/jws/acerola3d"
+      href="acerola3d.jnlp">
+  <information>
+    <title>acerola3d</title>
+    <vendor>Kenji Saito</vendor>
+    <homepage href="http://acerola3d.sourceforge.jp/"/>
+    <description>acerola3d library</description>
+    <icon href="./acerola3dIcon.png"/>
+    <offline-allowed/>
+  </information>
+  <security>
+    <all-permissions/>
+  </security>
+  <update check="timeout" policy="prompt-update"/>
+
+  <resources>
+    <java version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="./acerola3d.jar"/>
+    <jar href="./all/a3-vrml97.jar"/>
+    <jar href="./all/gluegen-rt.jar"/>
+    <jar href="./all/j3dcore.jar"/>
+    <jar href="./all/j3dutils.jar"/>
+    <jar href="./all/jbullet.jar"/>
+    <jar href="./all/jl1.0.1.jar"/>
+    <jar href="./all/joal.jar"/>
+    <jar href="./all/joalmixer.jar"/>
+    <jar href="./all/jogl.jar"/>
+    <jar href="./all/jorbis-0.0.17.jar"/>
+    <jar href="./all/tritonus_jorbis-0.3.6.jar"/>
+    <jar href="./all/tritonus_mp3-0.3.6.jar"/>
+    <jar href="./all/tritonus_share-0.3.6.jar"/>
+    <jar href="./all/vecmath.jar"/>
+    <jar href="./all/AC3DLoader.jar"/>
+    <jar href="./all/Loader3DS1_2.jar"/>
+    <jar href="./all/NWM.jar"/>
+    <jar href="./all/milkloader.jar"/>
+    <jar href="./all/mqoview20070717.jar"/>
+    <jar href="./all/quakeloaders.jar"/>
+  </resources>
+
+<!-- Windows ---------------------------------------- -->
+
+  <resources os="Windows" arch="i386 x86">
+    <nativelib href="win/a3-natives-windows-i586.jar"/>
+  </resources>
+
+  <resources os="Windows" arch="x86_64 amd64">
+    <nativelib href="win64/a3-natives-windows-amd64.jar"/>
+  </resources>
+
+<!-- Mac OS X ---------------------------------------- -->
+
+  <resources os="Mac OS X">
+    <nativelib href="mac/a3-natives-macosx-universal.jar"/>
+    <property name="j3d.rend" value="jogl"/>
+  </resources>
+
+<!-- Linux ---------------------------------------- -->
+
+  <resources os="Linux" arch="i386 x86">
+    <nativelib href="linux/a3-natives-linux-i586.jar"/>
+  </resources>
+
+  <resources os="Linux" arch="x86_64 amd64">
+    <nativelib href="linux64/a3-natives-linux-amd64.jar"/>
+  </resources>
+
+<!-- ---------------------------------------- -->
+
+  <component-desc/>
+</jnlp>
