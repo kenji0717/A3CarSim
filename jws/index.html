@@ -71,6 +71,44 @@
 -->
 
 </div>
+
+<div id="mm-div-3-2">
+<h2>64ビット版Windowsでの注意</h2>
+
+<p>64ビットWindowsを使用している場合，Java Web Start
+を用いたインストールを行う場合には64ビット版
+Internet Explorerを使用して下さい．(デフォルトの
+Internet Explorerは32ビット版だと思います．)
+64ビット版Internet Explorerは「スタート」ボタン
+→「すべてのプログラム」の中に入っています．</p>
+
+</div>
+
+<div id="mm-div-3-3">
+<h2>MacOSXでの注意</h2>
+
+<p>MacOSXにはデフォルトでJava3DのVersion1.3.1がインストールされています．非常に古いバージョンでこのサイトぷのプログラムの起動に悪影響があります．以下の方法で無効化して下さい．</p>
+
+<ul>
+<li>/System/Library/Java/Extensionsを開く</li>
+<li>その場所にOldJava3Dという名前のフォルダを作成する．</li>
+<li>/System/Library/Java/Extensionsに入っている
+以下のファイルを新しく作成したOldJava3Dフォルダに
+移動しておく．
+<ul>
+<li>j3daudio.jar</li>
+<li>j3dcore.jar</li>
+<li>j3dutils.jar</li>
+<li>vecmath.jar</li>
+<li>libJ3D.jnilib</li>
+<li>libJ3DAudio.jnilib</li>
+<li>libJ3DUtils.jnilib</li>
+</ul></li>
+</ul>
+
+<p>古いJava3Dが必要になったら，移動したファイルを元の場所に戻せばもとどうりになります．</p>
+
+</div>
 </div>
 
 <div id="footer">
