@@ -49,22 +49,22 @@ class CarRaceGUI extends JFrame implements ActionListener {
         classNameBox.myAdd(new JLabel("CAR:"),0);
         carClassTF = new JTextField(carClass);
         classNameBox.myAdd(carClassTF,1);
-        changeCPB = new JButton("changeCP");
+        changeCPB = new JButton("プログラム読み込み場所の変更");
         changeCPB.addActionListener(this);
         classNameBox.myAdd(changeCPB,0);
         VBox controlBox2 = new VBox();
         controlBox.myAdd(controlBox2,0);
         HBox generalInfoBox = new HBox();
         controlBox2.myAdd(generalInfoBox,0);
-        confB = new JButton("Conf");
+        confB = new JButton("設定");
         confB.addActionListener(this);
         generalInfoBox.myAdd(confB,0);
-        ideB = new JButton("IDE");
+        ideB = new JButton("プログラミング");
         ideB.addActionListener(this);
         generalInfoBox.myAdd(ideB,0);
         generalInfoL = new JLabel("Time:");
         generalInfoBox.myAdd(generalInfoL,1);
-        fastForwardCB = new JCheckBox("fast-forward");
+        fastForwardCB = new JCheckBox("早送り");
         fastForwardCB.addActionListener(this);
         generalInfoBox.myAdd(fastForwardCB,0);
         HBox mainButtonsBox = new HBox();
@@ -100,7 +100,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         carEnergyL = new JLabel("Energy: 000");
         carInfoBox.myAdd(carEnergyL,0);
         
-        stdOutTA = new JTextArea(10,80);
+        stdOutTA = new JTextArea(10,40);
         stdOutTA.setEditable(false);
         JScrollPane sp = new JScrollPane(stdOutTA);
         sp.setMinimumSize(new Dimension(100,100));
@@ -147,16 +147,16 @@ class CarRaceGUI extends JFrame implements ActionListener {
         }
     }
     String getPath(int i) {
-        Object[] possibleValues = { "System", "IDE", "JAR" };
+        Object[] possibleValues = { "システムのみ", "作業フォルダ", "JARファイル" };
         String selectedValue = (String)JOptionPane.showInputDialog(this,
                 "Choose one", "Input",
                 JOptionPane.INFORMATION_MESSAGE, null,
                 possibleValues, possibleValues[i]);
         if (selectedValue==null)
             return null;
-        if (selectedValue.equals("System"))
+        if (selectedValue.equals("システムのみ"))
             return "System";
-        else if (selectedValue.equals("IDE"))
+        else if (selectedValue.equals("作業フォルダ"))
             return "IDE";
         else {
             JFileChooser chooser = new JFileChooser();
@@ -192,15 +192,24 @@ class CarRaceGUI extends JFrame implements ActionListener {
         ideB.setEnabled(b);
     }
     void conf() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int returnVal = chooser.showOpenDialog(this);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File f = chooser.getSelectedFile();
-            impl.setWorkDir(f.getAbsolutePath());
-            impl.setWorkDirURL(f.toURI().toString());
-        } else {
-            impl.setWorkDirURL(null);
+        Object[] possibleValues = { "作業フォルダ" };
+        String selectedValue = (String)JOptionPane.showInputDialog(this,
+                "何を設定しますか?", "Input",
+                JOptionPane.INFORMATION_MESSAGE, null,
+                possibleValues, possibleValues[0]);
+        if (selectedValue==null)
+            return;
+        if (selectedValue.equals("作業フォルダ")) {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = chooser.showOpenDialog(this);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                File f = chooser.getSelectedFile();
+                impl.setWorkDir(f.getAbsolutePath());
+                impl.setWorkDirURL(f.toURI().toString());
+            } else {
+                impl.setWorkDirURL(null);
+            }
         }
     }
     void ide() {
