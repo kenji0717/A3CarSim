@@ -24,6 +24,8 @@ CarRaceに関するドキュメント．
 
 ![stk-racetrack-skeleton.png](./stk-racetrack-skeleton.png)
 
+* [SampleProgram.html](./SampleProgram.html)
+
 Footer @(id:1,footer)
 ========================================
 
