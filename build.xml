@@ -62,7 +62,11 @@
     </target>
 
     <target name="clean">
-        <delete dir="build"/>
+        <delete dir="." includeEmptyDirs="true">
+            <include name="build/**"/>
+            <exclude name="build/.gitignore"/>
+            <exclude name="build"/>
+        </delete>
         <delete file="release/a3carsim-api.jar"/>
         <delete file="release/a3carsim-res.jar"/>
         <delete>
