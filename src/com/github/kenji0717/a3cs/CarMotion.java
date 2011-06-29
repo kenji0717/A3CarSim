@@ -209,7 +209,6 @@ class CarMotion implements Motion {
 
             Transform rootTransInv = new Transform(rootTrans);
             rootTransInv.inverse();
-            vehicle.updateWheelTransform(wheelIndex,true);
             Transform trans = vehicle.getWheelInfo(wheelIndex).worldTransform;
             retTrans.mul(rootTransInv,trans);
         }
