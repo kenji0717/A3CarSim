@@ -1,7 +1,6 @@
 package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.linearmath.*;
-import jp.sourceforge.acerola3d.a3.*;
 import javax.vecmath.*;
 
 class CarMotionState extends MotionState {

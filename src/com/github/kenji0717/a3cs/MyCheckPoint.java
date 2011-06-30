@@ -1,14 +1,9 @@
 package com.github.kenji0717.a3cs;
 
-import javax.vecmath.Quat4d;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
-
+import javax.vecmath.*;
 import jp.sourceforge.acerola3d.a3.A3Object;
 import jp.sourceforge.acerola3d.a3.Util;
 import jp.sourceforge.acerola3d.a3.VRML;
-
 import com.bulletphysics.collision.dispatch.CollisionFlags;
 import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.GhostObject;

@@ -1,14 +1,10 @@
 package com.github.kenji0717.a3cs;
 
-import com.bulletphysics.collision.dispatch.CollisionFlags;
-import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.*;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-
 import javax.vecmath.*;
-
 import jp.sourceforge.acerola3d.a3.*;
 
 //弾丸を表すクラス

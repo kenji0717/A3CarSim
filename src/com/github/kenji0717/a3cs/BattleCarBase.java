@@ -34,6 +34,14 @@ public abstract class BattleCarBase extends CarBase {
     }
 
     /**
+     * 前進のための力(engine)、ハンドルの方向(steering:正->左,負->右)、
+     * ブレーキの力(breaking)、そしてドリフト(drift)を指定して車をコントロールします。
+     */
+    protected void setForce(double engine,double steering,double breaking,double drift) {
+        super.setForce(engine,steering,breaking,0.0);
+    }
+
+    /**
      * この車の現在の座標を取得します。
      */
     protected Vector3d getLoc() {

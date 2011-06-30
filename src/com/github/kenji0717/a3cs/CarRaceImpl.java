@@ -6,10 +6,7 @@ import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
-
 import javax.swing.JOptionPane;
 import javax.vecmath.Vector3d;
 
@@ -23,7 +20,6 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     ArrayList<ActiveObject> activeObjects = new ArrayList<ActiveObject>();
     boolean battleRunning = false;//一時停止中でもtrue
     boolean simRunning = false;//一時停止中はfalse
-    ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     URLClassLoader classLoader;
     CarRaceGUI gui;
     int NUM=12;

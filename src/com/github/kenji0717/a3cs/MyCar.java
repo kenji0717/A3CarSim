@@ -2,12 +2,9 @@ package com.github.kenji0717.a3cs;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3d;
-
 import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-
 import jp.sourceforge.acerola3d.a3.*;
 
 //car

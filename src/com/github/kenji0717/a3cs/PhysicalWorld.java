@@ -2,7 +2,6 @@ package com.github.kenji0717.a3cs;
 
 import com.bulletphysics.collision.broadphase.*;
 import com.bulletphysics.collision.dispatch.*;
-import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 //import com.bulletphysics.collision.dispatch.CollisionWorld.RayResultCallback;
 import com.bulletphysics.collision.narrowphase.PersistentManifold;
 import com.bulletphysics.dynamics.*;
