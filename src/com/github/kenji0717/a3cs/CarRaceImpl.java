@@ -129,7 +129,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
         gui.setCar(car);
         activeObjects.add(car);
         gui.updateCarInfo(car);
-
+        gui.a3csController.init();
     }
     
     URLClassLoader makeClassLoader(String s) {

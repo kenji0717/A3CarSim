@@ -87,7 +87,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             editor.setText("コンパイラがセットアップできません。。。");
             this.setEnable(false);
         } else if (workDir==null) {
-            editor.setText("作業フォルダを指定してからIDEを起動して下さい。");
+            editor.setText("[設定]で作業フォルダを指定してからIDEを起動して下さい。");
             this.setEnable(false);
         } else {
             editor.setText("");

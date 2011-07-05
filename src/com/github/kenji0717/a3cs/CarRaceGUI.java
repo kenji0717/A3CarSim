@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.PrintStream;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.vecmath.Vector3d;
 
@@ -18,9 +19,10 @@ class CarRaceGUI extends JFrame implements ActionListener {
     CarRaceImpl impl;
     SimpleIDE ide;
     A3Canvas mainCanvas;
+    A3CSController a3csController;
     A3SubCanvas carCanvas;
     JTextField carClassTF;
-    JButton changeCPB;
+    JComboBox changeCPCB;
     JButton confB;
     JButton ideB;
     JLabel generalInfoL;
@@ -28,7 +30,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
     JButton startB;
     JButton pauseB;
     JButton stopB;
-    JLabel carEnergyL;
+    //JLabel carEnergyL;
     JTextArea stdOutTA;
     JTextAreaOutputStream out;
     
@@ -45,28 +47,33 @@ class CarRaceGUI extends JFrame implements ActionListener {
         HBox controlBox = new HBox();
         baseBox.myAdd(controlBox,0);
         HBox classNameBox = new HBox();
+        classNameBox.setBorder(new TitledBorder("車のクラス名"));
         controlBox.myAdd(classNameBox,1);
-        classNameBox.myAdd(new JLabel("CAR:"),0);
         carClassTF = new JTextField(carClass);
         classNameBox.myAdd(carClassTF,1);
-        changeCPB = new JButton("プログラム読み込み場所の変更");
-        changeCPB.addActionListener(this);
-        classNameBox.myAdd(changeCPB,0);
+        HBox loadFromBox = new HBox();
+        loadFromBox.setBorder(new TitledBorder("プログラム読込場所"));
+        controlBox.myAdd(loadFromBox,0);
+        changeCPCB = new JComboBox(new String[]{"システムのみ","作業フォルダ","JARファイル"});
+        changeCPCB.addActionListener(this);
+        loadFromBox.myAdd(changeCPCB,0);
+        VBox controlBox1 = new VBox();
+        controlBox.myAdd(controlBox1,0);
+        confB = new JButton("設定");
+        confB.addActionListener(this);
+        controlBox1.myAdd(confB,0);
+        ideB = new JButton("プログラミング");
+        ideB.addActionListener(this);
+        controlBox1.myAdd(ideB,0);
         VBox controlBox2 = new VBox();
         controlBox.myAdd(controlBox2,0);
         HBox generalInfoBox = new HBox();
         controlBox2.myAdd(generalInfoBox,0);
-        confB = new JButton("設定");
-        confB.addActionListener(this);
-        generalInfoBox.myAdd(confB,0);
-        ideB = new JButton("プログラミング");
-        ideB.addActionListener(this);
-        generalInfoBox.myAdd(ideB,0);
-        generalInfoL = new JLabel("Time:");
-        generalInfoBox.myAdd(generalInfoL,1);
         fastForwardCB = new JCheckBox("早送り");
         fastForwardCB.addActionListener(this);
         generalInfoBox.myAdd(fastForwardCB,0);
+        generalInfoL = new JLabel("Time:");
+        generalInfoBox.myAdd(generalInfoL,1);
         HBox mainButtonsBox = new HBox();
         controlBox2.myAdd(mainButtonsBox,0);
         startB = new JButton("START");
@@ -84,8 +91,8 @@ class CarRaceGUI extends JFrame implements ActionListener {
         mainCanvas = A3Canvas.createA3Canvas(400,400);
         mainCanvas.setCameraLocImmediately(0.0,150.0,0.0);
         mainCanvas.setCameraLookAtPointImmediately(-50.0,0.0,1.0);
-        A3CSController c = new A3CSController(150.0);
-        mainCanvas.setA3Controller(c);
+        a3csController = new A3CSController(150.0);
+        mainCanvas.setA3Controller(a3csController);
         //mainCanvas.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE,150.0);
         displayBox.myAdd(mainCanvas,1);
         VBox subBox = new VBox();
@@ -94,11 +101,11 @@ class CarRaceGUI extends JFrame implements ActionListener {
         subBox.myAdd(carBox,1);
         carCanvas = A3SubCanvas.createA3SubCanvas(200,200);
         carBox.myAdd(carCanvas,1);
-        VBox carInfoBox = new VBox();
-        carBox.myAdd(carInfoBox,0);
-        carInfoBox.myAdd(new JLabel("CAR:"),0);
-        carEnergyL = new JLabel("Energy: 000");
-        carInfoBox.myAdd(carEnergyL,0);
+        //VBox carInfoBox = new VBox();
+        //carBox.myAdd(carInfoBox,0);
+        //carInfoBox.myAdd(new JLabel("CAR:"),0);
+        //carEnergyL = new JLabel("Energy: 000");
+        //carInfoBox.myAdd(carEnergyL,0);
         
         stdOutTA = new JTextArea(10,40);
         stdOutTA.setEditable(false);
@@ -111,6 +118,8 @@ class CarRaceGUI extends JFrame implements ActionListener {
         System.setErr(ps);
         //this.pack();
         //this.setVisible(true);
+
+        updateLoadFrom();
     }
 
     void setCar(CarBase c) {
@@ -122,7 +131,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
     }
 
     void updateCarInfo(CarBase c) {
-        carEnergyL.setText("Energy: "+c.energy);
+        //carEnergyL.setText("Energy: "+c.energy);
     }
     void updateTime(double t) {
         generalInfoL.setText("Time:"+String.format("%4.2f",t));
@@ -136,7 +145,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
             impl.pauseBattle();
         } else if (s==stopB) {
             impl.stopBattle();
-        } else if (s==changeCPB) {
+        } else if (s==changeCPCB) {
             changeCP();
         } else if (s==confB) {
             conf();
@@ -146,18 +155,15 @@ class CarRaceGUI extends JFrame implements ActionListener {
             impl.fastForward(fastForwardCB.isSelected());
         }
     }
-    String getPath(int i) {
-        Object[] possibleValues = { "システムのみ", "作業フォルダ", "JARファイル" };
-        String selectedValue = (String)JOptionPane.showInputDialog(this,
-                "Choose one", "Input",
-                JOptionPane.INFORMATION_MESSAGE, null,
-                possibleValues, possibleValues[i]);
-        if (selectedValue==null)
-            return null;
-        if (selectedValue.equals("システムのみ"))
-            return "System";
-        else if (selectedValue.equals("作業フォルダ"))
-            return "IDE";
+    void changeCP() {
+        if (changeCPCB.getSelectedItem().equals("システムのみ"))
+            impl.changeCP("System");
+        else if (changeCPCB.getSelectedItem().equals("作業フォルダ"))
+            if (impl.workDir==null) {
+                JOptionPane.showMessageDialog(this,"先に[設定]で作業フォルダを指定して下さい。");
+            } else {
+                impl.changeCP("IDE");
+            }
         else {
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -168,26 +174,24 @@ class CarRaceGUI extends JFrame implements ActionListener {
                 File f = chooser.getSelectedFile();
                 String url = f.toURI().toString();
                 url = "jar:"+url+"!/";
-                return url;
+                impl.changeCP(url);
             }
-            return null;
         }
+        updateLoadFrom();
     }
-    void changeCP() {
-        int i = 0;
+    void updateLoadFrom() {
+        changeCPCB.removeActionListener(this);
         if (impl.carClasspath.equals("System"))
-            i = 0;
+            changeCPCB.setSelectedItem("システムのみ");
         else if (impl.carClasspath.equals("IDE"))
-            i = 1;
+            changeCPCB.setSelectedItem("作業フォルダ");
         else
-            i = 2;
-        String cp = getPath(i);
-        if (cp!=null)
-            impl.changeCP(cp);
+            changeCPCB.setSelectedItem("JARファイル");
+        changeCPCB.addActionListener(this);
     }
     void setParamEditable(boolean b) {
         carClassTF.setEditable(b);
-        changeCPB.setEnabled(b);
+        changeCPCB.setEnabled(b);
         confB.setEnabled(b);
         ideB.setEnabled(b);
     }
