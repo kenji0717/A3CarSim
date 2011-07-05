@@ -22,7 +22,7 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
         if (keyRight) steering -= 0.1;
         if (keyLeft)  steering += 0.1;
 
-        if (keySpace) breaking = 100.0;
+        if (keySpace) breaking = 10.0;
 
         if (keyShift) drift = 1.0;
             
