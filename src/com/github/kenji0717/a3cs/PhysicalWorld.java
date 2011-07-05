@@ -177,12 +177,19 @@ class PhysicalWorld implements Runnable {
                     co.changeCOType(COType.KINEMATIC_TEMP);
             }
 
+//System.out.println("PhysicalWorld:-----gaha-----1");
             //ここで物理計算
             dynamicsWorld.stepSimulation(1.0f/30.0f,10);time += 1.0f/30.0f;
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
+//System.out.println("PhysicalWorld:-----gaha-----2");
 
-//System.out.println("-----gaha-----");
-
+            //車の車輪の更新?不必要かもしれない
+            for (A3CollisionObject co : objects) {
+                if (co instanceof MyCar) {
+                    ((MyCar)co).updateWheelTransform();
+                }
+            }
+            
             //衝突
             int numManifolds = dynamicsWorld.getDispatcher().getNumManifolds();
             for (int ii=0;ii<numManifolds;ii++) {

@@ -217,4 +217,11 @@ class CarMotion implements Motion {
         q.normalize();//???
         return new Transform3D(q,new Vector3d(retTrans.origin),1.0f);
     }
+
+    //車輪の更新?不必要かもしれない
+    void updateWheelTransform() {
+        for (int i = 0; i < vehicle.getNumWheels(); i++) {
+            vehicle.updateWheelTransform(i, true);
+        }
+    }
 }
