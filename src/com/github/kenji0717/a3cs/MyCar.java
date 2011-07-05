@@ -47,7 +47,7 @@ class MyCar extends A3CollisionObject {
         motion.setForce(gEngineForce,gVehicleSteering,gBreakingForce,drift);
     }
 
-    //車輪の更新?不必要かもしれない
+    //車輪の更新
     void updateWheelTransform() {
         motion.updateWheelTransform();
     }

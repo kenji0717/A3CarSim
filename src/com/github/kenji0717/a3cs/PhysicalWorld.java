@@ -183,7 +183,7 @@ class PhysicalWorld implements Runnable {
             //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
 //System.out.println("PhysicalWorld:-----gaha-----2");
 
-            //車の車輪の更新?不必要かもしれない
+            //車の車輪の更新。dynamicsWorld.setSimulation()の更新時間が1/60で割り切れない時とかに特に必要
             for (A3CollisionObject co : objects) {
                 if (co instanceof MyCar) {
                     ((MyCar)co).updateWheelTransform();

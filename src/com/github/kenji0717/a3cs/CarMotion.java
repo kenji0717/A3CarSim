@@ -218,7 +218,7 @@ class CarMotion implements Motion {
         return new Transform3D(q,new Vector3d(retTrans.origin),1.0f);
     }
 
-    //車輪の更新?不必要かもしれない
+    //車輪の更新
     void updateWheelTransform() {
         for (int i = 0; i < vehicle.getNumWheels(); i++) {
             vehicle.updateWheelTransform(i, true);
