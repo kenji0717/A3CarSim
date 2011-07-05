@@ -49,7 +49,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         HBox classNameBox = new HBox();
         classNameBox.setBorder(new TitledBorder("車のクラス名"));
         controlBox.myAdd(classNameBox,1);
-        carClassTF = new JTextField(carClass);
+        carClassTF = new JTextField(carClass,20);
         classNameBox.myAdd(carClassTF,1);
         HBox loadFromBox = new HBox();
         loadFromBox.setBorder(new TitledBorder("プログラム読込場所"));
@@ -204,15 +204,23 @@ class CarRaceGUI extends JFrame implements ActionListener {
         if (selectedValue==null)
             return;
         if (selectedValue.equals("作業フォルダ")) {
+            File iniF = null;
+            if (impl.workDir!=null) {
+                iniF = new File(impl.workDir);
+            }
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (iniF!=null)
+                chooser.setSelectedFile(iniF);
             int returnVal = chooser.showOpenDialog(this);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 File f = chooser.getSelectedFile();
                 impl.setWorkDir(f.getAbsolutePath());
                 impl.setWorkDirURL(f.toURI().toString());
             } else {
-                impl.setWorkDirURL(null);
+                //変更しないことにした
+                //impl.setWorkDir(null);
+                //impl.setWorkDirURL(null);
             }
         }
     }

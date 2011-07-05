@@ -295,11 +295,13 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
     }
     void setWorkDirURL(String wdu) {
         workDirURL = wdu;
-        prefs.put("workDirURL",workDirURL);
+        if (workDirURL!=null)
+            prefs.put("workDirURL",workDirURL);
     }
     void setWorkDir(String wd) {
         workDir = wd;
-        prefs.put("workDir",workDir);
+        if (workDir!=null)
+            prefs.put("workDir",workDir);
     }
     void fastForward(boolean b) {
         if (b==true)

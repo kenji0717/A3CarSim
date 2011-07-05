@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
@@ -31,11 +33,13 @@ class SimpleIDE extends JDialog implements ActionListener {
     JTextArea editor;
     JTextArea outputTA;
     JTextAreaOutputStream jtaos;
+    Executor e;
 
     SimpleIDE(Frame owner) {
         super(owner);
         //compiler = ToolProvider.getSystemJavaCompiler();
         //compiler = new EclipseCompiler();
+        e = Executors.newSingleThreadExecutor();
 
         VBox mainBox = new VBox();
         this.add(mainBox);
@@ -137,6 +141,7 @@ class SimpleIDE extends JDialog implements ActionListener {
                 e.printStackTrace();
             }
         }
+        editor.setCaretPosition(0);
     }
     void saveFile() {
         try {
@@ -149,11 +154,14 @@ class SimpleIDE extends JDialog implements ActionListener {
         }
     }
     void compile() {
-        prepareJars();
-        //if (compiler!=null)
-        //    compile1();
-        //else
-            compile2();
+        e.execute(new Runnable() {
+            public void run() {
+                //if (compiler!=null)
+                //    compile1();
+                //else
+                    compile2();
+            }
+        });
     }
     void prepareJars() {
         String vecmathPath = workDir+File.separator+"vecmath.jar";
@@ -161,15 +169,23 @@ class SimpleIDE extends JDialog implements ActionListener {
         File vpF = new File(vecmathPath);
         File apF = new File(a3carsimPath);
         if (!vpF.exists()) {
-            outputTA.append("コンパイルに必要なvecmath.jarを作業フォルダにダウンロード中\n");
-            dl("http://acerola3d.sourceforge.jp/jws/acerola3d/all/vecmath.jar",vecmathPath);
+            outputTA.append("コンパイルに必要なvecmath.jarを作業フォルダにダウンロード中(最初の一回だけ)...");
+            boolean b = dl("http://acerola3d.sourceforge.jp/jws/acerola3d/all/vecmath.jar",vecmathPath);
+            if (b)
+                outputTA.append("成功\n");
+            else
+                outputTA.append("失敗\n");
         }
         if (!apF.exists()) {
-            outputTA.append("コンパイルに必要なa3carsim-api.jarを作業フォルダにダウンロード中\n");
-            dl("http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim-api.jar",a3carsimPath);
+            outputTA.append("コンパイルに必要なa3carsim-api.jarを作業フォルダにダウンロード中(最初の一回だけ)...");
+            boolean b = dl("http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim-api.jar",a3carsimPath);
+            if (b)
+                outputTA.append("成功\n");
+            else
+                outputTA.append("失敗\n");
         }
     }
-    void dl(String s,String d) {
+    boolean dl(String s,String d) {
         try {
             URL url = new URL(s);
             URLConnection conn = url.openConnection();
@@ -186,13 +202,16 @@ class SimpleIDE extends JDialog implements ActionListener {
 
             out.close();
             in.close();
+            return true;
         }catch(Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
     /*
     void compile1() {
         outputTA.setText("");
+        prepareJars();
         String classPath = System.getProperty("java.class.path");
         classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar";
         classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar"+File.pathSeparator;
@@ -205,6 +224,7 @@ class SimpleIDE extends JDialog implements ActionListener {
     */
     void compile2() {
         outputTA.setText("");
+        prepareJars();
         String classPath = System.getProperty("java.class.path");
         String ss1 = Matcher.quoteReplacement("\\\\");
         String ss2 = Matcher.quoteReplacement("\\");
