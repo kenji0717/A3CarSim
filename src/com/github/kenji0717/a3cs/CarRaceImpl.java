@@ -33,7 +33,7 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             carClass = args[0];
             prefs.put("carClass",carClass);
         }
-        carClasspath = prefs.get("arClasspath","System");
+        carClasspath = prefs.get("carClasspath","System");
         workDir = prefs.get("workDir",null);
         workDirURL = prefs.get("workDirURL",null);
         checkPointStack = new ArrayDeque<MyCheckPoint>();
