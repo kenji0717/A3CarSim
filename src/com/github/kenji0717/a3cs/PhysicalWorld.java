@@ -26,7 +26,8 @@ class PhysicalWorld implements Runnable {
     Object waitingRoom = new Object();
     boolean pauseRequest = true;
     double time;
-    long waitTime = 33;
+    boolean fastForward = false;
+    final long waitTime = 33;
 
     //物理世界の初期化
     public PhysicalWorld() {
@@ -61,6 +62,7 @@ class PhysicalWorld implements Runnable {
     public void setMainCanvas(A3CanvasInterface c) {
         if (mainCanvas==null) {
             mainCanvas = c;
+            mainCanvas.setUpdateInterval(waitTime);
             for (A3CollisionObject o : objects) {
                 mainCanvas.add(o.a3);
                 System.out.println("GAHA:-------------");
@@ -253,7 +255,14 @@ class PhysicalWorld implements Runnable {
                     r.run();
                 }
             }
-            try{Thread.sleep(waitTime);}catch(Exception e){;}
+            if (fastForward==false) {
+                //if (mainCanvas!=null) {
+                //    mainCanvas.waitForUpdate(waitTime*2);
+                //    try{Thread.sleep(waitTime/2);}catch(Exception e){;}//微妙
+                //} else {
+                    try{Thread.sleep(waitTime);}catch(Exception e){;}
+                //}
+            }
         }
     }
     public void addCollisionListener(CollisionListener cl) {
@@ -279,7 +288,12 @@ class PhysicalWorld implements Runnable {
             tasks.remove(r);
         }
     }
-    public void setWaitTime(long l) {
-        waitTime = l;
+    /* やっぱりこれは危険
+    public void setWaitTime(long t) {
+        waitTime = t;
+    }
+    */
+    public void fastForward(boolean b) {
+        fastForward = b;
     }
 }

@@ -304,9 +304,6 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             prefs.put("workDir",workDir);
     }
     void fastForward(boolean b) {
-        if (b==true)
-            pw.setWaitTime(0);
-        else
-            pw.setWaitTime(33);
+        pw.fastForward(b);
     }
 }
