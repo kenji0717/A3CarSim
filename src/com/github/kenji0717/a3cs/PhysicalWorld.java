@@ -55,8 +55,8 @@ class PhysicalWorld implements Runnable {
         dynamicsWorld.setGravity(new Vector3f(0,-10,0));
 
         time = 0.0;
-        Thread t = new Thread(this);
-        t.start();
+        //Thread t = new Thread(this);
+        //t.start();
     }
 
     public void setMainCanvas(A3CanvasInterface c) {
@@ -122,7 +122,7 @@ class PhysicalWorld implements Runnable {
     //物理計算を進める処理
     //座標を変更するのがちょっとやっかい
     public void run() {
-        while (true) {
+        //while (true) {
             synchronized (waitingRoom) {
                 if (pauseRequest==true) {
                     try {
@@ -260,10 +260,11 @@ class PhysicalWorld implements Runnable {
                 //    mainCanvas.waitForUpdate(waitTime*2);
                 //    try{Thread.sleep(waitTime/2);}catch(Exception e){;}//微妙
                 //} else {
-                    try{Thread.sleep(waitTime);}catch(Exception e){;}
+                //    try{Thread.sleep(waitTime);}catch(Exception e){;}
                 //}
             }
-        }
+        //}
+            System.out.println("GAHA:+++++");
     }
     public void addCollisionListener(CollisionListener cl) {
         synchronized (collisionListeners) {

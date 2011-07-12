@@ -41,6 +41,12 @@ class RaceTestImpl implements CarSim, Runnable {
         pw.addTask(this);
 
         pw.resume();
+        window.insertTaskIntoTimerLoop(pw);
+        window.insertTaskIntoRenderingLoop(new Runnable(){
+            public void run() {
+                System.out.println("GAHA:-----");
+            }
+        });
     }
 
     @Override
