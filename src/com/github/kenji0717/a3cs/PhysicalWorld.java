@@ -65,7 +65,6 @@ class PhysicalWorld implements Runnable {
             mainCanvas.setUpdateInterval(waitTime);
             for (A3CollisionObject o : objects) {
                 mainCanvas.add(o.a3);
-                System.out.println("GAHA:-------------");
             }
         } else {
             System.out.println("Error: has already set mainCanvas!");
@@ -264,7 +263,6 @@ class PhysicalWorld implements Runnable {
                 //}
             }
         //}
-            System.out.println("GAHA:+++++");
     }
     public void addCollisionListener(CollisionListener cl) {
         synchronized (collisionListeners) {
