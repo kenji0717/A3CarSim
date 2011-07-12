@@ -256,12 +256,12 @@ class PhysicalWorld implements Runnable {
                 }
             }
             if (fastForward==false) {
-                //if (mainCanvas!=null) {
-                //    mainCanvas.waitForUpdate(waitTime*2);
-                //    try{Thread.sleep(waitTime/2);}catch(Exception e){;}//微妙
-                //} else {
+                if (mainCanvas!=null) {
+                    mainCanvas.waitForUpdate(waitTime*2);
+                    try{Thread.sleep(waitTime/2);}catch(Exception e){;}//微妙
+                } else {
                     try{Thread.sleep(waitTime);}catch(Exception e){;}
-                //}
+                }
             }
         }
     }
