@@ -17,6 +17,7 @@ class CarBattleGUI extends JFrame implements ActionListener {
     CarBattleImpl impl;
     SimpleIDE ide;
     A3Canvas mainCanvas;
+    A3CSController a3csController;
     A3SubCanvas car1Canvas;
     A3SubCanvas car2Canvas;
     JTextField car1classTF;
@@ -93,8 +94,8 @@ class CarBattleGUI extends JFrame implements ActionListener {
         mainCanvas = A3Canvas.createA3Canvas(400,400);
         mainCanvas.setCameraLocImmediately(0,50,20);
         mainCanvas.setCameraLookAtPointImmediately(0,0,0);
-        A3CSController c = new A3CSController(60.0);
-        mainCanvas.setA3Controller(c);
+        a3csController = new A3CSController(60.0);
+        mainCanvas.setA3Controller(a3csController);
         //mainCanvas.setNavigationMode(A3CanvasInterface.NaviMode.SIMPLE,150.0);
         displayBox.myAdd(mainCanvas,1);
         VBox subBox = new VBox();
@@ -231,15 +232,23 @@ class CarBattleGUI extends JFrame implements ActionListener {
         ideB.setEnabled(b);
     }
     void conf() {
+        File iniF = null;
+        if (impl.workDir!=null) {
+            iniF = new File(impl.workDir);
+        }
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (iniF!=null)
+            chooser.setSelectedFile(iniF);
         int returnVal = chooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             File f = chooser.getSelectedFile();
             impl.setWorkDir(f.getAbsolutePath());
             impl.setWorkDirURL(f.toURI().toString());
         } else {
-            impl.setWorkDirURL(null);
+            //変更しないことにした
+            //impl.setWorkDir(null);
+            //impl.setWorkDirURL(null);
         }
     }
     void ide() {

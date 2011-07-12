@@ -136,7 +136,7 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
         activeObjects.add(car2);
         gui.updateCar1Info(car1);
         gui.updateCar2Info(car2);
-
+        gui.a3csController.init();
     }
     
     URLClassLoader makeClassLoader(String s) {
@@ -329,10 +329,12 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
     }
     void setWorkDirURL(String wdu) {
         workDirURL = wdu;
-        prefs.put("workDirURL",workDirURL);
+        if (workDirURL!=null)
+            prefs.put("workDirURL",workDirURL);
     }
     void setWorkDir(String wd) {
         workDir = wd;
-        prefs.put("workDir",workDir);
+        if (workDir!=null)
+            prefs.put("workDir",workDir);
     }
 }
