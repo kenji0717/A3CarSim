@@ -25,6 +25,9 @@ grant codeBase "file:${user.dir}/release/a3carsim-api.jar" {
 grant codeBase "file:${user.dir}/lib/acerola3d/a3-vrml97.jar" {
   permission java.security.AllPermission;
 };
+grant codeBase "file:/usr/lib/jvm/java-6-sun/lib/tools.jar" {
+  permission java.security.AllPermission;
+};// for ubuntu???
 
 //grant codeBase "file:${user.dir}/lib/-" {
 //  permission java.security.AllPermission;
