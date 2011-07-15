@@ -26,6 +26,7 @@
             <include name="*.jar"/>
         </fileset>
         <pathelement location="lib/ecj-3.6.2.jar"/>
+        <pathelement location="lib/tools.jar"/>
     </path>
 
     <path id="my.exec.class.path">

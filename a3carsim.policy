@@ -1,13 +1,7 @@
-grant codeBase "file:lib/acerola3d/*" {
+grant codeBase "file:${user.dir}/lib/-" {
   permission java.security.AllPermission;
 };
-grant codeBase "file:release/a3carsim-api.jar" {
-  permission java.security.AllPermission;
-};
-grant codeBase "file:release/a3carsim-res.jar" {
-  permission java.security.AllPermission;
-};
-grant codeBase "file:lib/ecj-3.6.2.jar" {
+grant codeBase "file:${user.dir}/release/-" {
   permission java.security.AllPermission;
 };
 

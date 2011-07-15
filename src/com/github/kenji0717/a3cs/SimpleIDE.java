@@ -10,12 +10,12 @@ import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
-
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
-//import javax.tools.*;
+import javax.tools.JavaCompiler;
+//import javax.tools.ToolProvider;
 //import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler;
 import org.eclipse.jdt.internal.compiler.batch.Main;
 
@@ -23,7 +23,7 @@ class SimpleIDE extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     String workDir;
     String filePath;
-    //JavaCompiler compiler;
+    JavaCompiler compiler;
     Main compilerMain;
 
     JButton openB;
@@ -38,6 +38,7 @@ class SimpleIDE extends JDialog implements ActionListener {
     SimpleIDE(Frame owner) {
         super(owner);
         //compiler = ToolProvider.getSystemJavaCompiler();
+        compiler = com.sun.tools.javac.api.JavacTool.create();
         //compiler = new EclipseCompiler();
         e = Executors.newSingleThreadExecutor();
 
@@ -156,9 +157,9 @@ class SimpleIDE extends JDialog implements ActionListener {
     void compile() {
         e.execute(new Runnable() {
             public void run() {
-                //if (compiler!=null)
-                //    compile1();
-                //else
+                if (compiler!=null)
+                    compile1();
+                else
                     compile2();
             }
         });
@@ -208,11 +209,12 @@ class SimpleIDE extends JDialog implements ActionListener {
             return false;
         }
     }
-    /*
+
     void compile1() {
         outputTA.setText("");
         prepareJars();
         String classPath = System.getProperty("java.class.path");
+        classPath=classPath+File.pathSeparator+workDir;
         classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar";
         classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar"+File.pathSeparator;
         System.out.println("CLASSPATH:"+classPath);
@@ -221,7 +223,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             outputTA.append("コンパイル成功\n");
         }
     }
-    */
+
     void compile2() {
         outputTA.setText("");
         prepareJars();
@@ -229,6 +231,7 @@ class SimpleIDE extends JDialog implements ActionListener {
         String ss1 = Matcher.quoteReplacement("\\\\");
         String ss2 = Matcher.quoteReplacement("\\");
         classPath = classPath.replaceAll(ss1,ss2);
+        classPath=classPath+File.pathSeparator+workDir;
         classPath=classPath+File.pathSeparator+workDir+File.separator+"vecmath.jar";
         classPath=classPath+File.pathSeparator+workDir+File.separator+"a3carsim-api.jar"+File.pathSeparator;
         System.out.println("CLASSPATH:"+classPath);
