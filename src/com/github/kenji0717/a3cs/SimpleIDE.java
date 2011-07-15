@@ -38,7 +38,12 @@ class SimpleIDE extends JDialog implements ActionListener {
     SimpleIDE(Frame owner) {
         super(owner);
         //compiler = ToolProvider.getSystemJavaCompiler();
-        compiler = com.sun.tools.javac.api.JavacTool.create();
+        try {
+            compiler = com.sun.tools.javac.api.JavacTool.create();
+        } catch (NoClassDefFoundError e) {
+            compiler = null;
+            //e.printStackTrace();
+        }
         //compiler = new EclipseCompiler();
         e = Executors.newSingleThreadExecutor();
 

@@ -34,6 +34,7 @@
             <include name="*.jar"/>
         </fileset>
         <pathelement location="lib/ecj-3.6.2.jar"/>
+        <pathelement location="lib/tools.jar"/>
         <pathelement location="release/a3carsim-api.jar"/>
         <pathelement location="release/a3carsim-res.jar"/>
     </path>
