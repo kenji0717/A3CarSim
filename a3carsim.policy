@@ -1,9 +1,37 @@
-grant codeBase "file:${user.dir}/lib/-" {
+grant codeBase "file:${user.dir}/lib/acerola3d/acerola3d.jar" {
   permission java.security.AllPermission;
 };
-grant codeBase "file:${user.dir}/release/-" {
+grant codeBase "file:${user.dir}/lib/ecj-3.6.2.jar" {
   permission java.security.AllPermission;
 };
+grant codeBase "file:${user.dir}/lib/acerola3d/j3dcore.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/lib/acerola3d/jogl.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/lib/acerola3d/joal.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/lib/acerola3d/j3dutils.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/lib/acerola3d/gluegen-rt.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/release/a3carsim-api.jar" {
+  permission java.security.AllPermission;
+};
+grant codeBase "file:${user.dir}/lib/acerola3d/a3-vrml97.jar" {
+  permission java.security.AllPermission;
+};
+
+//grant codeBase "file:${user.dir}/lib/-" {
+//  permission java.security.AllPermission;
+//};
+//grant codeBase "file:${user.dir}/release/-" {
+//  permission java.security.AllPermission;
+//};
 
 //-----------------------------------------
 //keystore "pubKeystore";
