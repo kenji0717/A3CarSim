@@ -22,6 +22,8 @@ CarBattleに関するドキュメント．
 
 現在準備中です．
 
+![BattleField01.png](./BattleField01.png)
+
 Footer @(id:1,footer)
 ========================================
 
