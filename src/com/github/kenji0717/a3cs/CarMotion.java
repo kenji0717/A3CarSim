@@ -113,15 +113,17 @@ class CarMotion implements Motion {
     public void setForce(float gEngineForce,float gVehicleSteering,float gBreakingForce,float drift) {
         int wheelIndex = 2;
         vehicle.setBrake(gBreakingForce,wheelIndex);
+        vehicle.applyEngineForce(gEngineForce,wheelIndex);//後輪駆動の場合
         wheelIndex = 3;
         vehicle.setBrake(gBreakingForce,wheelIndex);
+        vehicle.applyEngineForce(gEngineForce,wheelIndex);//後輪駆動の場合
 
         wheelIndex = 0;
         vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
-        vehicle.applyEngineForce(gEngineForce,wheelIndex);
+        //vehicle.applyEngineForce(gEngineForce,wheelIndex);//前輪駆動の場合
         wheelIndex = 1;
         vehicle.setSteeringValue(gVehicleSteering,wheelIndex);
-        vehicle.applyEngineForce(gEngineForce,wheelIndex);
+        //vehicle.applyEngineForce(gEngineForce,wheelIndex);//前輪駆動の場合
 
         WheelInfo wi = null;
         wi = vehicle.getWheelInfo(0);

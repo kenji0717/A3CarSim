@@ -9,6 +9,8 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
     boolean keyLeft;
     boolean keySpace;
     boolean keyShift;
+    boolean keyZ;
+    boolean keyX;
 
     public void exec() {
         double engine = 0.0;
@@ -25,7 +27,10 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
         if (keySpace) breaking = 10.0;
 
         if (keyShift) drift = 1.0;
-            
+
+        if (keyZ) steering=1.57;//test前輪を90度左に向ける
+        if (keyX) steering=-1.57;//test前輪を90度右に向ける
+
         setForce(engine,steering,breaking,drift);
 
     }
@@ -39,6 +44,8 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
         case KeyEvent.VK_LEFT:  keyLeft=true;  break;
         case KeyEvent.VK_SPACE: keySpace=true; break;
         case KeyEvent.VK_SHIFT: keyShift=true; break;
+        case KeyEvent.VK_Z:     keyZ=true;     break;
+        case KeyEvent.VK_X:     keyX=true;     break;
         }
     }
 
@@ -51,6 +58,8 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
         case KeyEvent.VK_LEFT:  keyLeft=false;  break;
         case KeyEvent.VK_SPACE: keySpace=false; break;
         case KeyEvent.VK_SHIFT: keyShift=false; break;
+        case KeyEvent.VK_Z:     keyZ=false;     break;
+        case KeyEvent.VK_X:     keyX=false;     break;
         }
     }
 
