@@ -34,6 +34,18 @@ About
   詳しくは以下のページを見て下さい．
     + [車の性能の変更](./doc/CarRace/item01.html)
 
+連絡事項，NEWS
+----------------------------------------
+
+このプロジェクトでは様々なオープンなプロジェクトの
+成果を利用させてもらっています．
+
+* [SuperTuxKart](http://supertuxkart.sourceforge.net/)
+* [Acerola3D](http://acerola3d.sourceforge.jp/)
+* [JBullet](http://jbullet.advel.cz/)
+* [Java3D](http://java3d.java.net/)
+* [その他](openprojects.html)
+
 Footer @(id:1,footer)
 ========================================
 
