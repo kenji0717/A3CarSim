@@ -225,12 +225,13 @@ class PhysicalWorld implements Runnable {
 
 
             for (A3CollisionObject co : objects) {
-                if (co.locRequest==null)
+                if (co.locRequest==null && co.quatRequest==null)
                     continue;
                 if (co.coType==COType.KINEMATIC_TEMP){
                     co.changeCOType(COType.DYNAMIC);
                 }
                 co.locRequest=null;
+                co.quatRequest=null;
             }
 
             for (A3CollisionObject co : objects) {

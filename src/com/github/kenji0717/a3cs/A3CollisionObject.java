@@ -43,10 +43,10 @@ abstract class A3CollisionObject {
     public abstract MotionState makeMotionState(Vector3d l,Vector3d r);
     public abstract CollisionObject makeCollisionObject(Object...args);
 
-    public void changeCOType(COType t) {
+    public void changeCOType_BAK(COType t) {
         ;
     }
-    public void changeCOType_BAK(COType t) {
+    public void changeCOType(COType t) {
         //RigidBodyとGhostObject間の変換は不可
         if ((t==COType.GHOST)&&(coType!=COType.GHOST)) {
             System.exit(0);
