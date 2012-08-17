@@ -46,5 +46,7 @@ public class TestCar01 extends RaceCarBase {
 
         v.normalize();
         setForce(200,0.3*v.dot(left),0,0);
+//System.out.println("GAHA: "+getNearestPoint());
+System.out.println("GAHA: "+getDirectionPlus(10.0));
     }
 }
