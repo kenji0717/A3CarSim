@@ -46,6 +46,9 @@ static int gaha;
     }
 
     boolean initGrav = false;
+    public void beforeExec() {
+        ;
+    }
     public void exec() {
         //l.add(v);
         //this.setLoc2(l.x,l.y,l.z);

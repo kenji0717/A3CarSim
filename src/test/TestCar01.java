@@ -2,51 +2,39 @@ package test;
 
 import com.github.kenji0717.a3cs.*;
 import javax.vecmath.Vector3d;
-import java.util.ArrayDeque;
 
 public class TestCar01 extends RaceCarBase {
-    ArrayDeque<Vector3d> points = new ArrayDeque<Vector3d>();
-    Vector3d target;
     public TestCar01() {
-        points.addLast(new Vector3d(  0,  0,-25));//cp00
-        points.addLast(new Vector3d(-13,  0,-52));
-        points.addLast(new Vector3d(-37,  0,-56));//cp01
-        points.addLast(new Vector3d(-68,  0,-49));
-        points.addLast(new Vector3d(-76,  0,  9));//cp02
-        points.addLast(new Vector3d(-30,  0,  9));
-        points.addLast(new Vector3d(-21,  0, 20));//cp03
-        points.addLast(new Vector3d(-45,  0, 27));
-        points.addLast(new Vector3d(-54,  0, 35));//cp04
-        points.addLast(new Vector3d(-34,  0, 44));
-        points.addLast(new Vector3d(-16,  0, 35));//cp05
-        points.addLast(new Vector3d( -9,  0,-28));
-        points.addLast(new Vector3d(-23,  0,-39));//cp06
-        points.addLast(new Vector3d(-36,  0,-29));
-        points.addLast(new Vector3d(-36,  0, -6));
-        points.addLast(new Vector3d(-43,  0,  0));//cp07
-        points.addLast(new Vector3d(-52,  0, -4));
-        points.addLast(new Vector3d(-47,  0,-28));
-        points.addLast(new Vector3d(-53,  0,-38));//cp08
-        points.addLast(new Vector3d(-64,  0,-32));
-        points.addLast(new Vector3d(-65,  5, 11));//cp09
-        points.addLast(new Vector3d(-60,  0, 49));
-        points.addLast(new Vector3d(-40,  0, 55));//cp10
-        points.addLast(new Vector3d( -9,  0, 46));
-        points.addLast(new Vector3d(  0,  0, 10));//cp11
-
-        target = points.removeFirst();
     }
     public void exec() {
-        Vector3d v = new Vector3d(target);
-        v.sub(this.getLoc());
+        Vector3d loc = getLoc();
+        
+        Vector3d mae1 = getNearestPointPlus(10.0);//前方の座標1
+        Vector3d mae2 = getNearestPointPlus(30.0);//前方の座標2
+        mae1.sub(loc);
+        mae1.normalize();
+        mae2.sub(loc);
+        mae2.normalize();
         Vector3d left = getUnitVecX();
+        Vector3d front = getUnitVecZ();
 
-        if ((v.length()<1.0)&&(!points.isEmpty()))
-            target = points.removeFirst();
+        boolean noborizaka = mae1.y>0.1;
+        boolean kyuukaabu = front.dot(mae2)<0.85;
 
-        v.normalize();
-        setForce(200,0.3*v.dot(left),0,0);
-//System.out.println("GAHA: "+getNearestPoint());
-System.out.println("GAHA: "+getDirectionPlus(10.0));
+        double engineForce = 600.0; //エンジン出力
+        if (noborizaka) engineForce += 150; //上り坂では加速
+        if (kyuukaabu) engineForce = 300; //急カーブでは減速
+        double steering = 0.3*mae1.dot(left); //左にハンドルを切る量
+        double breakingForce = kyuukaabu?10.0:0.0;//急カーブの時ブレーキ
+        double drift=0.0; //ドリフトしない。
+
+        setForce(engineForce,steering,breakingForce,drift);
+
+if (engineForce>700.0)System.out.println("加速");
+if (breakingForce>1.0)System.out.println("ブレーキ");
+//System.out.println("Debug: "+getNearestPoint());
+//System.out.println("Debug: "+getDirectionPlus(10.0));
+//System.out.println("Debug: "+getVel());
+System.out.println("-");
     }
 }

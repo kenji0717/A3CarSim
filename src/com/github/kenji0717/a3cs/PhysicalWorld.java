@@ -27,6 +27,7 @@ class PhysicalWorld implements Runnable {
     boolean pauseRequest = true;
     double time;
     boolean fastForward = false;
+    final float stepTime = 1.0f/30.0f;
     final long waitTime = 33;
 
     //物理世界の初期化
@@ -180,8 +181,9 @@ class PhysicalWorld implements Runnable {
 
 //System.out.println("PhysicalWorld:-----gaha-----1");
             //ここで物理計算
-            dynamicsWorld.stepSimulation(1.0f/30.0f,10);time += 1.0f/30.0f;
-            //dynamicsWorld.stepSimulation(1.0f/30.0f,2);
+            dynamicsWorld.stepSimulation(stepTime,10);
+            //dynamicsWorld.stepSimulation(stepTime,2);
+            time += stepTime;
 //System.out.println("PhysicalWorld:-----gaha-----2");
 
             //車の車輪の更新。dynamicsWorld.setSimulation()の更新時間が1/60で割り切れない時とかに特に必要

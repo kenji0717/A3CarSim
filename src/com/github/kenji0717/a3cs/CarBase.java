@@ -6,6 +6,7 @@ import javax.vecmath.*;
 
 import jp.sourceforge.acerola3d.a3.Util;
 
+import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 
 /**
@@ -224,4 +225,19 @@ abstract class CarBase implements ActiveObject {
      * 下さい。
      */
     public abstract void exec();
+    //以下2012,08/18追加
+    Vector3d oldLoc=new Vector3d();
+    Vector3d vel=new Vector3d();
+    public void beforeExec() {
+        Vector3d loc = getLoc();
+        vel.sub(loc,oldLoc);
+        vel.scale(1.0/pw.stepTime);
+        oldLoc = loc;
+    }
+    /**
+     * 車の現在の速度を返します。
+     */
+    Vector3d getVel() {
+        return new Vector3d(vel);
+    }
 }
