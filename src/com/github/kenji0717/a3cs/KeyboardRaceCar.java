@@ -32,7 +32,11 @@ class KeyboardRaceCar extends RaceCarBase implements KeyListener {
         if (keyX) steering=-1.57;//test前輪を90度右に向ける
 
         setForce(engine,steering,breaking,drift);
-
+//System.out.println("Debug: "+getPoint());
+//System.out.println("Debug: "+getDirection());
+//System.out.println("Debug: "+getVel());
+//System.out.println("Debug: "+getDist());
+//System.out.println("-");
     }
 
     @Override

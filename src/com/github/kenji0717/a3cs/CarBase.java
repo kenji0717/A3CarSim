@@ -1,12 +1,8 @@
 package com.github.kenji0717.a3cs;
 
 import java.util.ArrayList;
-
 import javax.vecmath.*;
-
 import jp.sourceforge.acerola3d.a3.Util;
-
-import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 
 /**

@@ -49,9 +49,9 @@ public abstract class RaceCarBase extends CarBase {
         dirs.add(new Vector3d(0,0,-1));
         double milage = 0.0;
         Vector3d v1,v2,v3;
-        Vector3d tmp1 = new Vector3d();
-        Vector3d tmp2 = new Vector3d();
         for (int i=1;i<points.size()-1;i++) {
+            Vector3d tmp1 = new Vector3d();
+            Vector3d tmp2 = new Vector3d();
             v1 = points.get(i-1);
             v2 = points.get(i);
             v3 = points.get(i+1);
@@ -166,7 +166,7 @@ public abstract class RaceCarBase extends CarBase {
      * 690で割った時のあまりを計算し、負の数である場合はさらに690を加えた数字を
      * 用いてポイントを特定します。
      */
-    protected Vector3d getPoint(int i) {
+    protected Vector3d getRawPointData(int i) {
         i = normalizeIndex(i);
         return new Vector3d(points.get(i));
     }
@@ -212,12 +212,28 @@ public abstract class RaceCarBase extends CarBase {
         k = tmp.dot(tmp2)/k;
         return new Tuple3<Integer,Integer,Double>(index1,index2,k);
     }
+
+    /**
+     * コースのセンターライン上の点のうち現在位置に最も近い点を計算し、その点がスタート位置から
+     * センターラインに沿って走行した場合の走行距離を返します。
+     * ただし車が十分センターラインに近い場所にない場合は正確な値は計算されない可能性があります。
+     * 詳細はソースコード参照のこと。
+     */
+    protected double getDist() {
+        Tuple3<Integer,Integer,Double> t = getNearest2PointsAndRatio();
+        double d1 = dists.get(t.t1);
+        double d2 = dists.get(t.t2);
+        if (t.t3>1.0) return d1;
+        if (t.t3<0.0) return d2;
+        return t.t3*d1 + (1.0-t.t3)*d2;
+    }
+
     /**
      * コースのセンターライン上の点のうち、現在位置に最も近い座標を返します。
      * ただし車が十分センターラインに近い場所にない場合は正確な値は計算されない可能性があります。
      * 詳細はソースコード参照のこと。
      */
-    protected Vector3d getNearestPoint() {
+    protected Vector3d getPoint() {
         Tuple3<Integer,Integer,Double> t = getNearest2PointsAndRatio();
         Vector3d v1 = new Vector3d(points.get(t.t1));
         Vector3d v2 = new Vector3d(points.get(t.t2));
@@ -283,7 +299,7 @@ public abstract class RaceCarBase extends CarBase {
      * ただし車が十分センターラインに近い場所にない場合は正確な値は計算されない可能性があります。
      * 詳細はソースコード参照のこと。
      */
-    protected Vector3d getNearestPointPlus(double plus) {
+    protected Vector3d getPoint(double plus) {
         Tuple3<Integer,Integer,Double> t = getNearest2PointsAndRatioPlus(plus);
         Vector3d v1 = new Vector3d(points.get(t.t1));
         Vector3d v2 = new Vector3d(points.get(t.t2));
@@ -301,7 +317,7 @@ public abstract class RaceCarBase extends CarBase {
      * ただし車が十分センターラインに近い場所にない場合は正確な値は計算されない可能性があります。
      * 詳細はソースコード参照のこと。
      */
-    protected Vector3d getDirectionPlus(double plus) {
+    protected Vector3d getDirection(double plus) {
         Tuple3<Integer,Integer,Double> t = getNearest2PointsAndRatioPlus(plus);
         Vector3d v1 = new Vector3d(dirs.get(t.t1));
         Vector3d v2 = new Vector3d(dirs.get(t.t2));
