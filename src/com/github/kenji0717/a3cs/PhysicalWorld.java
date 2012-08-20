@@ -34,30 +34,33 @@ class PhysicalWorld implements Runnable {
     public PhysicalWorld() {
         //mainCanvas = new A3Window(500,500);
 
+        makeDynamicsWorld();
+
+        time = 0.0;
+        Thread t = new Thread(this);
+        t.start();
+    }
+    void makeDynamicsWorld() {
         CollisionConfiguration collisionConfiguration =
-                new DefaultCollisionConfiguration();
+            new DefaultCollisionConfiguration();
         CollisionDispatcher dispatcher =
-                new CollisionDispatcher(collisionConfiguration);
+            new CollisionDispatcher(collisionConfiguration);
         /*
         Vector3f worldAabbMin = new Vector3f(-10000,-10000,-10000);
         Vector3f worldAabbMax = new Vector3f(10000,10000,10000);
         int maxProxies = MAX_PROXIES;
         AxisSweep3 overlappingPairCache =
-                new AxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
+            new AxisSweep3(worldAabbMin, worldAabbMax, maxProxies);
         SequentialImpulseConstraintSolver solver =
-                new SequentialImpulseConstraintSolver();
+            new SequentialImpulseConstraintSolver();
         */
         BroadphaseInterface overlappingPairCache = new DbvtBroadphase();
         ConstraintSolver solver = new SequentialImpulseConstraintSolver();
 
         dynamicsWorld =
-                new DiscreteDynamicsWorld(dispatcher,overlappingPairCache,
-                                          solver,collisionConfiguration);
+            new DiscreteDynamicsWorld(dispatcher,overlappingPairCache,
+                                      solver,collisionConfiguration);
         dynamicsWorld.setGravity(new Vector3f(0,-10,0));
-
-        time = 0.0;
-        Thread t = new Thread(this);
-        t.start();
     }
 
     public void setMainCanvas(A3CanvasInterface c) {
@@ -118,6 +121,8 @@ class PhysicalWorld implements Runnable {
         newObjects.clear();
         delObjects.clear();
         time = 0.0;
+
+        makeDynamicsWorld();//これでやっと毎回同じタイムになった。
     }
     //物理計算を進める処理
     //座標を変更するのがちょっとやっかい
