@@ -262,7 +262,9 @@ class CarRaceImpl implements Runnable, CollisionListener, CarSim {
             tmp.addAll(activeObjects);
         }
         for (ActiveObject o: tmp) {
-            o.beforeExec();
+            if (o instanceof CarBase) {
+                ((CarBase)o).beforeExec();
+            }
             o.exec();
         }
         gui.updateCarInfo(car);

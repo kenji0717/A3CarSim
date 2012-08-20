@@ -224,7 +224,7 @@ abstract class CarBase implements ActiveObject {
     //以下2012,08/18追加
     Vector3d oldLoc=new Vector3d();
     Vector3d vel=new Vector3d();
-    public void beforeExec() {
+    void beforeExec() {
         Vector3d loc = getLoc();
         vel.sub(loc,oldLoc);
         vel.scale(1.0/pw.stepTime);
