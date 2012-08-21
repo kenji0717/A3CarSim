@@ -24,7 +24,7 @@ public class TestCar01 extends RaceCarBase {
         double breakingForce = kyuukaabu?10.0:0.0;//急カーブの時ブレーキ
         double drift=0.0; //ドリフトしない。
 
-        setForce(engineForce,steering,breakingForce,drift);
+        setForce(engineForce,steering,breakingForce,drift);//実際にパラメータを設定
 //以下デバッグ用のプリント文(必要に応じてコメントを外す)
 //if (noborizaka)System.out.println("上り坂");
 //if (kyuukaabu)System.out.println("急カーブ");
