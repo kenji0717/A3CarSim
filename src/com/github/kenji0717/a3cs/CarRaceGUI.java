@@ -196,7 +196,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         ideB.setEnabled(b);
     }
     void conf() {
-        Object[] possibleValues = { "作業フォルダ" };
+        Object[] possibleValues = { "作業フォルダ", "カメラ追従" };
         String selectedValue = (String)JOptionPane.showInputDialog(this,
                 "何を設定しますか?", "Input",
                 JOptionPane.INFORMATION_MESSAGE, null,
@@ -221,6 +221,14 @@ class CarRaceGUI extends JFrame implements ActionListener {
                 //変更しないことにした
                 //impl.setWorkDir(null);
                 //impl.setWorkDirURL(null);
+            }
+        } else if (selectedValue.equals("カメラ追従")) {
+            String val = JOptionPane.showInputDialog(this,"補間率(0以上1未満)","0.1");
+            try {
+                double dVal = Double.parseDouble(val);
+                carCanvas.setCameraInterpolateRatio(dVal);
+            } catch(Exception e) {
+                ;
             }
         }
     }
