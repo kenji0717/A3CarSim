@@ -21,8 +21,10 @@ class CarRaceGUI extends JFrame implements ActionListener {
     A3Canvas mainCanvas;
     A3CSController a3csController;
     A3SubCanvas carCanvas;
+    double cameraDist = 6.7;
     JTextField carClassTF;
-    JComboBox changeCPCB;
+    JLabel loadFromL;
+    JButton changeCPB;
     JButton confB;
     JButton ideB;
     JLabel generalInfoL;
@@ -54,9 +56,12 @@ class CarRaceGUI extends JFrame implements ActionListener {
         HBox loadFromBox = new HBox();
         loadFromBox.setBorder(new TitledBorder("プログラム読込場所"));
         controlBox.myAdd(loadFromBox,0);
-        changeCPCB = new JComboBox(new String[]{"システムのみ","作業フォルダ","JARファイル"});
-        changeCPCB.addActionListener(this);
-        loadFromBox.myAdd(changeCPCB,0);
+        loadFromL = new JLabel("loadFrom???");
+        loadFromBox.myAdd(loadFromL,0);
+//changeCPB = new JButton(new String[]{"システムのみ","作業フォルダ","JARファイル"});
+        changeCPB = new JButton("変更");
+        changeCPB.addActionListener(this);
+        loadFromBox.myAdd(changeCPB,0);
         VBox controlBox1 = new VBox();
         controlBox.myAdd(controlBox1,0);
         confB = new JButton("設定");
@@ -126,6 +131,8 @@ class CarRaceGUI extends JFrame implements ActionListener {
         carCanvas.setAvatar(c.car.a3);
         Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
         Vector3d camera = new Vector3d(0.0,3.0,-6.0);
+        camera.normalize();
+        camera.scale(cameraDist);
         Vector3d up = new Vector3d(0.0,1.0,0.0);
         carCanvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
     }
@@ -145,7 +152,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
             impl.pauseBattle();
         } else if (s==stopB) {
             impl.stopBattle();
-        } else if (s==changeCPCB) {
+        } else if (s==changeCPB) {
             changeCP();
         } else if (s==confB) {
             conf();
@@ -156,9 +163,22 @@ class CarRaceGUI extends JFrame implements ActionListener {
         }
     }
     void changeCP() {
-        if (changeCPCB.getSelectedItem().equals("システムのみ"))
+        Object[] possibleValues = { "システムのみ", "作業フォルダ", "JARファイル" };
+        Object iniVal;
+        if (impl.carClasspath.equals("System"))
+            iniVal = possibleValues[0];
+        else if (impl.carClasspath.equals("IDE"))
+            iniVal = possibleValues[1];
+        else
+            iniVal = possibleValues[2];
+        String selectedValue = (String)JOptionPane.showInputDialog(this,
+                "プログラムの読込場所は？", "Input", JOptionPane.INFORMATION_MESSAGE,
+                null, possibleValues, iniVal);
+        if (selectedValue==null)
+            return;
+        if (selectedValue.equals("システムのみ"))
             impl.changeCP("System");
-        else if (changeCPCB.getSelectedItem().equals("作業フォルダ"))
+        else if (selectedValue.equals("作業フォルダ"))
             if (impl.workDir==null) {
                 JOptionPane.showMessageDialog(this,"先に[設定]で作業フォルダを指定して下さい。");
             } else {
@@ -180,18 +200,16 @@ class CarRaceGUI extends JFrame implements ActionListener {
         updateLoadFrom();
     }
     void updateLoadFrom() {
-        changeCPCB.removeActionListener(this);
         if (impl.carClasspath.equals("System"))
-            changeCPCB.setSelectedItem("システムのみ");
+            loadFromL.setText("システムのみ");
         else if (impl.carClasspath.equals("IDE"))
-            changeCPCB.setSelectedItem("作業フォルダ");
+            loadFromL.setText("作業フォルダ");
         else
-            changeCPCB.setSelectedItem("JARファイル");
-        changeCPCB.addActionListener(this);
+            loadFromL.setText("JARファイル");
     }
     void setParamEditable(boolean b) {
         carClassTF.setEditable(b);
-        changeCPCB.setEnabled(b);
+        changeCPB.setEnabled(b);
         confB.setEnabled(b);
         ideB.setEnabled(b);
     }
@@ -223,12 +241,19 @@ class CarRaceGUI extends JFrame implements ActionListener {
                 //impl.setWorkDirURL(null);
             }
         } else if (selectedValue.equals("カメラ追従")) {
-            String val = JOptionPane.showInputDialog(this,"補間率(0以上1未満)","0.1");
             try {
+                String val = JOptionPane.showInputDialog(this,"距離(0以上)","6.7");
+                cameraDist = Double.parseDouble(val);
+                Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
+                Vector3d camera = new Vector3d(0.0,3.0,-6.0);
+                camera.normalize();camera.scale(cameraDist);
+                Vector3d up = new Vector3d(0.0,1.0,0.0);
+                carCanvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
+                val = JOptionPane.showInputDialog(this,"補間率(0以上1未満)","0.1");
                 double dVal = Double.parseDouble(val);
                 carCanvas.setCameraInterpolateRatio(dVal);
             } catch(Exception e) {
-                ;
+                e.printStackTrace();
             }
         }
     }
