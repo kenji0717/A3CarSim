@@ -45,6 +45,9 @@
             <classpath refid="my.class.path"/>
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+    	<copy file="src/Messages.properties" todir="build"/> 
+    	<copy file="src/Messages_en_US.properties" todir="build"/> 
+        <copy file="src/Messages_ja_JP.properties" todir="build"/> 
     </target>
 
     <target name="jar" depends="jar-api,jar-res">
@@ -80,6 +83,10 @@
         <java classname="com.github.kenji0717.a3cs.CarRace" fork="true">
             <classpath refid="my.exec.class.path"/>
             <jvmarg value="-Djava.library.path=${my.lib.path}"/>
+        	<!--
+            <jvmarg value="-Duser.language=en"/>
+            <jvmarg value="-Duser.country=US"/>
+            -->
             <!-- <arg value="test.TestCar01"/> -->
         </java>
     </target>

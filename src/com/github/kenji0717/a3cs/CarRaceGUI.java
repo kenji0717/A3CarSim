@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.PrintStream;
-
+import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,9 +35,14 @@ class CarRaceGUI extends JFrame implements ActionListener {
     //JLabel carEnergyL;
     JTextArea stdOutTA;
     JTextAreaOutputStream out;
+    //i18n
+    ResourceBundle messages;
     
     CarRaceGUI(CarRaceImpl i,String carClass) {
         super("CarRace");
+        PropertiesControl pc = new PropertiesControl("UTF-8");
+        messages = ResourceBundle.getBundle("Messages",pc);
+
         impl = i;
         ide = new SimpleIDE(this);
 
@@ -49,7 +54,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         HBox controlBox = new HBox();
         baseBox.myAdd(controlBox,0);
         HBox classNameBox = new HBox();
-        classNameBox.setBorder(new TitledBorder("車のクラス名"));
+        classNameBox.setBorder(new TitledBorder(messages.getString("carClassname")));
         controlBox.myAdd(classNameBox,1);
         carClassTF = new JTextField(carClass,20);
         classNameBox.myAdd(carClassTF,1);
