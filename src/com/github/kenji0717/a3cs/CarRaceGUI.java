@@ -37,6 +37,10 @@ class CarRaceGUI extends JFrame implements ActionListener {
     JTextAreaOutputStream out;
     //i18n
     ResourceBundle messages;
+
+    String i18n(String s) {
+        return messages.getString(s);
+    }
     
     CarRaceGUI(CarRaceImpl i,String carClass) {
         super("CarRace");
@@ -54,45 +58,45 @@ class CarRaceGUI extends JFrame implements ActionListener {
         HBox controlBox = new HBox();
         baseBox.myAdd(controlBox,0);
         HBox classNameBox = new HBox();
-        classNameBox.setBorder(new TitledBorder(messages.getString("carClassname")));
+        classNameBox.setBorder(new TitledBorder(i18n("main.carClassname")));
         controlBox.myAdd(classNameBox,1);
         carClassTF = new JTextField(carClass,20);
         classNameBox.myAdd(carClassTF,1);
         HBox loadFromBox = new HBox();
-        loadFromBox.setBorder(new TitledBorder("プログラム読込場所"));
+        loadFromBox.setBorder(new TitledBorder(i18n("main.loadFrom")));
         controlBox.myAdd(loadFromBox,0);
         loadFromL = new JLabel("loadFrom???");
         loadFromBox.myAdd(loadFromL,0);
 //changeCPB = new JButton(new String[]{"システムのみ","作業フォルダ","JARファイル"});
-        changeCPB = new JButton("変更");
+        changeCPB = new JButton(i18n("main.change"));
         changeCPB.addActionListener(this);
         loadFromBox.myAdd(changeCPB,0);
         VBox controlBox1 = new VBox();
         controlBox.myAdd(controlBox1,0);
-        confB = new JButton("設定");
+        confB = new JButton(i18n("main.settings"));
         confB.addActionListener(this);
         controlBox1.myAdd(confB,0);
-        ideB = new JButton("プログラミング");
+        ideB = new JButton(i18n("main.programming"));
         ideB.addActionListener(this);
         controlBox1.myAdd(ideB,0);
         VBox controlBox2 = new VBox();
         controlBox.myAdd(controlBox2,0);
         HBox generalInfoBox = new HBox();
         controlBox2.myAdd(generalInfoBox,0);
-        fastForwardCB = new JCheckBox("早送り");
+        fastForwardCB = new JCheckBox(i18n("main.fastForward"));
         fastForwardCB.addActionListener(this);
         generalInfoBox.myAdd(fastForwardCB,0);
-        generalInfoL = new JLabel("Time:");
+        generalInfoL = new JLabel(i18n("main.time"));
         generalInfoBox.myAdd(generalInfoL,1);
         HBox mainButtonsBox = new HBox();
         controlBox2.myAdd(mainButtonsBox,0);
-        startB = new JButton("START");
+        startB = new JButton(i18n("main.start"));
         startB.addActionListener(this);
         mainButtonsBox.myAdd(startB,1);
-        pauseB = new JButton("PAUSE");
+        pauseB = new JButton(i18n("main.pause"));
         pauseB.addActionListener(this);
         mainButtonsBox.myAdd(pauseB,1);
-        stopB = new JButton("STOP");
+        stopB = new JButton(i18n("main.stop"));
         stopB.addActionListener(this);
         mainButtonsBox.myAdd(stopB,1);
 
@@ -168,7 +172,10 @@ class CarRaceGUI extends JFrame implements ActionListener {
         }
     }
     void changeCP() {
-        Object[] possibleValues = { "システムのみ", "作業フォルダ", "JARファイル" };
+        Object[] possibleValues = {
+            i18n("ccp.onlySystem"),
+            i18n("ccp.workingFolder"),
+            i18n("ccp.jarFile") };
         Object iniVal;
         if (impl.carClasspath.equals("System"))
             iniVal = possibleValues[0];
@@ -177,15 +184,15 @@ class CarRaceGUI extends JFrame implements ActionListener {
         else
             iniVal = possibleValues[2];
         String selectedValue = (String)JOptionPane.showInputDialog(this,
-                "プログラムの読込場所は？", "Input", JOptionPane.INFORMATION_MESSAGE,
+            i18n("ccp.whereLoadFrom"), "Input", JOptionPane.INFORMATION_MESSAGE,
                 null, possibleValues, iniVal);
         if (selectedValue==null)
             return;
-        if (selectedValue.equals("システムのみ"))
+        if (selectedValue.equals(possibleValues[0]))
             impl.changeCP("System");
-        else if (selectedValue.equals("作業フォルダ"))
+        else if (selectedValue.equals(possibleValues[1]))
             if (impl.workDir==null) {
-                JOptionPane.showMessageDialog(this,"先に[設定]で作業フォルダを指定して下さい。");
+                JOptionPane.showMessageDialog(this,i18n("ccp.warning1"));
             } else {
                 impl.changeCP("IDE");
             }
@@ -206,11 +213,11 @@ class CarRaceGUI extends JFrame implements ActionListener {
     }
     void updateLoadFrom() {
         if (impl.carClasspath.equals("System"))
-            loadFromL.setText("システムのみ");
+            loadFromL.setText(i18n("ccp.onlySystem"));
         else if (impl.carClasspath.equals("IDE"))
-            loadFromL.setText("作業フォルダ");
+            loadFromL.setText(i18n("ccp.workingFolder"));
         else
-            loadFromL.setText("JARファイル");
+            loadFromL.setText(i18n("ccp.jarFile"));
     }
     void setParamEditable(boolean b) {
         carClassTF.setEditable(b);
