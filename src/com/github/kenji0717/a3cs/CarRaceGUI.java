@@ -150,7 +150,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         //carEnergyL.setText("Energy: "+c.energy);
     }
     void updateTime(double t) {
-        generalInfoL.setText("Time:"+String.format("%4.2f",t));
+        generalInfoL.setText(i18n("main.time")+String.format("%4.2f",t));
     }
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -226,9 +226,11 @@ class CarRaceGUI extends JFrame implements ActionListener {
         ideB.setEnabled(b);
     }
     void conf() {
-        Object[] possibleValues = { "作業フォルダ", "カメラ追従" };
+        Object[] possibleValues = {
+gaha;
+            i18n("conf.workingFolder"), i18n("カメラ追従") };
         String selectedValue = (String)JOptionPane.showInputDialog(this,
-                "何を設定しますか?", "Input",
+                i18n("conf.whichOption"), "Input",
                 JOptionPane.INFORMATION_MESSAGE, null,
                 possibleValues, possibleValues[0]);
         if (selectedValue==null)
