@@ -46,6 +46,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         super("CarRace");
         PropertiesControl pc = new PropertiesControl("UTF-8");
         messages = ResourceBundle.getBundle("Messages",pc);
+        System.out.println("i18n: test="+i18n("test"));
 
         impl = i;
         ide = new SimpleIDE(this);

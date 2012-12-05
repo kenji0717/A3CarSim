@@ -86,6 +86,10 @@
         	<!--
             <jvmarg value="-Duser.language=en"/>
             <jvmarg value="-Duser.country=US"/>
+            <jvmarg value="-Duser.language=th"/>
+            <jvmarg value="-Duser.country=TH"/>
+            <jvmarg value="-Duser.language=ja"/>
+            <jvmarg value="-Duser.country=JP"/>
             -->
             <!-- <arg value="test.TestCar01"/> -->
         </java>
