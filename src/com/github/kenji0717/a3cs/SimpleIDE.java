@@ -154,12 +154,12 @@ class SimpleIDE extends JDialog implements ActionListener {
                     line = br.readLine();
                 }
                 filePath = f.getAbsolutePath();
+                setEnable(true);
+                editor.setCaretPosition(0);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        editor.setCaretPosition(0);
-        setEnable(true);
     }
     void saveFile() {
         try {

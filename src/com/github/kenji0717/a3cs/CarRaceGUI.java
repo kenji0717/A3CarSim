@@ -256,6 +256,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
         } else if (selectedValue.equals(possibleValues[1])) {
             try {
                 String val = JOptionPane.showInputDialog(this,i18n("conf.distance"),"6.7");
+                if (val==null) return;
                 cameraDist = Double.parseDouble(val);
                 Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
                 Vector3d camera = new Vector3d(0.0,3.0,-6.0);
@@ -263,6 +264,7 @@ class CarRaceGUI extends JFrame implements ActionListener {
                 Vector3d up = new Vector3d(0.0,1.0,0.0);
                 carCanvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
                 val = JOptionPane.showInputDialog(this,i18n("conf.interpolation"),"0.1");
+                if (val==null) return;
                 double dVal = Double.parseDouble(val);
                 carCanvas.setCameraInterpolateRatio(dVal);
             } catch(Exception e) {
