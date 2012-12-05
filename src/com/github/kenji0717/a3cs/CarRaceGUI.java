@@ -227,15 +227,14 @@ class CarRaceGUI extends JFrame implements ActionListener {
     }
     void conf() {
         Object[] possibleValues = {
-gaha;
-            i18n("conf.workingFolder"), i18n("カメラ追従") };
+            i18n("conf.workingFolder"), i18n("conf.cameraTracking") };
         String selectedValue = (String)JOptionPane.showInputDialog(this,
                 i18n("conf.whichOption"), "Input",
                 JOptionPane.INFORMATION_MESSAGE, null,
                 possibleValues, possibleValues[0]);
         if (selectedValue==null)
             return;
-        if (selectedValue.equals("作業フォルダ")) {
+        if (selectedValue.equals(possibleValues[0])) {
             File iniF = null;
             if (impl.workDir!=null) {
                 iniF = new File(impl.workDir);
@@ -254,16 +253,16 @@ gaha;
                 //impl.setWorkDir(null);
                 //impl.setWorkDirURL(null);
             }
-        } else if (selectedValue.equals("カメラ追従")) {
+        } else if (selectedValue.equals(possibleValues[1])) {
             try {
-                String val = JOptionPane.showInputDialog(this,"距離(0以上)","6.7");
+                String val = JOptionPane.showInputDialog(this,i18n("conf.distance"),"6.7");
                 cameraDist = Double.parseDouble(val);
                 Vector3d lookAt = new Vector3d(0.0,0.0,6.0);
                 Vector3d camera = new Vector3d(0.0,3.0,-6.0);
                 camera.normalize();camera.scale(cameraDist);
                 Vector3d up = new Vector3d(0.0,1.0,0.0);
                 carCanvas.setNavigationMode(A3CanvasInterface.NaviMode.CHASE,lookAt,camera,up,10.0);
-                val = JOptionPane.showInputDialog(this,"補間率(0以上1未満)","0.1");
+                val = JOptionPane.showInputDialog(this,i18n("conf.interpolation"),"0.1");
                 double dVal = Double.parseDouble(val);
                 carCanvas.setCameraInterpolateRatio(dVal);
             } catch(Exception e) {

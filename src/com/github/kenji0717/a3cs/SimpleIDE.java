@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
+import java.util.ResourceBundle;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -34,9 +35,18 @@ class SimpleIDE extends JDialog implements ActionListener {
     JTextArea outputTA;
     JTextAreaOutputStream jtaos;
     Executor e;
+    //i18n
+    ResourceBundle messages;
+
+    String i18n(String s) {
+        return messages.getString(s);
+    }
 
     SimpleIDE(Frame owner) {
         super(owner);
+        PropertiesControl pc = new PropertiesControl("UTF-8");
+        messages = ResourceBundle.getBundle("Messages",pc);
+
         //compiler = ToolProvider.getSystemJavaCompiler();
         try {
             compiler = com.sun.tools.javac.api.JavacTool.create();
@@ -51,16 +61,16 @@ class SimpleIDE extends JDialog implements ActionListener {
         this.add(mainBox);
         HBox buttonsBox = new HBox();
         mainBox.myAdd(buttonsBox,0);
-        openB = new JButton("Open");
+        openB = new JButton(i18n("ide.open"));
         openB.addActionListener(this);
         buttonsBox.myAdd(openB,0);
-        saveB = new JButton("Save");
+        saveB = new JButton(i18n("ide.save"));
         saveB.addActionListener(this);
         buttonsBox.myAdd(saveB,0);
-        compileB = new JButton("Compile");
+        compileB = new JButton(i18n("ide.compile"));
         compileB.addActionListener(this);
         buttonsBox.myAdd(compileB,0);
-        makeJarB = new JButton("MakeJAR");
+        makeJarB = new JButton(i18n("ide.makeJar"));
         makeJarB.addActionListener(this);
         buttonsBox.myAdd(makeJarB,0);
         buttonsBox.myAdd(Box.createHorizontalGlue(),1);
@@ -94,14 +104,15 @@ class SimpleIDE extends JDialog implements ActionListener {
 
         //if (compiler==null) {
         if (compilerMain==null) {
-            editor.setText("コンパイラがセットアップできません。。。");
+            editor.setText(i18n("ide.compilerWarning"));
             this.setEnable(false);
         } else if (workDir==null) {
-            editor.setText("[設定]で作業フォルダを指定してからIDEを起動して下さい。");
+            editor.setText(i18n("ide.workingFolderWarning"));
             this.setEnable(false);
         } else {
-            editor.setText("");
-            this.setEnable(true);
+            editor.setText(i18n("ide.emptyWarning"));
+            this.setEnable(false);
+            openB.setEnabled(true);
         }
 
         this.setModal(true);
@@ -148,6 +159,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             }
         }
         editor.setCaretPosition(0);
+        setEnable(true);
     }
     void saveFile() {
         try {
@@ -155,6 +167,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             PrintWriter pw = new PrintWriter(fw);
             pw.print(editor.getText());
             pw.flush();
+            outputTA.append(i18n("ide.saveSuccess")+"\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -175,20 +188,20 @@ class SimpleIDE extends JDialog implements ActionListener {
         File vpF = new File(vecmathPath);
         File apF = new File(a3carsimPath);
         if (!vpF.exists()) {
-            outputTA.append("コンパイルに必要なvecmath.jarを作業フォルダにダウンロード中(最初の一回だけ)...");
+            outputTA.append(i18n("ide.downloadInfo1"));
             boolean b = dl("http://acerola3d.sourceforge.jp/jws/acerola3d/all/vecmath.jar",vecmathPath);
             if (b)
-                outputTA.append("成功\n");
+                outputTA.append(i18n("ide.success")+"\n");
             else
-                outputTA.append("失敗\n");
+                outputTA.append(i18n("ide.fail")+"\n");
         }
         if (!apF.exists()) {
-            outputTA.append("コンパイルに必要なa3carsim-api.jarを作業フォルダにダウンロード中(最初の一回だけ)...");
+            outputTA.append(i18n("ide.downloadInfo2"));
             boolean b = dl("http://kenji0717.github.com/A3CarSim/jws/A3CarSim/a3carsim-api.jar",a3carsimPath);
             if (b)
-                outputTA.append("成功\n");
+                outputTA.append(i18n("ide.success")+"\n");
             else
-                outputTA.append("失敗\n");
+                outputTA.append(i18n("ide.fail")+"\n");
         }
     }
     boolean dl(String s,String d) {
@@ -225,7 +238,7 @@ class SimpleIDE extends JDialog implements ActionListener {
         System.out.println("CLASSPATH:"+classPath);
         int result = compiler.run(System.in,jtaos,jtaos,"-cp",classPath,"-d",workDir,filePath);
         if (result==0) {
-            outputTA.append("コンパイル成功\n");
+            outputTA.append(i18n("ide.compileSuccess")+"\n");
         }
     }
 
@@ -242,7 +255,7 @@ class SimpleIDE extends JDialog implements ActionListener {
         System.out.println("CLASSPATH:"+classPath);
         boolean result = compilerMain.compile(new String[]{"-1.6","-cp",classPath,filePath});
         if (result==true) {
-            outputTA.append("コンパイル成功\n");
+            outputTA.append(i18n("ide.compileSuccess")+"\n");
         }
     }
     void makeJarFile() {
@@ -263,7 +276,7 @@ class SimpleIDE extends JDialog implements ActionListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            outputTA.append(i18n("ide.makeJarSuccess")+"\n");
         }
     }
     void makeJarFileRec(JarOutputStream jos,File f,String path) throws Exception {
@@ -276,6 +289,8 @@ class SimpleIDE extends JDialog implements ActionListener {
             if (f.getName().equals("vecmath.jar"))
                 return;
             if (f.getName().equals("a3carsim-api.jar"))
+                return;
+            if (f.getName().endsWith(".jar"))
                 return;
             FileInputStream fis = new FileInputStream(f);
             byte[] buf = new byte[1024];
