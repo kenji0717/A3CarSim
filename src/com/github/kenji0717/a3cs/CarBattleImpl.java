@@ -243,6 +243,10 @@ class CarBattleImpl implements Runnable, CollisionListener, CarSim {
                 }
                 o.exec();
             }
+
+            if(car1.getLoc().y<-10) car1.energy = -100;
+            if(car2.getLoc().y<-10) car2.energy = -100;
+
             gui.updateCar1Info(car1);
             gui.updateCar2Info(car2);
 
