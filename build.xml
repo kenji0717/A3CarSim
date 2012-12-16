@@ -48,6 +48,7 @@
     	<copy file="src/Messages.properties" todir="build"/> 
     	<copy file="src/Messages_en_US.properties" todir="build"/> 
         <copy file="src/Messages_ja_JP.properties" todir="build"/> 
+        <copy file="src/Messages_th_TH.properties" todir="build"/> 
     </target>
 
     <target name="jar" depends="jar-api,jar-res">
